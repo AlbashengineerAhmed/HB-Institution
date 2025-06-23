@@ -1,0 +1,251 @@
+/* Using global color variables from global.css */
+
+.about-page {
+  padding-top: 2rem;
+}
+
+/* Common section styles */
+section {
+  padding: 5rem 0;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.section-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--text-color);
+  position: relative;
+  display: inline-block;
+  padding-bottom: 1rem;
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 3px;
+  background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+  border-radius: 2px;
+}
+
+/* Chairman's Message Section */
+.chairman-section {
+  background-color: var(--secondary-color);
+}
+
+.chairman-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 3rem;
+}
+
+.chairman-image-container {
+  flex: 0 0 300px;
+  text-align: center;
+}
+
+.chairman-image {
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 5px solid #fff;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1.5rem;
+}
+
+.chairman-name {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-color);
+  margin-bottom: 0.5rem;
+}
+
+.chairman-title {
+  font-size: 1rem;
+  color: var(--primary-color);
+  font-weight: 500;
+}
+
+.chairman-message {
+  flex: 1;
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: var(--text-color);
+}
+
+.highlight-text {
+  font-size: 1.3rem;
+  color: var(--primary-color);
+  margin-top: 1.5rem;
+  font-style: italic;
+}
+
+/* Vision Section */
+.vision-section {
+  background-color: #ffffff;
+}
+
+.vision-content {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+}
+
+.vision-image {
+  flex: 1;
+  text-align: center;
+}
+
+.vision-image img {
+  max-width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.vision-text {
+  flex: 1;
+  font-size: 1.2rem;
+  line-height: 1.8;
+  color: var(--text-color);
+  padding: 2rem;
+  background-color: var(--secondary-color);
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+/* Mission Section */
+.mission-section {
+  background: linear-gradient(135deg, #f5f7fa 0%, #e8edf5 100%);
+}
+
+.mission-content {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+}
+
+.mission-text {
+  flex: 1;
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: var(--text-color);
+}
+
+.mission-list {
+  margin-top: 1.5rem;
+  padding-left: 1.5rem;
+}
+
+.mission-list li {
+  margin-bottom: 1rem;
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.mission-list li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--primary-color);
+  font-weight: bold;
+}
+
+.mission-image {
+  flex: 1;
+  text-align: center;
+}
+
+.mission-image img {
+  max-width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* What We Offer Section */
+.offerings-section {
+  background-color: #ffffff;
+}
+
+.offerings-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.offering-card {
+  background-color: var(--secondary-color);
+  border-radius: 8px;
+  padding: 2rem;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.offering-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+.offering-icon {
+  font-size: 3rem;
+  margin-bottom: 1.5rem;
+}
+
+.offering-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text-color);
+  margin-bottom: 1rem;
+}
+
+.offering-description {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #666;
+}
+
+/* Responsive Styles */
+@media (max-width: 992px) {
+  .chairman-content,
+  .vision-content,
+  .mission-content {
+    flex-direction: column;
+    gap: 2rem;
+  }
+  
+  .chairman-image-container {
+    margin: 0 auto;
+  }
+  
+  .offerings-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  section {
+    padding: 3rem 0;
+  }
+  
+  .section-title {
+    font-size: 2rem;
+  }
+  
+  .chairman-message,
+  .vision-text,
+  .mission-text {
+    font-size: 1rem;
+  }
+  
+  .offerings-grid {
+    grid-template-columns: 1fr;
+  }
+}
