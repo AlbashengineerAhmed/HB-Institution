@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './Contact.css';
+import styles from './Contact.module.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 const Contact = () => {
@@ -65,42 +65,42 @@ const Contact = () => {
   };
 
   return (
-    <section className="contact-section">
+    <section className={styles.contactSection}>
       <div className="container">
-        <div className="contact-wrapper">
-          <div className="contact-info">
+        <div className={styles.contactWrapper}>
+          <div className={styles.contactInfo}>
             <h2 className="section-title">Get in Touch</h2>
-            <p className="contact-description">
+            <p className={styles.contactDescription}>
               Have questions about our courses or need more information? 
               Fill out the form and our team will get back to you as soon as possible.
             </p>
             
-            <div className="contact-details">
-              <div className="contact-item">
-                <div className="contact-icon">
+            <div className={styles.contactDetails}>
+              <div className={styles.contactItem}>
+                <div className={styles.contactIcon}>
                   <i className="fas fa-map-marker-alt"></i>
                 </div>
-                <div className="contact-text">
+                <div className={styles.contactText}>
                   <h4>Our Location</h4>
                   <p>123 Education Street, Learning City, 10001</p>
                 </div>
               </div>
               
-              <div className="contact-item">
-                <div className="contact-icon">
+              <div className={styles.contactItem}>
+                <div className={styles.contactIcon}>
                   <i className="fas fa-envelope"></i>
                 </div>
-                <div className="contact-text">
+                <div className={styles.contactText}>
                   <h4>Email Us</h4>
                   <p>info@educationplatform.com</p>
                 </div>
               </div>
               
-              <div className="contact-item">
-                <div className="contact-icon">
+              <div className={styles.contactItem}>
+                <div className={styles.contactIcon}>
                   <i className="fas fa-phone-alt"></i>
                 </div>
-                <div className="contact-text">
+                <div className={styles.contactText}>
                   <h4>Call Us</h4>
                   <p>+1 (555) 123-4567</p>
                 </div>
@@ -108,22 +108,22 @@ const Contact = () => {
             </div>
           </div>
           
-          <div className="contact-form-container">
-            <form className="contact-form" onSubmit={handleSubmit}>
+          <div className={styles.contactFormContainer}>
+            <form className={styles.contactForm} onSubmit={handleSubmit}>
               {formStatus.submitted && (
                 <div className={`form-status ${formStatus.success ? 'success' : 'sending'}`}>
-                  <div className="status-icon">
+                  <div className={styles.statusIcon}>
                     {formStatus.success ? (
                       <i className="fas fa-check-circle"></i>
                     ) : (
                       <i className="fas fa-spinner fa-spin"></i>
                     )}
                   </div>
-                  <div className="status-message">{formStatus.message}</div>
+                  <div className={styles.statusMessage}>{formStatus.message}</div>
                 </div>
               )}
               
-              <div className="form-group" data-label="Your Name">
+              <div className={styles.formGroup} data-label="Your Name">
                 <input
                   type="text"
                   id="name"
@@ -131,13 +131,13 @@ const Contact = () => {
                   value={formData.name}
                   onChange={handleChange}
                   required
-                  className="border-label-input"
+                  className={styles.borderLabelInput}
                   placeholder="Enter your full name"
                 />
-                <div className="input-highlight"></div>
+                <div className={styles.inputHighlight}></div>
               </div>
               
-              <div className="form-group" data-label="Your Email">
+              <div className={styles.formGroup} data-label="Your Email">
                 <input
                   type="email"
                   id="email"
@@ -145,13 +145,13 @@ const Contact = () => {
                   value={formData.email}
                   onChange={handleChange}
                   required
-                  className="border-label-input"
+                  className={styles.borderLabelInput}
                   placeholder="Enter your email address"
                 />
-                <div className="input-highlight"></div>
+                <div className={styles.inputHighlight}></div>
               </div>
               
-              <div className="form-group" data-label="Subject">
+              <div className={styles.formGroup} data-label="Subject">
                 <input
                   type="text"
                   id="subject"
@@ -159,13 +159,13 @@ const Contact = () => {
                   value={formData.subject}
                   onChange={handleChange}
                   required
-                  className="border-label-input"
+                  className={styles.borderLabelInput}
                   placeholder="What is your message about?"
                 />
-                <div className="input-highlight"></div>
+                <div className={styles.inputHighlight}></div>
               </div>
               
-              <div className="form-group" data-label="Your Message">
+              <div className={styles.formGroup} data-label="Your Message">
                 <textarea
                   id="message"
                   name="message"
@@ -173,10 +173,10 @@ const Contact = () => {
                   value={formData.message}
                   onChange={handleChange}
                   required
-                  className="border-label-input"
+                  className={styles.borderLabelInput}
                   placeholder="Type your message here..."
                 ></textarea>
-                <div className="input-highlight"></div>
+                <div className={styles.inputHighlight}></div>
               </div>
               
               <button 

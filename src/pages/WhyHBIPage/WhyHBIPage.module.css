@@ -1,0 +1,1006 @@
+/* Using global color variables from global.css */
+
+/* General Styles */
+.whyHbiPage {
+  font-family: var(--font-primary);
+  color: var(--text-color);
+  line-height: 1.6;
+}
+
+section {
+  padding: 80px 0;
+}
+
+/* Using global styles */
+
+.sectionTitle::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 3px;
+  background-color: var(--secondary-color);
+}
+
+.sectionDescription {
+  font-size: 1.1rem;
+  color: var(--text-light);
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Banner Section */
+.whyHbiBanner {
+  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('../../../public/images/hero-2-thumb-1.png');
+  background-size: cover;
+  background-position: center;
+  color: white;
+  text-align: center;
+  padding: 150px 0;
+  position: relative;
+}
+
+.bannerContent {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.bannerTitle {
+  font-family: var(--font-secondary);
+  font-size: 3.5rem;
+  margin-bottom: 20px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.bannerDescription {
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Why Study Section */
+.whyStudySection {
+  background-color: var(--light-color);
+}
+
+.whyStudyContent {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 40px;
+}
+
+.whyStudyImage {
+  flex: 1;
+  min-width: 300px;
+}
+
+.whyStudyImage img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: var(--box-shadow);
+}
+
+.whyStudyText {
+  flex: 1;
+  min-width: 300px;
+}
+
+.whyStudyText p {
+  margin-bottom: 30px;
+  font-size: 1.1rem;
+}
+
+.reasonsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+}
+
+.reasonCard {
+  background-color: white;
+  padding: 25px;
+  border-radius: 8px;
+  box-shadow: var(--box-shadow);
+  transition: var(--transition);
+}
+
+.reasonCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.reasonIcon {
+  font-size: 2.5rem;
+  color: var(--primary-color);
+  margin-bottom: 15px;
+}
+
+.reasonTitle {
+  font-size: 1.3rem;
+  margin-bottom: 10px;
+  color: var(--primary-color);
+}
+
+.reasonDescription {
+  color: var(--text-light);
+}
+
+/* Tuition Fees Section */
+.tuitionSection {
+  background-color: white;
+}
+
+.tuitionTables {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  margin-bottom: 50px;
+}
+
+.tuitionTableContainer {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.tableTitle {
+  font-size: 1.5rem;
+  color: var(--primary-color);
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.tuitionTable {
+  width: 100%;
+  border-collapse: collapse;
+  box-shadow: var(--box-shadow);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.tuitionTable th {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 15px;
+  text-align: left;
+}
+
+.tuitionTable td {
+  padding: 15px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.tuitionTable tr:nth-child(even) {
+  background-color: rgba(63, 81, 181, 0.05);
+}
+
+.tuitionTable tr:hover {
+  background-color: rgba(63, 81, 181, 0.1);
+}
+
+.additionalFees {
+  margin-bottom: 50px;
+}
+
+.feesTitle {
+  font-size: 1.5rem;
+  color: var(--primary-color);
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.feesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.feeItem {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px;
+  background-color: var(--light-color);
+  border-radius: 8px;
+  box-shadow: var(--box-shadow);
+}
+
+.feeName {
+  font-weight: bold;
+}
+
+.paymentOptions {
+  background-color: var(--light-color);
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: var(--box-shadow);
+}
+
+.paymentTitle {
+  font-size: 1.5rem;
+  color: var(--primary-color);
+  margin-bottom: 15px;
+}
+
+.paymentDescription {
+  margin-bottom: 20px;
+}
+
+.paymentList {
+  list-style-type: disc;
+  padding-left: 20px;
+}
+
+.paymentList li {
+  margin-bottom: 10px;
+}
+
+/* Accreditation Section */
+.accreditationSection {
+  background-color: var(--light-color);
+}
+
+.accreditationContent {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+}
+
+.accreditationText {
+  flex: 1;
+  min-width: 300px;
+}
+
+.accreditationText p {
+  margin-bottom: 20px;
+  font-size: 1.1rem;
+}
+
+.accreditationSubtitle {
+  font-size: 1.3rem;
+  color: var(--primary-color);
+  margin: 30px 0 15px;
+}
+
+.accreditationList {
+  list-style-type: none;
+  padding: 0;
+}
+
+.accreditationList li {
+  margin-bottom: 15px;
+  padding-left: 30px;
+  position: relative;
+}
+
+.accreditationList li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--success-color);
+  font-weight: bold;
+}
+
+.accreditationLogos {
+  flex: 1;
+  min-width: 300px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 30px;
+  align-content: center;
+}
+
+.logoItem {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: var(--box-shadow);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: var(--transition);
+}
+
+.logoItem:hover {
+  transform: scale(1.05);
+}
+
+.logoItem img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Graduate Acceptance Section */
+.graduateAcceptanceSection {
+  background-color: white;
+}
+
+.graduateContent {
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+}
+
+.graduateStats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+}
+
+.statCard {
+  background-color: var(--light-color);
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: var(--box-shadow);
+  text-align: center;
+  transition: var(--transition);
+}
+
+.statCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.statValue {
+  font-size: 3rem;
+  font-weight: bold;
+  color: var(--primary-color);
+  margin-bottom: 10px;
+}
+
+.statLabel {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.statDescription {
+  color: var(--text-light);
+}
+
+.graduateDestinations {
+  background-color: var(--light-color);
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: var(--box-shadow);
+}
+
+.destinationsTitle {
+  font-size: 1.5rem;
+  color: var(--primary-color);
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.destinationsTabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+}
+
+.destinationsCategory {
+  flex: 1;
+  min-width: 300px;
+}
+
+.categoryTitle {
+  font-size: 1.3rem;
+  color: var(--primary-color);
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.destinationsList {
+  list-style-type: none;
+  padding: 0;
+}
+
+.destinationsList li {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.alumniTestimonials {
+  margin-top: 30px;
+}
+
+.testimonialsTitle {
+  font-size: 1.5rem;
+  color: var(--primary-color);
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.testimonialCard {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: var(--box-shadow);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.testimonialImage {
+  height: 200px;
+  overflow: hidden;
+}
+
+.testimonialImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.testimonialContent {
+  padding: 25px;
+}
+
+.testimonialText {
+  font-style: italic;
+  margin-bottom: 20px;
+}
+
+.testimonialAuthor {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.authorName {
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.authorInfo {
+  color: var(--text-light);
+  font-size: 0.9rem;
+}
+
+.authorPosition {
+  color: var(--primary-color);
+  font-size: 0.9rem;
+  margin-top: 5px;
+}
+
+/* Exam Centers Section */
+.examCentersSection {
+  background-color: var(--light-color);
+}
+
+.examCentersContent {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+}
+
+.examCentersInfo {
+  flex: 1;
+  min-width: 300px;
+}
+
+.examCentersInfo p {
+  margin-bottom: 20px;
+  font-size: 1.1rem;
+}
+
+.examCentersSubtitle {
+  font-size: 1.3rem;
+  color: var(--primary-color);
+  margin: 30px 0 15px;
+}
+
+.facilitiesList,
+.examTypesList {
+  list-style-type: none;
+  padding: 0;
+  margin-bottom: 30px;
+}
+
+.facilitiesList li,
+.examTypesList li {
+  margin-bottom: 10px;
+  padding-left: 30px;
+  position: relative;
+}
+
+.facilitiesList li::before,
+.examTypesList li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--success-color);
+  font-weight: bold;
+}
+
+.examCentersLocations {
+  flex: 1;
+  min-width: 300px;
+}
+
+.locationsTitle {
+  font-size: 1.3rem;
+  color: var(--primary-color);
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.locationsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+}
+
+.locationCard {
+  background-color: white;
+  padding: 25px;
+  border-radius: 8px;
+  box-shadow: var(--box-shadow);
+  transition: var(--transition);
+}
+
+.locationCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.locationIcon {
+  font-size: 2rem;
+  color: var(--primary-color);
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.locationName {
+  font-size: 1.2rem;
+  color: var(--primary-color);
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.locationAddress,
+.locationContact {
+  text-align: center;
+  margin-bottom: 5px;
+  color: var(--text-light);
+}
+
+/* Scholarships Section */
+.scholarshipsSection {
+  background-color: white;
+}
+
+.scholarshipsIntro {
+  max-width: 800px;
+  margin: 0 auto 40px;
+  text-align: center;
+  font-size: 1.1rem;
+}
+
+.scholarshipsCategories {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+  margin-bottom: 50px;
+}
+
+.categoryCard {
+  background-color: var(--light-color);
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: var(--box-shadow);
+  transition: var(--transition);
+}
+
+.categoryCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.categoryIcon {
+  font-size: 2.5rem;
+  color: var(--primary-color);
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.categoryTitle {
+  font-size: 1.3rem;
+  color: var(--primary-color);
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.categoryDescription {
+  text-align: center;
+  margin-bottom: 20px;
+  color: var(--text-light);
+}
+
+.scholarshipsList {
+  list-style-type: none;
+  padding: 0;
+}
+
+.scholarshipsList li {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.scholarshipName {
+  font-weight: bold;
+}
+
+.scholarshipValue {
+  color: var(--success-color);
+  font-weight: bold;
+}
+
+.scholarshipApplication {
+  background-color: var(--light-color);
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: var(--box-shadow);
+}
+
+.applicationTitle {
+  font-size: 1.5rem;
+  color: var(--primary-color);
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.applicationSteps {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.stepItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.stepNumber {
+  background-color: var(--primary-color);
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.stepContent {
+  flex: 1;
+}
+
+.stepTitle {
+  font-size: 1.2rem;
+  color: var(--primary-color);
+  margin-bottom: 5px;
+}
+
+.applicationCta {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 30px;
+}
+
+.btnApply,
+.btnLearnMore {
+  display: inline-block;
+  padding: 12px 25px;
+  border-radius: 30px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: var(--transition);
+}
+
+.btnApply {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.btnApply:hover {
+  background-color: #303f9f;
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.btnLearnMore {
+  background-color: transparent;
+  color: var(--primary-color);
+  border: 2px solid var(--primary-color);
+}
+
+.btnLearnMore:hover {
+  background-color: var(--primary-color);
+  color: white;
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Testimonials Section */
+.testimonialsSection {
+  background-color: var(--light-color);
+}
+
+.testimonialsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+}
+
+.testimonialCard {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: var(--box-shadow);
+  overflow: hidden;
+  transition: var(--transition);
+}
+
+.testimonialCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.testimonialContent {
+  padding: 25px;
+}
+
+.testimonialText {
+  font-style: italic;
+  margin-bottom: 20px;
+  position: relative;
+  padding: 0 20px;
+}
+
+.testimonialText::before,
+.testimonialText::after {
+  content: '\201C';
+  font-size: 3rem;
+  color: var(--primary-color);
+  opacity: 0.3;
+  position: absolute;
+  top: -20px;
+  left: -10px;
+}
+
+.testimonialText::after {
+  content: '\201D';
+  top: auto;
+  left: auto;
+  bottom: -40px;
+  right: -10px;
+}
+
+.testimonialAuthor {
+  display: flex;
+  align-items: center;
+  padding: 15px 25px;
+  background-color: var(--light-color);
+}
+
+.authorImage {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-right: 15px;
+}
+
+.authorImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.authorName {
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-bottom: 5px;
+}
+
+.authorDetails {
+  color: var(--text-light);
+  font-size: 0.9rem;
+}
+
+/* Student Affairs Office Section */
+.studentAffairsSection {
+  background-color: white;
+}
+
+.studentAffairsContent {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+}
+
+.studentAffairsImage {
+  flex: 1;
+  min-width: 300px;
+}
+
+.studentAffairsImage img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: var(--box-shadow);
+}
+
+.studentAffairsInfo {
+  flex: 1;
+  min-width: 300px;
+}
+
+.studentAffairsInfo p {
+  margin-bottom: 20px;
+  font-size: 1.1rem;
+}
+
+.servicesTitle {
+  font-size: 1.3rem;
+  color: var(--primary-color);
+  margin: 30px 0 20px;
+}
+
+.servicesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.serviceCard {
+  background-color: var(--light-color);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: var(--box-shadow);
+  transition: var(--transition);
+}
+
+.serviceCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.serviceIcon {
+  font-size: 2rem;
+  color: var(--primary-color);
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.serviceTitle {
+  font-size: 1.2rem;
+  color: var(--primary-color);
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.serviceDescription {
+  text-align: center;
+  color: var(--text-light);
+}
+
+.contactInfo {
+  background-color: var(--light-color);
+  padding: 25px;
+  border-radius: 8px;
+  box-shadow: var(--box-shadow);
+}
+
+.contactTitle {
+  font-size: 1.3rem;
+  color: var(--primary-color);
+  margin-bottom: 15px;
+}
+
+.contactDetails {
+  line-height: 1.8;
+}
+
+/* Responsive Styles */
+@media (max-width: 992px) {
+  section {
+    padding: 60px 0;
+  }
+  
+  .bannerTitle {
+    font-size: 2.8rem;
+  }
+  
+  /* Using global .section-title styles */
+  
+  .whyStudyContent,
+  .accreditationContent,
+  .studentAffairsContent {
+    flex-direction: column;
+  }
+  
+  .destinationsTabs {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 768px) {
+  section {
+    padding: 50px 0;
+  }
+  
+  .bannerTitle {
+    font-size: 2.3rem;
+  }
+  
+  /* Using global .section-title styles */
+  
+  .reasonCard,
+  .statCard,
+  .categoryCard,
+  .serviceCard {
+    padding: 20px;
+  }
+  
+  .applicationCta {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .btnApply,
+  .btnLearnMore {
+    width: 100%;
+    text-align: center;
+  }
+  
+  .stepItem {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .stepNumber {
+    margin-bottom: 10px;
+  }
+}
+
+@media (max-width: 576px) {
+  .bannerTitle {
+    font-size: 2rem;
+  }
+  
+  /* Using global .section-title styles */
+  
+  .testimonialAuthor {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .authorImage {
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+  
+  .feeItem {
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  .scholarshipsList li {
+    flex-direction: column;
+    gap: 5px;
+  }
+}

@@ -1,11 +1,11 @@
 import React from 'react';
-import './LoadingIndicator.css';
+import styles from './LoadingIndicator.module.css';
 
 const LoadingIndicator = ({ isLoading }) => {
   return (
-    <div className={`page-transition-loader ${isLoading ? 'visible' : ''}`}>
-      <div className="page-loader">
-        <div className="page-loader-inner"></div>
+    <div className={`${styles.pageTransitionLoader} ${isLoading ? styles.visible : ''}`}>
+      <div className={styles.pageLoader}>
+        <div className={styles.pageLoaderInner}></div>
       </div>
     </div>
   );

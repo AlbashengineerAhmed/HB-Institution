@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Slider from 'react-slick';
-import './Instructors.css';
+import styles from './Instructors.module.css';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
@@ -115,68 +115,68 @@ const Instructors = () => {
   };
 
   return (
-    <section className="instructors-section">
+    <section className={styles.instructorsSection}>
       {/* Decorative shapes */}
-      <div className="instructor-shape shape-1">
+      <div className={`${styles.instructorShape} ${styles.shape1}`}>
         <img src="/images/team-2-svg-1.svg" alt="" />
       </div>
-      <div className="instructor-shape shape-2">
+      <div className={`${styles.instructorShape} ${styles.shape2}`}>
         <img src="/images/testimonial-shape-1.png" alt="" />
       </div>
-      <div className="instructor-shape shape-3">
+      <div className={`${styles.instructorShape} ${styles.shape3}`}>
         <img src="/images/cat-2-icon-7.svg" alt="" />
       </div>
-      <div className="instructor-shape shape-4">
+      <div className={`${styles.instructorShape} ${styles.shape4}`}>
         <img src="/images/menu-shape-1.png" alt="" />
       </div>
-      <div className="instructor-shape shape-5">
+      <div className={`${styles.instructorShape} ${styles.shape5}`}>
         <img src="/images/menu-shape-3.png" alt="" />
       </div>
       
       <div className="container">
         <div className="section-header">
           <h2 className="section-title">Meet Our Expert Instructors</h2>
-          <p className="section-subtitle">Learn from industry professionals with years of experience</p>
+          <p className={styles.sectionSubtitle}>Learn from industry professionals with years of experience</p>
         </div>
         
-        <div className="instructors-slider-container">
+        <div className={styles.instructorsSliderContainer}>
           <Slider {...settings}>
             {instructors.map(instructor => (
-              <div className="instructor-slide" key={instructor.id}>
-                <div className="instructor-card">
-                  <div className="instructor-image-container">
-                    <img src={instructor.image} alt={instructor.name} className="instructor-image" />
-                    <div className="instructor-social">
+              <div className={styles.instructorSlide} key={instructor.id}>
+                <div className={styles.instructorCard}>
+                  <div className={styles.instructorImageContainer}>
+                    <img src={instructor.image} alt={instructor.name} className={styles.instructorImage} />
+                    <div className={styles.instructorSocial}>
                       {Object.entries(instructor.socialLinks).map(([platform, link]) => (
                         <a href={link} key={platform} className={`social-icon ${platform}`} target="_blank" rel="noopener noreferrer">
-                          <span className="social-icon-text">{platform.charAt(0).toUpperCase()}</span>
+                          <span className={styles.socialIconText}>{platform.charAt(0).toUpperCase()}</span>
                         </a>
                       ))}
                     </div>
                   </div>
-                  <div className="instructor-content">
-                    <h3 className="instructor-name">{instructor.name}</h3>
-                    <p className="instructor-role">{instructor.role}</p>
-                    <div className="instructor-meta">
-                      <div className="instructor-courses">
-                        <span className="meta-icon">📚</span>
-                        <span className="meta-text">{instructor.courses} Courses</span>
+                  <div className={styles.instructorContent}>
+                    <h3 className={styles.instructorName}>{instructor.name}</h3>
+                    <p className={styles.instructorRole}>{instructor.role}</p>
+                    <div className={styles.instructorMeta}>
+                      <div className={styles.instructorCourses}>
+                        <span className={styles.metaIcon}>📚</span>
+                        <span className={styles.metaText}>{instructor.courses} Courses</span>
                       </div>
-                      <div className="instructor-students">
-                        <span className="meta-icon">👥</span>
-                        <span className="meta-text">{instructor.students} Students</span>
+                      <div className={styles.instructorStudents}>
+                        <span className={styles.metaIcon}>👥</span>
+                        <span className={styles.metaText}>{instructor.students} Students</span>
                       </div>
-                      <div className="instructor-rating">
-                        <span className="meta-icon">⭐</span>
-                        <span className="meta-text">{instructor.rating}</span>
+                      <div className={styles.instructorRating}>
+                        <span className={styles.metaIcon}>⭐</span>
+                        <span className={styles.metaText}>{instructor.rating}</span>
                       </div>
                     </div>
-                    <div className="instructor-expertise">
+                    <div className={styles.instructorExpertise}>
                       {instructor.expertise.map(skill => (
-                        <span key={skill} className="expertise-tag">{skill}</span>
+                        <span key={skill} className={styles.expertiseTag}>{skill}</span>
                       ))}
                     </div>
-                    <Link to={`/instructor/${instructor.id}`} className="view-profile-button">View Profile</Link>
+                    <Link to={`/instructor/${instructor.id}`} className={styles.viewProfileButton}>View Profile</Link>
                   </div>
                 </div>
               </div>

@@ -1,10 +1,17 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import './Header.css';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../../store/slices/authSlice';
+import styles from './Header.module.css';
 
 const Header = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { isAuthenticated, user } = useSelector((state) => state.auth);
+  
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [userDropdownOpen, setUserDropdownOpen] = useState(false);
 
   const handleDropdownToggle = (dropdownName) => {
     if (activeDropdown === dropdownName) {
@@ -18,138 +25,197 @@ const Header = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
 
-  // Mobile menu state management is handled by toggleMobileMenu
+  const handleLogout = () => {
+    dispatch(logout());
+    setUserDropdownOpen(false);
+    navigate('/');
+  };
+
+  const toggleUserDropdown = () => {
+    setUserDropdownOpen(!userDropdownOpen);
+  };
+
+  // Close dropdowns when clicking outside
+  const handleOutsideClick = () => {
+    setActiveDropdown(null);
+    setUserDropdownOpen(false);
+  };
 
   return (
-    <header className="header">
-      <div className="container header-container">
-        <div className="logo-container">
+    <header className={styles.header}>
+      <div className={`container ${styles.headerContainer}`}>
+        <div className={styles.logoContainer}>
           <Link to="/">
-            <img src="/images/logo-black.webp" alt="HB Institution Logo" className="logo" />
+            <img src="/images/logo-black.webp" alt="HB Institution Logo" className={styles.logo} />
           </Link>
         </div>
         
-        <nav className="main-nav">
-          <ul className={`nav-list ${mobileMenuOpen ? 'show' : ''}`}>
-            <li className="nav-item"><Link to="/" className="nav-link active">Home</Link></li>
-            <li className={`nav-item dropdown ${activeDropdown === 'about' ? 'active' : ''}`}>
+        <nav className={styles.mainNav}>
+          <ul className={`${styles.navList} ${mobileMenuOpen ? styles.show : ''}`}>
+            <li className={styles.navItem}><Link to="/" className={`${styles.navLink} ${styles.active}`}>Home</Link></li>
+            <li className={`${styles.navItem} ${styles.dropdown} ${activeDropdown === 'about' ? styles.active : ''}`}>
               <div 
-                className="nav-link dropdown-toggle" 
+                className={`${styles.navLink} ${styles.dropdownToggle}`} 
                 onClick={() => handleDropdownToggle('about')}
               >
-                About <i className="fas fa-chevron-down dropdown-icon"></i>
+                About <i className={`fas fa-chevron-down ${styles.dropdownIcon}`}></i>
               </div>
-              <ul className={`dropdown-menu ${activeDropdown === 'about' ? 'show' : ''}`}>
-                <li><Link to="/about" className="dropdown-item">Who we are</Link></li>
-                <li><Link to="/about/history" className="dropdown-item">History</Link></li>
-                <li><Link to="/about/mission" className="dropdown-item">Mission</Link></li>
-                <li><Link to="/about/founder" className="dropdown-item">Founder</Link></li>
-                <li><Link to="/about/chancellor" className="dropdown-item">Chancellor's Message</Link></li>
-                <li><Link to="/about/libraries" className="dropdown-item">Libraries</Link></li>
-                <li><Link to="/about/milestones" className="dropdown-item">Milestones</Link></li>
-                <li><Link to="/about/career" className="dropdown-item">Career</Link></li>
-                <li><Link to="/contact" className="dropdown-item">Contact</Link></li>
-                <li><Link to="/about/disclaimer" className="dropdown-item">Disclaimer</Link></li>
+              <ul className={`${styles.dropdownMenu} ${activeDropdown === 'about' ? styles.show : ''}`}>
+                <li><Link to="/about" className={styles.dropdownItem}>Who we are</Link></li>
+                <li><Link to="/about/history" className={styles.dropdownItem}>History</Link></li>
+                <li><Link to="/about/mission" className={styles.dropdownItem}>Mission</Link></li>
+                <li><Link to="/about/founder" className={styles.dropdownItem}>Founder</Link></li>
+                <li><Link to="/about/chancellor" className={styles.dropdownItem}>Chancellor's Message</Link></li>
+                <li><Link to="/about/libraries" className={styles.dropdownItem}>Libraries</Link></li>
+                <li><Link to="/about/milestones" className={styles.dropdownItem}>Milestones</Link></li>
+                <li><Link to="/about/career" className={styles.dropdownItem}>Career</Link></li>
+                <li><Link to="/contact" className={styles.dropdownItem}>Contact</Link></li>
+                <li><Link to="/about/disclaimer" className={styles.dropdownItem}>Disclaimer</Link></li>
               </ul>
             </li>
-            <li className={`nav-item dropdown ${activeDropdown === 'faculty' ? 'active' : ''}`}>
+            <li className={`${styles.navItem} ${styles.dropdown} ${activeDropdown === 'faculty' ? styles.active : ''}`}>
               <div 
-                className="nav-link dropdown-toggle" 
+                className={`${styles.navLink} ${styles.dropdownToggle}`} 
                 onClick={() => handleDropdownToggle('faculty')}
               >
-                Faculty <i className="fas fa-chevron-down dropdown-icon"></i>
+                Faculty <i className={`fas fa-chevron-down ${styles.dropdownIcon}`}></i>
               </div>
-              <ul className={`dropdown-menu ${activeDropdown === 'faculty' ? 'show' : ''}`}>
-                <li><Link to="/faculty" className="dropdown-item">Faculty</Link></li>
-                <li><Link to="/faculty/alumni" className="dropdown-item">Alumni</Link></li>
-                <li><Link to="/faculty/representatives" className="dropdown-item">Representatives</Link></li>
-                <li><Link to="/faculty/convocation" className="dropdown-item">Convocation</Link></li>
-                <li><Link to="/faculty/iou-store" className="dropdown-item">IOU Store</Link></li>
-                <li><Link to="/faculty/student-counselling" className="dropdown-item">Student Counselling</Link></li>
-                <li><Link to="/faculty/student-discounts" className="dropdown-item">Student Discounts</Link></li>
-                <li><Link to="/faculty/student-software" className="dropdown-item">Student Software</Link></li>
-                <li><Link to="/faculty/statistics" className="dropdown-item">Statistics Till Spring 2022</Link></li>
-                <li><Link to="/faculty/social-media" className="dropdown-item">Social Media</Link></li>
-                <li><Link to="/faculty/corporate-relationship" className="dropdown-item">Corporate Relationship Program</Link></li>
+              <ul className={`${styles.dropdownMenu} ${activeDropdown === 'faculty' ? styles.show : ''}`}>
+                <li><Link to="/faculty" className={styles.dropdownItem}>Faculty</Link></li>
+                <li><Link to="/faculty/alumni" className={styles.dropdownItem}>Alumni</Link></li>
+                <li><Link to="/faculty/representatives" className={styles.dropdownItem}>Representatives</Link></li>
+                <li><Link to="/faculty/convocation" className={styles.dropdownItem}>Convocation</Link></li>
+                <li><Link to="/faculty/iou-store" className={styles.dropdownItem}>IOU Store</Link></li>
+                <li><Link to="/faculty/student-counselling" className={styles.dropdownItem}>Student Counselling</Link></li>
+                <li><Link to="/faculty/student-discounts" className={styles.dropdownItem}>Student Discounts</Link></li>
+                <li><Link to="/faculty/student-software" className={styles.dropdownItem}>Student Software</Link></li>
+                <li><Link to="/faculty/statistics" className={styles.dropdownItem}>Statistics Till Spring 2022</Link></li>
+                <li><Link to="/faculty/social-media" className={styles.dropdownItem}>Social Media</Link></li>
+                <li><Link to="/faculty/corporate-relationship" className={styles.dropdownItem}>Corporate Relationship Program</Link></li>
               </ul>
             </li>
-            <li className={`nav-item dropdown ${activeDropdown === 'community' ? 'active' : ''}`}>
+            <li className={`${styles.navItem} ${styles.dropdown} ${activeDropdown === 'community' ? styles.active : ''}`}>
               <div 
-                className="nav-link dropdown-toggle" 
+                className={`${styles.navLink} ${styles.dropdownToggle}`} 
                 onClick={() => handleDropdownToggle('community')}
               >
-                Community <i className="fas fa-chevron-down dropdown-icon"></i>
+                Community <i className={`fas fa-chevron-down ${styles.dropdownIcon}`}></i>
               </div>
-              <ul className={`dropdown-menu ${activeDropdown === 'community' ? 'show' : ''}`}>
-                <li><Link to="/community" className="dropdown-item">Student Life</Link></li>
-                <li><Link to="/community/clubs" className="dropdown-item">Student Clubs</Link></li>
-                <li><Link to="/community/events" className="dropdown-item">Events Calendar</Link></li>
-                <li><Link to="/community/alumni" className="dropdown-item">Alumni Network</Link></li>
-                <li><Link to="/community/outreach" className="dropdown-item">Community Outreach</Link></li>
-                <li><Link to="/community/gallery" className="dropdown-item">Photo Gallery</Link></li>
-                <li><Link to="/community/news" className="dropdown-item">News & Announcements</Link></li>
+              <ul className={`${styles.dropdownMenu} ${activeDropdown === 'community' ? styles.show : ''}`}>
+                <li><Link to="/community" className={styles.dropdownItem}>Student Life</Link></li>
+                <li><Link to="/community/clubs" className={styles.dropdownItem}>Student Clubs</Link></li>
+                <li><Link to="/community/events" className={styles.dropdownItem}>Events Calendar</Link></li>
+                <li><Link to="/community/alumni" className={styles.dropdownItem}>Alumni Network</Link></li>
+                <li><Link to="/community/outreach" className={styles.dropdownItem}>Community Outreach</Link></li>
+                <li><Link to="/community/gallery" className={styles.dropdownItem}>Photo Gallery</Link></li>
+                <li><Link to="/community/news" className={styles.dropdownItem}>News & Announcements</Link></li>
               </ul>
             </li>
-            <li className={`nav-item dropdown ${activeDropdown === 'why-hbi' ? 'active' : ''}`}>
+            <li className={`${styles.navItem} ${styles.dropdown} ${activeDropdown === 'why-hbi' ? styles.active : ''}`}>
               <div 
-                className="nav-link dropdown-toggle" 
+                className={`${styles.navLink} ${styles.dropdownToggle}`} 
                 onClick={() => handleDropdownToggle('why-hbi')}
               >
-                Why HBI <i className="fas fa-chevron-down dropdown-icon"></i>
+                Why HBI <i className={`fas fa-chevron-down ${styles.dropdownIcon}`}></i>
               </div>
-              <ul className={`dropdown-menu ${activeDropdown === 'why-hbi' ? 'show' : ''}`}>
-                <li><Link to="/why-hbi" className="dropdown-item">Why Study at HBI</Link></li>
-                <li><Link to="/why-hbi/tuition-fees" className="dropdown-item">Tuition Fees</Link></li>
-                <li><Link to="/why-hbi/accreditation" className="dropdown-item">Accreditation</Link></li>
-                <li><Link to="/why-hbi/graduate-acceptance" className="dropdown-item">Graduate Acceptance</Link></li>
-                <li><Link to="/why-hbi/exam-centers" className="dropdown-item">Exam Centers</Link></li>
-                <li><Link to="/why-hbi/scholarships" className="dropdown-item">Scholarships</Link></li>
-                <li><Link to="/why-hbi/testimonials" className="dropdown-item">Testimonials</Link></li>
-                <li><Link to="/why-hbi/student-affairs" className="dropdown-item">Student Affairs Office</Link></li>
+              <ul className={`${styles.dropdownMenu} ${activeDropdown === 'why-hbi' ? styles.show : ''}`}>
+                <li><Link to="/why-hbi" className={styles.dropdownItem}>Why Study at HBI</Link></li>
+                <li><Link to="/why-hbi/tuition-fees" className={styles.dropdownItem}>Tuition Fees</Link></li>
+                <li><Link to="/why-hbi/accreditation" className={styles.dropdownItem}>Accreditation</Link></li>
+                <li><Link to="/why-hbi/graduate-acceptance" className={styles.dropdownItem}>Graduate Acceptance</Link></li>
+                <li><Link to="/why-hbi/exam-centers" className={styles.dropdownItem}>Exam Centers</Link></li>
+                <li><Link to="/why-hbi/scholarships" className={styles.dropdownItem}>Scholarships</Link></li>
+                <li><Link to="/why-hbi/testimonials" className={styles.dropdownItem}>Testimonials</Link></li>
+                <li><Link to="/why-hbi/student-affairs" className={styles.dropdownItem}>Student Affairs Office</Link></li>
               </ul>
             </li>
-            <li className={`nav-item dropdown ${activeDropdown === 'programs' ? 'active' : ''}`}>
+            <li className={`${styles.navItem} ${styles.dropdown} ${activeDropdown === 'programs' ? styles.active : ''}`}>
               <div 
-                className="nav-link dropdown-toggle" 
+                className={`${styles.navLink} ${styles.dropdownToggle}`} 
                 onClick={() => handleDropdownToggle('programs')}
               >
-                Programs <i className="fas fa-chevron-down dropdown-icon"></i>
+                Programs <i className={`fas fa-chevron-down ${styles.dropdownIcon}`}></i>
               </div>
-              <ul className={`dropdown-menu ${activeDropdown === 'programs' ? 'show' : ''}`}>
-                <li><Link to="/programs/bachelor" className="dropdown-item">Bachelor Degree</Link></li>
-                <li><Link to="/programs/intensive-arabic" className="dropdown-item">Intensive Arabic Program</Link></li>
-                <li><Link to="/programs/bridge" className="dropdown-item">Bridge to Master's</Link></li>
-                <li><Link to="/programs/master" className="dropdown-item">Master Degree</Link></li>
-                <li><Link to="/programs/master-research" className="dropdown-item">Master Degree - Research</Link></li>
+              <ul className={`${styles.dropdownMenu} ${activeDropdown === 'programs' ? styles.show : ''}`}>
+                <li><Link to="/programs/bachelor" className={styles.dropdownItem}>Bachelor Degree</Link></li>
+                <li><Link to="/programs/intensive-arabic" className={styles.dropdownItem}>Intensive Arabic Program</Link></li>
+                <li><Link to="/programs/bridge" className={styles.dropdownItem}>Bridge to Master's</Link></li>
+                <li><Link to="/programs/master" className={styles.dropdownItem}>Master Degree</Link></li>
+                <li><Link to="/programs/master-research" className={styles.dropdownItem}>Master Degree - Research</Link></li>
               </ul>
             </li>
-            <li className={`nav-item dropdown ${activeDropdown === 'publications' ? 'active' : ''}`}>
+            <li className={`${styles.navItem} ${styles.dropdown} ${activeDropdown === 'publications' ? styles.active : ''}`}>
               <div 
-                className="nav-link dropdown-toggle" 
+                className={`${styles.navLink} ${styles.dropdownToggle}`} 
                 onClick={() => handleDropdownToggle('publications')}
               >
-                Applications <i className="fas fa-chevron-down dropdown-icon"></i>
+                Applications <i className={`fas fa-chevron-down ${styles.dropdownIcon}`}></i>
               </div>
-              <ul className={`dropdown-menu ${activeDropdown === 'publications' ? 'show' : ''}`}>
-                <li><Link to="/publications/about" className="dropdown-item">About</Link></li>
-                <li><Link to="/publications/iou-book" className="dropdown-item">IOU Book Publication</Link></li>
-                <li><Link to="/publications/booklets" className="dropdown-item">Booklets</Link></li>
-                <li><Link to="/publications/prospectus" className="dropdown-item">Prospectus</Link></li>
-                <li><Link to="/publications/insights" className="dropdown-item">Insights Magazine</Link></li>
-                <li><Link to="/publications/journals" className="dropdown-item">Journals</Link></li>
-                <li><Link to="/publications/news" className="dropdown-item">News Portal</Link></li>
-                <li><Link to="/publications/conferences" className="dropdown-item">Conferences</Link></li>
+              <ul className={`${styles.dropdownMenu} ${activeDropdown === 'publications' ? styles.show : ''}`}>
+                <li><Link to="/publications/about" className={styles.dropdownItem}>About</Link></li>
+                <li><Link to="/publications/iou-book" className={styles.dropdownItem}>IOU Book Publication</Link></li>
+                <li><Link to="/publications/booklets" className={styles.dropdownItem}>Booklets</Link></li>
+                <li><Link to="/publications/prospectus" className={styles.dropdownItem}>Prospectus</Link></li>
+                <li><Link to="/publications/insights" className={styles.dropdownItem}>Insights Magazine</Link></li>
+                <li><Link to="/publications/journals" className={styles.dropdownItem}>Journals</Link></li>
+                <li><Link to="/publications/news" className={styles.dropdownItem}>News Portal</Link></li>
+                <li><Link to="/publications/conferences" className={styles.dropdownItem}>Conferences</Link></li>
               </ul>
             </li>
-            <li className="nav-item"><Link to="/contact" className="nav-link">Contact us</Link></li>
+            <li className={styles.navItem}><Link to="/contact" className={styles.navLink}>Contact us</Link></li>
           </ul>
         </nav>
         
-        <div className="header-actions">
-          <Link to="/login" className="login-btn">Log in</Link>
+        <div className={styles.headerActions}>
+          {isAuthenticated ? (
+            <div className={styles.userMenu}>
+              <div className={styles.userProfile} onClick={toggleUserDropdown}>
+                <div className={styles.userAvatar}>
+                  {user?.firstName?.charAt(0) || user?.email?.charAt(0) || 'U'}
+                </div>
+                <span className={styles.userName}>
+                  {user?.firstName || 'User'}
+                </span>
+                <i className={`fas fa-chevron-down ${styles.userDropdownIcon} ${userDropdownOpen ? styles.open : ''}`}></i>
+              </div>
+              
+              <div className={`${styles.userDropdown} ${userDropdownOpen ? styles.show : ''}`}>
+                <div className={styles.userInfo}>
+                  <div className={styles.userDetails}>
+                    <h4>{user?.firstName} {user?.lastName}</h4>
+                    <p>{user?.email}</p>
+                    <span className={styles.userRole}>{user?.role || 'Student'}</span>
+                  </div>
+                </div>
+                <div className={styles.userActions}>
+                  <Link to="/profile" className={styles.userAction} onClick={() => setUserDropdownOpen(false)}>
+                    <i className="fas fa-user"></i>
+                    Profile
+                  </Link>
+                  <Link to="/courses" className={styles.userAction} onClick={() => setUserDropdownOpen(false)}>
+                    <i className="fas fa-book"></i>
+                    My Courses
+                  </Link>
+                  <Link to="/settings" className={styles.userAction} onClick={() => setUserDropdownOpen(false)}>
+                    <i className="fas fa-cog"></i>
+                    Settings
+                  </Link>
+                  <button onClick={handleLogout} className={styles.logoutBtn}>
+                    <i className="fas fa-sign-out-alt"></i>
+                    Logout
+                  </button>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className={styles.authButtons}>
+              <Link to="/login" className={styles.loginBtn}>Log in</Link>
+              <Link to="/register" className={styles.registerBtn}>Sign up</Link>
+            </div>
+          )}
         </div>
 
-        <div className="mobile-menu-toggle" onClick={toggleMobileMenu}>
+        <div className={styles.mobileMenuToggle} onClick={toggleMobileMenu}>
           <i className={`fas ${mobileMenuOpen ? 'fa-times' : 'fa-bars'}`}></i>
         </div>
         

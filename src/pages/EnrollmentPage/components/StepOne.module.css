@@ -1,0 +1,96 @@
+/* Step One - Using Global Colors */
+.stepOne {
+  width: 100%;
+}
+
+.stepHeader {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.stepHeader h2 {
+  color: var(--text-color);
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.stepHeader p {
+  color: var(--text-color);
+  font-size: 1rem;
+  margin: 0;
+  opacity: 0.8;
+}
+
+/* Loading State */
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  color: var(--text-color);
+}
+
+.loadingSpinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--border-color);
+  border-top: 3px solid var(--primary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading p {
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+/* Step Actions */
+.stepActions {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.nextButton {
+  padding: 1rem 2rem;
+  background: var(--primary-color);
+  color: var(--gradient-start);
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  min-width: 200px;
+}
+
+.nextButton:hover {
+  background: var(--hover-color);
+  transform: translateY(-2px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .nextButton {
+    width: 100%;
+    max-width: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  .stepHeader h2 {
+    font-size: 1.25rem;
+  }
+  
+  .stepHeader p {
+    font-size: 0.9rem;
+  }
+}

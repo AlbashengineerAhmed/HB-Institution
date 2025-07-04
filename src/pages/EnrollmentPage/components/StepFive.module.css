@@ -1,0 +1,213 @@
+/* Step Five - Using Global Colors */
+.stepFive {
+  width: 100%;
+}
+
+.stepHeader {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.stepHeader h2 {
+  color: var(--text-color);
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.stepHeader p {
+  color: var(--text-color);
+  font-size: 0.9rem;
+  margin: 0;
+  opacity: 0.8;
+}
+
+/* Review Container */
+.reviewContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+/* Selection Grid */
+.selectionGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  background: var(--gradient-start);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.selectionItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.selectionLabel {
+  color: var(--text-color);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  opacity: 0.7;
+}
+
+.selectionValue {
+  color: var(--text-color);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+/* Terms Section */
+.termsSection {
+  background: var(--gradient-start);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.termsCheckbox {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.termsCheckbox input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--primary-color);
+}
+
+.termsCheckbox label {
+  color: var(--text-color);
+  font-size: 0.9rem;
+  cursor: pointer;
+  line-height: 1.4;
+}
+
+/* Error Message */
+.errorMessage {
+  background: var(--error-color);
+  border: 1px solid var(--error-color);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.errorMessage h4 {
+  color: var(--text-color);
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.errorMessage p {
+  color: var(--text-color);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+/* Step Actions */
+.stepActions {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.prevButton,
+.submitButton {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  min-width: 120px;
+}
+
+.prevButton {
+  background: transparent;
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+}
+
+.prevButton:hover:not(:disabled) {
+  background: var(--secondary-color);
+  border-color: var(--primary-color);
+}
+
+.prevButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.submitButton {
+  background: var(--success-color);
+  color: var(--text-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.submitButton:hover:not(:disabled):not(.loading) {
+  background: var(--primary-color);
+  transform: translateY(-1px);
+}
+
+.submitButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.submitSpinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top: 2px solid var(--text-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .stepActions {
+    flex-direction: column;
+  }
+  
+  .prevButton,
+  .submitButton {
+    width: 100%;
+  }
+  
+  .selectionGrid {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .stepHeader h2 {
+    font-size: 1.25rem;
+  }
+  
+  .reviewContainer {
+    gap: 1rem;
+  }
+  
+  .selectionGrid,
+  .termsSection {
+    padding: 1rem;
+  }
+}

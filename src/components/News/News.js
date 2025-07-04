@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './News.css';
+import styles from './News.module.css';
 
 const News = () => {
   // Sample news data
@@ -32,18 +32,18 @@ const News = () => {
   ];
 
   return (
-    <section className="news-section">
+    <section className={styles.newsSection}>
       {/* Decorative shapes */}
-      <div className="news-shape shape-1">
+      <div className={`${styles.newsShape} ${styles.shape1}`}>
         <img src="/images/banner-2-svg-1.svg" alt="" />
       </div>
-      <div className="news-shape shape-2">
+      <div className={`${styles.newsShape} ${styles.shape2}`}>
         <img src="/images/banner-2-svg-2.svg" alt="" />
       </div>
-      <div className="news-shape shape-3">
+      <div className={`${styles.newsShape} ${styles.shape3}`}>
         <img src="/images/testimonial-shape-3.png" alt="" />
       </div>
-      <div className="news-shape shape-4">
+      <div className={`${styles.newsShape} ${styles.shape4}`}>
         <img src="/images/menu-shape-2.png" alt="" />
       </div>
       
@@ -53,22 +53,22 @@ const News = () => {
           <Link to="/news" className="view-all-link">View All News</Link>
         </div>
         
-        <div className="news-grid">
+        <div className={styles.newsGrid}>
           {newsItems.map(item => (
-            <div className="news-card" key={item.id}>
-              <div className="news-image-container">
-                <img src={item.image} alt={item.title} className="news-image" />
-                <span className="news-category">{item.category}</span>
+            <div className={styles.newsCard} key={item.id}>
+              <div className={styles.newsImageContainer}>
+                <img src={item.image} alt={item.title} className={styles.newsImage} />
+                <span className={styles.newsCategory}>{item.category}</span>
               </div>
-              <div className="news-content">
-                <h3 className="news-title">
+              <div className={styles.newsContent}>
+                <h3 className={styles.newsTitle}>
                   <Link to={`/news/${item.id}`}>{item.title}</Link>
                 </h3>
-                <div className="news-meta">
-                  <span className="news-date">{item.date}</span>
+                <div className={styles.newsMeta}>
+                  <span className={styles.newsDate}>{item.date}</span>
                 </div>
-                <p className="news-excerpt">{item.excerpt}</p>
-                <Link to={`/news/${item.id}`} className="read-more-link">Read More</Link>
+                <p className={styles.newsExcerpt}>{item.excerpt}</p>
+                <Link to={`/news/${item.id}`} className={styles.readMoreLink}>Read More</Link>
               </div>
             </div>
           ))}

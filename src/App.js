@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
-import './App.css';
+import { Provider } from 'react-redux';
+import { ToastContainer } from 'react-toastify';
+import { store } from './store/store';
+import styles from './App.module.css';
 import './styles/global.css';
+import 'react-toastify/dist/ReactToastify.css';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
 import HomePage from './pages/HomePage/HomePage';
@@ -20,6 +24,12 @@ import ForgotPasswordPage from './pages/AuthPages/ForgotPasswordPage';
 import VerifyCodePage from './pages/AuthPages/VerifyCodePage';
 import ResetPasswordPage from './pages/AuthPages/ResetPasswordPage';
 
+// New Pages
+import CoursesPage from './pages/CoursesPage/CoursesPage';
+import CourseDetailsPage from './pages/CourseDetailsPage/CourseDetailsPage';
+import EnrollmentPage from './pages/EnrollmentPage/EnrollmentPage';
+import EnrollmentSuccessPage from './pages/EnrollmentSuccessPage/EnrollmentSuccessPage';
+
 // Route change tracker wrapper component
 const AppContent = () => {
   const [isInitialLoad, setIsInitialLoad] = useState(true);
@@ -34,9 +44,9 @@ const AppContent = () => {
   }, []);
   
   return (
-    <div className="App">
+    <div className={styles.App}>
       <Header />
-      <main className="main-content">
+      <main className={styles.mainContent}>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<AboutPage />} />
@@ -45,6 +55,12 @@ const AppContent = () => {
           <Route path="/community/*" element={<CommunityPage />} />
           <Route path="/why-hbi" element={<WhyHBIPage />} />
           <Route path="/why-hbi/*" element={<WhyHBIPage />} />
+          
+          {/* Course Routes */}
+          <Route path="/courses" element={<CoursesPage />} />
+          <Route path="/course/:id" element={<CourseDetailsPage />} />
+          <Route path="/enrollment/:courseId" element={<EnrollmentPage />} />
+          <Route path="/enrollment-success/:courseId" element={<EnrollmentSuccessPage />} />
           
           {/* Auth Routes */}
           <Route path="/login" element={<LoginPage />} />
@@ -58,15 +74,33 @@ const AppContent = () => {
       <WhatsAppFloat />
       <ScrollToTop />
       {!isInitialLoad && <RouteChangeTracker />}
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+        toastStyle={{
+          backgroundColor: 'var(--secondary-color)',
+          color: 'var(--text-color)',
+        }}
+      />
     </div>
   );
 };
 
 function App() {
   return (
-    <Router>
-      <AppContent />
-    </Router>
+    <Provider store={store}>
+      <Router>
+        <AppContent />
+      </Router>
+    </Provider>
   );
 }
 

@@ -1,0 +1,344 @@
+/* Step Four - Using Global Colors */
+.stepFour {
+  width: 100%;
+}
+
+.stepHeader {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.stepHeader h2 {
+  color: var(--text-color);
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.stepHeader p {
+  color: var(--text-color);
+  font-size: 0.9rem;
+  margin: 0;
+  opacity: 0.8;
+}
+
+/* Loading State */
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  color: var(--text-color);
+}
+
+.loadingSpinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--border-color);
+  border-top: 3px solid var(--primary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading p {
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+/* Error State */
+.error {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-color);
+}
+
+.error h3 {
+  color: var(--text-color);
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.error p {
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.retryButton {
+  padding: 0.75rem 1.5rem;
+  background: var(--primary-color);
+  color: var(--gradient-start);
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.retryButton:hover {
+  background: var(--hover-color);
+}
+
+/* No Groups */
+.noGroups {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-color);
+}
+
+.noGroups h3 {
+  color: var(--text-color);
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.noGroups p {
+  font-size: 0.9rem;
+  margin: 0;
+  opacity: 0.8;
+}
+
+/* Groups Container */
+.groupsContainer {
+  margin-bottom: 2rem;
+}
+
+.groupsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.groupCard {
+  background: var(--gradient-start);
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.groupCard:hover:not(.unavailable) {
+  border-color: var(--primary-color);
+  transform: translateY(-2px);
+}
+
+.groupCard.selected {
+  border-color: var(--primary-color);
+  background: var(--secondary-color);
+}
+
+.groupCard.unavailable {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.groupHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.groupInfo h3 {
+  color: var(--text-color);
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.availabilityBadge {
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.availabilityBadge.available {
+  background: var(--success-color);
+  color: var(--text-color);
+}
+
+.availabilityBadge.full {
+  background: var(--error-color);
+  color: var(--text-color);
+}
+
+.selectIndicator {
+  width: 20px;
+  height: 20px;
+  color: var(--success-color);
+  flex-shrink: 0;
+}
+
+.selectIndicator svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Schedule Section */
+.scheduleSection {
+  margin-bottom: 1rem;
+}
+
+.scheduleList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.scheduleItem {
+  background: var(--secondary-color);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 0.75rem;
+  transition: var(--transition);
+  position: relative;
+}
+
+.scheduleItem.selectable {
+  cursor: pointer;
+}
+
+.scheduleItem.selectable:hover {
+  border-color: var(--primary-color);
+}
+
+.scheduleItem.selectedSchedule {
+  border-color: var(--primary-color);
+  background: var(--gradient-end);
+}
+
+.scheduleDay {
+  color: var(--text-color);
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 0.25rem;
+}
+
+.scheduleTime {
+  color: var(--primary-color);
+  font-weight: 600;
+  font-size: 0.8rem;
+  margin-bottom: 0.25rem;
+}
+
+.scheduleTimezone {
+  color: var(--text-color);
+  font-size: 0.7rem;
+  opacity: 0.7;
+}
+
+.scheduleCheckmark {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 16px;
+  height: 16px;
+  color: var(--success-color);
+}
+
+.scheduleCheckmark svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Group Stats */
+.groupStats {
+  text-align: center;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color);
+  color: var(--text-color);
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+/* Step Actions */
+.stepActions {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.prevButton,
+.nextButton {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  min-width: 120px;
+}
+
+.prevButton {
+  background: transparent;
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+}
+
+.prevButton:hover {
+  background: var(--secondary-color);
+  border-color: var(--primary-color);
+}
+
+.nextButton {
+  background: var(--primary-color);
+  color: var(--gradient-start);
+}
+
+.nextButton:hover:not(.disabled) {
+  background: var(--hover-color);
+  transform: translateY(-1px);
+}
+
+.nextButton.disabled {
+  background: var(--border-color);
+  color: var(--text-color);
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .groupsGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .stepActions {
+    flex-direction: column;
+  }
+  
+  .prevButton,
+  .nextButton {
+    width: 100%;
+  }
+  
+  .groupCard {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .stepHeader h2 {
+    font-size: 1.25rem;
+  }
+  
+  .groupCard {
+    padding: 0.75rem;
+  }
+  
+  .scheduleItem {
+    padding: 0.5rem;
+  }
+}

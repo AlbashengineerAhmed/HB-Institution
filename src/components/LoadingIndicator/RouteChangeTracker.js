@@ -10,10 +10,10 @@ const RouteChangeTracker = () => {
     // Show loading indicator when route changes
     setIsLoading(true);
     
-    // Hide loading indicator after a short delay
+    // Hide loading indicator after a shorter delay for better UX
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 800); // Adjust timing as needed
+    }, 500); // Reduced from 800ms to 500ms
     
     return () => clearTimeout(timer);
   }, [location.pathname]);

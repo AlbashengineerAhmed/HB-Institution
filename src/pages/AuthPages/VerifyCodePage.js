@@ -1,14 +1,19 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import './AuthPages.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { verifyCode, forgetPassword, clearError } from '../../store/slices/authSlice';
+import styles from './AuthPages.module.css';
 import logo from '../../assets/images/logo-black.webp';
 // Using register.png for the auth page image
 const authImage = process.env.PUBLIC_URL + '/images/register.png';
 
 const VerifyCodePage = () => {
-  const [code, setCode] = useState(['', '', '', '']);
-  const inputRefs = useRef([]);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { isLoading, error, resetEmail, isCodeVerified } = useSelector((state) => state.auth);
+
+  const [code, setCode] = useState(['', '', '', '', '', '']); // 6 digits for the API
+  const inputRefs = useRef([]);
 
   useEffect(() => {
     // Focus the first input when component mounts
@@ -17,10 +22,25 @@ const VerifyCodePage = () => {
     }
   }, []);
 
+  useEffect(() => {
+    // Clear errors when component mounts
+    dispatch(clearError());
+  }, [dispatch]);
+
+  useEffect(() => {
+    // Redirect if code is verified
+    if (isCodeVerified) {
+      navigate('/reset-password');
+    }
+  }, [isCodeVerified, navigate]);
+
   const handleChange = (index, value) => {
+    // Only allow numeric input
+    if (!/^\d*$/.test(value)) return;
+
     if (value.length > 1) {
       // If pasting multiple digits, distribute them across inputs
-      const digits = value.split('');
+      const digits = value.slice(0, 6).split('');
       const newCode = [...code];
       
       digits.forEach((digit, i) => {
@@ -59,36 +79,61 @@ const VerifyCodePage = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const verificationCode = code.join('');
-    console.log('Verification code submitted:', verificationCode);
     
-    // If code is complete, navigate to reset password page
-    if (verificationCode.length === 4) {
-      navigate('/reset-password');
+    if (verificationCode.length !== 6) {
+      return;
+    }
+
+    try {
+      await dispatch(verifyCode(verificationCode)).unwrap();
+      // Navigation is handled by useEffect when isCodeVerified changes
+    } catch (error) {
+      // Error is handled by Redux and displayed in the UI
+      console.error('Code verification failed:', error);
+    }
+  };
+
+  const handleResendCode = async () => {
+    if (resetEmail) {
+      try {
+        await dispatch(forgetPassword(resetEmail)).unwrap();
+      } catch (error) {
+        console.error('Resend code failed:', error);
+      }
     }
   };
 
   return (
-    <div className="auth-container">
-      <div className="auth-left-panel">
-        <div className="auth-image-container">
-          <img src={authImage} alt="Authentication" className="auth-image" />
+    <div className={styles.authContainer}>
+      <div className={styles.authLeftPanel}>
+        <div className={styles.authImageContainer}>
+          <img src={authImage} alt="Authentication" className={styles.authImage} />
         </div>
       </div>
       
-      <div className="auth-right-panel">
-        <div className="auth-form-container">
-          <div className="auth-logo">
+      <div className={styles.authRightPanel}>
+        <div className={styles.authFormContainer}>
+          <div className={styles.authLogo}>
             <img src={logo} alt="Website Logo" />
           </div>
-          <h2 className="auth-title">Verify Your Email</h2>
+          <h2 className={styles.authTitle}>Verify Your Email</h2>
           
-          <p className="auth-description">Enter the 4-digit verification code sent to your email address.</p>
+          <p className={styles.authSubtitle}>
+            Enter the 6-digit verification code sent to {resetEmail || 'your email address'}.
+          </p>
           
-          <form onSubmit={handleSubmit} className="auth-form">
-            <div className="verification-code-container">
+          {/* Display errors */}
+          {error && (
+            <div className={styles.errorMessage}>
+              {error}
+            </div>
+          )}
+          
+          <form onSubmit={handleSubmit} className={styles.authForm}>
+            <div className={styles.verificationCodeContainer}>
               {code.map((digit, index) => (
                 <input
                   key={index}
@@ -98,7 +143,7 @@ const VerifyCodePage = () => {
                   onChange={(e) => handleChange(index, e.target.value)}
                   onKeyDown={(e) => handleKeyDown(index, e)}
                   ref={(el) => (inputRefs.current[index] = el)}
-                  className="verification-input"
+                  className={styles.verificationInput}
                   pattern="[0-9]*"
                   inputMode="numeric"
                   required
@@ -108,19 +153,28 @@ const VerifyCodePage = () => {
             
             <button 
               type="submit" 
-              className="auth-button"
-              disabled={code.some(digit => !digit)}
+              className={styles.authButton}
+              disabled={code.some(digit => !digit) || isLoading}
             >
-              Verify Code
+              {isLoading ? 'Verifying...' : 'Verify Code'}
             </button>
           </form>
           
-          <div className="auth-links">
-            <p>Didn't receive a code? <button className="text-button">Resend Code</button></p>
+          <div className={styles.authLinks}>
+            <p>
+              Didn't receive a code? 
+              <button 
+                className={styles.textButton}
+                onClick={handleResendCode}
+                disabled={isLoading}
+              >
+                Resend Code
+              </button>
+            </p>
             <p><Link to="/forgot-password">Use a different email</Link></p>
           </div>
           
-          <div className="auth-footer">
+          <div className={styles.authFooter}>
             <Link to="/terms">Terms of Service</Link>
             <Link to="/privacy">Privacy Policy</Link>
           </div>

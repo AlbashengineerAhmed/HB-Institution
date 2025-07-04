@@ -1,0 +1,590 @@
+/* Using global color variables from global.css */
+
+/* General Styles */
+.applicationPage {
+  font-family: 'Roboto', sans-serif;
+  color: var(--text-color);
+  line-height: 1.6;
+}
+
+/* Using global styles */
+
+.sectionTitle::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 3px;
+  background-color: var(--secondary-color);
+}
+
+.sectionDescription {
+  max-width: 800px;
+  margin: 0 auto;
+  color: var(--light-text);
+  font-size: 1.1rem;
+}
+
+/* Banner Section */
+.applicationBanner {
+  background: linear-gradient(rgba(63, 81, 181, 0.8), rgba(63, 81, 181, 0.9)), url('/images/hero-2-thumb-1.png');
+  background-size: cover;
+  background-position: center;
+  color: var(--white);
+  padding: 100px 0;
+  text-align: center;
+}
+
+.bannerTitle {
+  font-size: 3.5rem;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+}
+
+.bannerDescription {
+  font-size: 1.2rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Application Process Overview */
+.applicationOverviewSection {
+  padding: 80px 0;
+  background-color: var(--white);
+}
+
+.processSteps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+.stepCard {
+  background-color: var(--light-bg);
+  border-radius: 8px;
+  padding: 30px;
+  box-shadow: var(--shadow);
+  text-align: center;
+  transition: var(--transition);
+}
+
+.stepCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.stepIcon {
+  width: 70px;
+  height: 70px;
+  background-color: var(--primary-color);
+  color: var(--white);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  font-size: 1.8rem;
+}
+
+.stepTitle {
+  font-size: 1.3rem;
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+}
+
+.stepDescription {
+  color: var(--light-text);
+}
+
+/* Requirements Section */
+.requirementsSection {
+  padding: 80px 0;
+  background-color: var(--light-bg);
+}
+
+.requirementsTabs {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.tabButtons {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.tabButton {
+  padding: 12px 25px;
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--light-text);
+  cursor: pointer;
+  transition: var(--transition);
+  position: relative;
+}
+
+.tabButton.active {
+  color: var(--primary-color);
+}
+
+.tabButton.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: var(--primary-color);
+}
+
+.tabContent {
+  background-color: var(--white);
+  border-radius: 8px;
+  padding: 40px;
+  box-shadow: var(--shadow);
+}
+
+.requirementsTitle {
+  font-size: 1.5rem;
+  color: var(--primary-color);
+  margin-bottom: 1.5rem;
+}
+
+.requirementsList ul {
+  list-style-type: none;
+  padding-left: 0;
+  margin-bottom: 2rem;
+}
+
+.requirementsList li {
+  position: relative;
+  padding-left: 25px;
+  margin-bottom: 12px;
+}
+
+.requirementsList li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--secondary-color);
+  font-weight: bold;
+}
+
+.additionalInfo {
+  background-color: #f0f4ff;
+  border-left: 4px solid var(--primary-color);
+  padding: 15px 20px;
+  border-radius: 0 4px 4px 0;
+}
+
+.additionalInfo h4 {
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.additionalInfo p {
+  margin-bottom: 0.5rem;
+  color: var(--light-text);
+}
+
+/* Application Form Section */
+.applicationFormSection {
+  padding: 80px 0;
+  background-color: var(--white);
+}
+
+.applicationFormContainer {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.formProgress {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 40px;
+  position: relative;
+}
+
+.formProgress::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: var(--border-color);
+  z-index: 1;
+}
+
+.progressStep {
+  position: relative;
+  background-color: var(--white);
+  color: var(--light-text);
+  padding: 8px 15px;
+  border-radius: 20px;
+  font-weight: 600;
+  z-index: 2;
+  border: 2px solid var(--border-color);
+  transition: var(--transition);
+}
+
+.progressStep.active {
+  background-color: var(--primary-color);
+  color: var(--white);
+  border-color: var(--primary-color);
+}
+
+.applicationForm {
+  background-color: var(--white);
+  border-radius: 8px;
+  padding: 40px;
+  box-shadow: var(--shadow);
+}
+
+.formStepTitle {
+  font-size: 1.5rem;
+  color: var(--primary-color);
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.formRow {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.formGroup {
+  flex: 1;
+  margin-bottom: 20px;
+}
+
+.formGroup.fullWidth {
+  width: 100%;
+}
+
+.formGroup label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.formGroup input,
+.formGroup select,
+.formGroup textarea {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: var(--transition);
+}
+
+.formGroup input:focus,
+.formGroup select:focus,
+.formGroup textarea:focus {
+  border-color: var(--primary-color);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(63, 81, 181, 0.2);
+}
+
+.fileInfo {
+  display: block;
+  margin-top: 5px;
+  font-size: 0.85rem;
+  color: var(--light-text);
+}
+
+.checkboxGroup {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.checkboxGroup input[type="checkbox"] {
+  width: auto;
+  margin-top: 5px;
+}
+
+.formButtons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+}
+
+.btnPrev,
+.btnNext,
+.btnSubmit {
+  padding: 12px 25px;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.btnPrev {
+  background-color: var(--light-bg);
+  color: var(--text-color);
+}
+
+.btnPrev:hover {
+  background-color: var(--border-color);
+}
+
+.btnNext,
+.btnSubmit {
+  background-color: var(--primary-color);
+  color: var(--white);
+}
+
+.btnNext:hover,
+.btnSubmit:hover {
+  background-color: #303f9f;
+}
+
+/* Deadlines Section */
+.deadlinesSection {
+  padding: 80px 0;
+  background-color: var(--light-bg);
+}
+
+.deadlinesTableContainer {
+  overflow-x: auto;
+  margin-bottom: 20px;
+}
+
+.deadlinesTable {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: var(--white);
+  box-shadow: var(--shadow);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.deadlinesTable th,
+.deadlinesTable td {
+  padding: 15px 20px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.deadlinesTable th {
+  background-color: var(--primary-color);
+  color: var(--white);
+  font-weight: 600;
+}
+
+.deadlinesTable tr:last-child td {
+  border-bottom: none;
+}
+
+.deadlinesTable tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.deadlinesNote {
+  background-color: #f0f4ff;
+  border-left: 4px solid var(--primary-color);
+  padding: 15px 20px;
+  border-radius: 0 4px 4px 0;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* Contact Section */
+.contactSection {
+  padding: 80px 0;
+  background-color: var(--white);
+}
+
+.contactInfo {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+}
+
+.contactCard {
+  background-color: var(--light-bg);
+  border-radius: 8px;
+  padding: 30px;
+  box-shadow: var(--shadow);
+  text-align: center;
+  transition: var(--transition);
+}
+
+.contactCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.contactIcon {
+  width: 60px;
+  height: 60px;
+  background-color: var(--primary-color);
+  color: var(--white);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  font-size: 1.5rem;
+}
+
+.contactTitle {
+  font-size: 1.3rem;
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
+}
+
+.contactDetail {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.contactDescription {
+  color: var(--light-text);
+  font-size: 0.9rem;
+}
+
+/* FAQ Section */
+.faqSection {
+  padding: 80px 0;
+  background-color: var(--light-bg);
+}
+
+.faqContainer {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.faqItem {
+  background-color: var(--white);
+  border-radius: 8px;
+  padding: 25px 30px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow);
+  transition: var(--transition);
+}
+
+.faqItem:hover {
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.faqQuestion {
+  font-size: 1.2rem;
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+  position: relative;
+  padding-left: 30px;
+}
+
+.faqQuestion::before {
+  content: 'Q:';
+  position: absolute;
+  left: 0;
+  color: var(--secondary-color);
+  font-weight: bold;
+}
+
+.faqAnswer {
+  color: var(--light-text);
+  position: relative;
+  padding-left: 30px;
+}
+
+.faqAnswer::before {
+  content: 'A:';
+  position: absolute;
+  left: 0;
+  color: var(--primary-color);
+  font-weight: bold;
+}
+
+/* Responsive Styles */
+@media (max-width: 992px) {
+  .processSteps,
+  .contactInfo {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .bannerTitle {
+    font-size: 3rem;
+  }
+  
+  /* Using global .section-title styles */
+  
+  .formProgress {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  .formProgress::before {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .formRow {
+    flex-direction: column;
+    gap: 0;
+  }
+  
+  .tabButtons {
+    flex-wrap: wrap;
+  }
+  
+  .tabButton {
+    flex: 1;
+    min-width: 120px;
+    text-align: center;
+  }
+  
+  .bannerTitle {
+    font-size: 2.5rem;
+  }
+  
+  /* Using global .section-title styles */
+}
+
+@media (max-width: 576px) {
+  .processSteps,
+  .contactInfo {
+    grid-template-columns: 1fr;
+  }
+  
+  .bannerTitle {
+    font-size: 2rem;
+  }
+  
+  .bannerDescription {
+    font-size: 1rem;
+  }
+  
+  /* Using global .section-title styles */
+  
+  .tabContent,
+  .applicationForm {
+    padding: 20px;
+  }
+  
+  .formButtons {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .btnPrev,
+  .btnNext,
+  .btnSubmit {
+    width: 100%;
+  }
+}

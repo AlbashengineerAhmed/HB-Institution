@@ -1,6 +1,7 @@
 import React from 'react';
-import './HomePage.css';
+import styles from './HomePage.module.css';
 import Hero from '../../components/Hero/Hero';
+import Categories from '../../components/Categories/Categories';
 import PopularCourses from '../../components/PopularCourses/PopularCourses';
 import Instructors from '../../components/Instructors/Instructors';
 import Testimonials from '../../components/Testimonials/Testimonials';
@@ -9,9 +10,10 @@ import News from '../../components/News/News';
 
 const HomePage = () => {
   return (
-    <div className="home-page">
+    <div className={styles.homePage}>
       <Hero />
-      <PopularCourses />
+      <Categories />
+      {/* <PopularCourses /> */}
       <Instructors />
       <Testimonials />
       <Contact />
