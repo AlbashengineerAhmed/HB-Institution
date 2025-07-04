@@ -6,7 +6,7 @@ const WhyHBIPage = () => {
     <div className={styles.whyHbiPage}>
       {/* Why HBI Banner Section */}
       <section className={styles.whyHbiBanner}>
-        <div className={container}>
+        <div className="container">
           <div className={styles.bannerContent}>
             <h1 className={styles.bannerTitle}>Why Choose HB Institution</h1>
             <p className={styles.bannerDescription}>
@@ -18,7 +18,7 @@ const WhyHBIPage = () => {
 
       {/* Why Study at HBI Section */}
       <section className={styles.whyStudySection}>
-        <div className={container}>
+        <div className="container">
           <div className="section-header">
             <h2 className="section-title">Why Study at HBI</h2>
           </div>
@@ -67,7 +67,7 @@ const WhyHBIPage = () => {
 
       {/* Tuition Fees Section */}
       <section className={styles.tuitionSection}>
-        <div className={container}>
+        <div className="container">
           <div className="section-header">
             <h2 className="section-title">Tuition Fees</h2>
             <p className={styles.sectionDescription}>We strive to make quality education accessible through competitive tuition rates and various financial aid options.</p>
@@ -251,7 +251,7 @@ const WhyHBIPage = () => {
 
       {/* Accreditation Section */}
       <section className={styles.accreditationSection}>
-        <div className={container}>
+        <div className="container">
           <div className="section-header">
             <h2 className="section-title">Accreditation</h2>
             <p className={styles.sectionDescription}>HB Institution is committed to maintaining the highest standards of educational quality through accreditation by respected organizations.</p>
@@ -306,7 +306,7 @@ const WhyHBIPage = () => {
 
       {/* Graduate Acceptance Section */}
       <section className={styles.graduateAcceptanceSection}>
-        <div className={container}>
+        <div className="container">
           <div className="section-header">
             <h2 className="section-title">Graduate Acceptance</h2>
             <p className={styles.sectionDescription}>Our graduates are accepted into prestigious institutions worldwide for further studies and sought after by employers for their knowledge and skills.</p>
@@ -393,7 +393,7 @@ const WhyHBIPage = () => {
 
       {/* Exam Centers Section */}
       <section className={styles.examCentersSection}>
-        <div className={container}>
+        <div className="container">
           <div className="section-header">
             <h2 className="section-title">Exam Centers</h2>
             <p className={styles.sectionDescription}>HB Institution provides well-equipped examination centers to ensure a conducive environment for assessments.</p>
@@ -467,7 +467,7 @@ const WhyHBIPage = () => {
 
       {/* Scholarships Section */}
       <section className={styles.scholarshipsSection}>
-        <div className={container}>
+        <div className="container">
           <div className="section-header">
             <h2 className="section-title">Scholarships</h2>
             <p className={styles.sectionDescription}>HB Institution offers a variety of scholarships to recognize academic excellence, support students with financial need, and promote diversity.</p>
@@ -635,7 +635,7 @@ const WhyHBIPage = () => {
 
       {/* Testimonials Section */}
       <section className={styles.testimonialsSection}>
-        <div className={container}>
+        <div className="container">
           <div className="section-header">
             <h2 className="section-title">Testimonials</h2>
             <p className={styles.sectionDescription}>Hear what our students and alumni have to say about their experience at HB Institution.</p>
@@ -714,7 +714,7 @@ const WhyHBIPage = () => {
 
       {/* Student Affairs Office Section */}
       <section className={styles.studentAffairsSection}>
-        <div className={container}>
+        <div className="container">
           <div className="section-header">
             <h2 className="section-title">Student Affairs Office</h2>
             <p className={styles.sectionDescription}>Our Student Affairs Office is dedicated to enhancing the student experience and providing comprehensive support services.</p>

@@ -6,7 +6,7 @@ const CommunityPage = () => {
     <div className={styles.communityPage}>
       {/* Community Banner Section */}
       <section className={styles.communityBanner}>
-        <div className={container}>
+        <div className="container">
           <div className={styles.bannerContent}>
             <h1 className={styles.bannerTitle}>Our Community</h1>
             <p className={styles.bannerDescription}>
@@ -18,7 +18,7 @@ const CommunityPage = () => {
 
       {/* Student Life Section */}
       <section className={styles.studentLifeSection}>
-        <div className={container}>
+        <div className="container">
           <div className="section-header">
             <h2 className="section-title">Student Life</h2>
           </div>
@@ -40,7 +40,7 @@ const CommunityPage = () => {
 
       {/* Student Clubs Section */}
       <section className={styles.clubsSection}>
-        <div className={container}>
+        <div className="container">
           <div className="section-header">
             <h2 className="section-title">Student Clubs</h2>
           </div>
@@ -81,7 +81,7 @@ const CommunityPage = () => {
 
       {/* Events Calendar Section */}
       <section className={styles.eventsSection}>
-        <div className={container}>
+        <div className="container">
           <div className="section-header">
             <h2 className="section-title">Upcoming Events</h2>
           </div>
@@ -137,7 +137,7 @@ const CommunityPage = () => {
 
       {/* Alumni Network Section */}
       <section className={styles.alumniSection}>
-        <div className={container}>
+        <div className="container">
           <div className="section-header">
             <h2 className="section-title">Alumni Network</h2>
           </div>
@@ -162,7 +162,7 @@ const CommunityPage = () => {
 
       {/* Community Outreach Section */}
       <section className={styles.outreachSection}>
-        <div className={container}>
+        <div className="container">
           <div className="section-header">
             <h2 className="section-title">Community Outreach</h2>
           </div>
