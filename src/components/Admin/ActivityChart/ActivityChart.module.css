@@ -1,0 +1,175 @@
+.activityChart {
+  width: 100%;
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+}
+
+.chartLegend {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+  justify-content: center;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--text-color);
+}
+
+.legendColor {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+}
+
+.legendColor.registrations {
+  background: linear-gradient(135deg, var(--primary-color), var(--hover-color));
+}
+
+.legendColor.courses {
+  background: linear-gradient(135deg, var(--info-color), #3d8bff);
+}
+
+.chartContainer {
+  display: flex;
+  flex: 1;
+  gap: 1rem;
+}
+
+.yAxis {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 40px;
+  padding-right: 0.5rem;
+}
+
+.yAxisLabel {
+  font-size: 0.75rem;
+  color: rgba(var(--text-color-rgb), 0.7);
+  text-align: right;
+  line-height: 1;
+}
+
+.chartArea {
+  flex: 1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.gridLines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.gridLine {
+  height: 1px;
+  background-color: rgba(var(--text-color-rgb), 0.1);
+  width: 100%;
+}
+
+.barsContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  height: calc(100% - 30px);
+  padding: 0 0.5rem;
+}
+
+.barGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  max-width: 80px;
+}
+
+.bars {
+  display: flex;
+  gap: 4px;
+  align-items: flex-end;
+  height: 100%;
+  width: 100%;
+  justify-content: center;
+}
+
+.bar {
+  width: 20px;
+  min-height: 4px;
+  border-radius: 4px 4px 0 0;
+  transition: var(--transition);
+  cursor: pointer;
+  position: relative;
+}
+
+.bar:hover {
+  transform: scaleY(1.05);
+  filter: brightness(1.1);
+}
+
+.registrationsBar {
+  background: linear-gradient(180deg, var(--primary-color), var(--hover-color));
+  box-shadow: 0 2px 8px rgba(var(--primary-color-rgb), 0.3);
+}
+
+.coursesBar {
+  background: linear-gradient(180deg, var(--info-color), #3d8bff);
+  box-shadow: 0 2px 8px rgba(var(--info-color-rgb), 0.3);
+}
+
+.xAxisLabel {
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+  color: rgba(var(--text-color-rgb), 0.7);
+  font-weight: 500;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .activityChart {
+    height: 250px;
+  }
+  
+  .chartLegend {
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  
+  .legendItem {
+    font-size: 0.8rem;
+  }
+  
+  .bar {
+    width: 16px;
+  }
+  
+  .yAxisLabel,
+  .xAxisLabel {
+    font-size: 0.7rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .activityChart {
+    height: 200px;
+  }
+  
+  .bar {
+    width: 12px;
+  }
+  
+  .bars {
+    gap: 2px;
+  }
+}

@@ -1,0 +1,357 @@
+.courseEvaluation {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.evaluationContainer {
+  background: linear-gradient(135deg, var(--secondary-color), var(--gradient-end));
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: var(--box-shadow);
+  border: 1px solid rgba(var(--primary-color-rgb), 0.1);
+}
+
+/* Header */
+.evaluationHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid rgba(var(--primary-color-rgb), 0.2);
+}
+
+.courseInfo {
+  flex: 1;
+}
+
+.courseTitle {
+  color: var(--text-color);
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+}
+
+.courseInstructor {
+  color: var(--primary-color);
+  font-size: 1rem;
+  font-weight: 500;
+  margin: 0 0 0.5rem 0;
+}
+
+.completionInfo {
+  color: rgba(var(--text-color-rgb), 0.8);
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.evaluationBadge {
+  background: linear-gradient(135deg, var(--primary-color), var(--hover-color));
+  color: var(--secondary-color);
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(var(--primary-color-rgb), 0.3);
+}
+
+.badgeText {
+  font-weight: 600;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Form */
+.evaluationForm {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.sectionTitle {
+  color: var(--text-color);
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0 0 1rem 0;
+}
+
+.sectionDescription {
+  color: rgba(var(--text-color-rgb), 0.8);
+  font-size: 0.875rem;
+  margin: 0 0 1.5rem 0;
+  line-height: 1.5;
+}
+
+/* Ratings Section */
+.ratingsSection {
+  background-color: rgba(var(--gradient-start-rgb), 0.5);
+  border: 1px solid rgba(var(--primary-color-rgb), 0.2);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.ratingCategory {
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(var(--primary-color-rgb), 0.1);
+}
+
+.ratingCategory:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.categoryHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.categoryLabel {
+  color: var(--text-color);
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.ratingLabel {
+  color: var(--primary-color);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.categoryDescription {
+  color: rgba(var(--text-color-rgb), 0.8);
+  font-size: 0.875rem;
+  margin: 0 0 1rem 0;
+  line-height: 1.4;
+}
+
+.starRating {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.star {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: var(--transition);
+  padding: 0.25rem;
+  border-radius: 4px;
+  opacity: 0.3;
+}
+
+.star.filled {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.star:hover {
+  transform: scale(1.2);
+}
+
+.ratingText {
+  color: rgba(var(--text-color-rgb), 0.7);
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-left: 0.5rem;
+}
+
+/* Feedback Section */
+.feedbackSection {
+  background-color: rgba(var(--gradient-start-rgb), 0.5);
+  border: 1px solid rgba(var(--primary-color-rgb), 0.2);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.formGroup {
+  margin-bottom: 1.5rem;
+}
+
+.formGroup:last-child {
+  margin-bottom: 0;
+}
+
+.formLabel {
+  color: var(--text-color);
+  font-size: 0.875rem;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.formTextarea,
+.formSelect {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background-color: rgba(var(--gradient-start-rgb), 0.5);
+  border: 1px solid rgba(var(--primary-color-rgb), 0.3);
+  border-radius: 8px;
+  color: var(--text-color);
+  font-size: 0.875rem;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.formTextarea:focus,
+.formSelect:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.1);
+}
+
+.formTextarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.formTextarea::placeholder {
+  color: rgba(var(--text-color-rgb), 0.6);
+}
+
+/* Recommendation Section */
+.recommendationSection {
+  background-color: rgba(var(--gradient-start-rgb), 0.5);
+  border: 1px solid rgba(var(--primary-color-rgb), 0.2);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.checkboxGroup {
+  display: flex;
+  align-items: center;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  font-size: 0.875rem;
+  color: var(--text-color);
+}
+
+.checkbox {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--primary-color);
+  cursor: pointer;
+}
+
+.checkboxText {
+  font-weight: 500;
+}
+
+/* Summary Section */
+.summarySection {
+  background-color: rgba(var(--info-color-rgb), 0.1);
+  border: 1px solid rgba(var(--info-color-rgb), 0.3);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.summaryGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.summaryItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  background-color: rgba(var(--gradient-start-rgb), 0.5);
+  border-radius: 8px;
+  border: 1px solid rgba(var(--primary-color-rgb), 0.1);
+}
+
+.summaryLabel {
+  color: rgba(var(--text-color-rgb), 0.8);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.summaryValue {
+  color: var(--text-color);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+/* Form Actions */
+.formActions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(var(--primary-color-rgb), 0.2);
+}
+
+.cancelBtn,
+.submitBtn {
+  padding: 0.75rem 2rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-size: 0.875rem;
+}
+
+.cancelBtn {
+  background-color: rgba(var(--error-color-rgb), 0.2);
+  color: var(--error-color);
+}
+
+.cancelBtn:hover {
+  background-color: rgba(var(--error-color-rgb), 0.3);
+}
+
+.submitBtn {
+  background: linear-gradient(135deg, var(--primary-color), var(--hover-color));
+  color: var(--secondary-color);
+}
+
+.submitBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(var(--primary-color-rgb), 0.3);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .evaluationContainer {
+    padding: 1.5rem;
+  }
+  
+  .evaluationHeader {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+  }
+  
+  .summaryGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .formActions {
+    flex-direction: column;
+  }
+  
+  .star {
+    font-size: 1.25rem;
+  }
+  
+  .ratingsSection,
+  .feedbackSection,
+  .recommendationSection,
+  .summarySection {
+    padding: 1rem;
+  }
+}
