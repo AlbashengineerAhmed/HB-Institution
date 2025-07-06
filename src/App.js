@@ -30,6 +30,7 @@ import CourseDetailsPage from './pages/CourseDetailsPage/CourseDetailsPage';
 import EnrollmentPage from './pages/EnrollmentPage/EnrollmentPage';
 import EnrollmentSuccessPage from './pages/EnrollmentSuccessPage/EnrollmentSuccessPage';
 
+<<<<<<< HEAD
 // Admin Pages
 import AdminDashboard from './pages/AdminDashboard/AdminDashboard';
 
@@ -40,6 +41,8 @@ import ProfilePage from './pages/ProfilePage/ProfilePage';
 import InstructorDashboard from './pages/InstructorDashboard/InstructorDashboard';
 import StudentDashboard from './pages/StudentDashboard/StudentDashboard';
 
+=======
+>>>>>>> origin/main
 // Route change tracker wrapper component
 const AppContent = () => {
   const [isInitialLoad, setIsInitialLoad] = useState(true);
