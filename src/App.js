@@ -43,6 +43,7 @@ import StudentDashboard from './pages/StudentDashboard/StudentDashboard';
 // Route change tracker wrapper component
 const AppContent = () => {
   const [isInitialLoad, setIsInitialLoad] = useState(true);
+  const location = useLocation();
   
   useEffect(() => {
     // Mark initial load as complete after a short delay
@@ -52,6 +53,19 @@ const AppContent = () => {
     
     return () => clearTimeout(timer);
   }, []);
+
+  // Define dashboard routes where footer should be hidden
+  const dashboardRoutes = [
+    '/admin',
+    '/instructor-dashboard',
+    '/student-dashboard',
+    '/profile'
+  ];
+
+  // Check if current route is a dashboard
+  const isDashboardRoute = dashboardRoutes.some(route => 
+    location.pathname.startsWith(route)
+  );
   
   return (
     <div className={styles.App}>
@@ -90,7 +104,10 @@ const AppContent = () => {
           <Route path="/admin" element={<AdminDashboard />} />
         </Routes>
       </main>
-      <Footer />
+      
+      {/* Conditionally render Footer - HIDDEN on dashboard and profile pages */}
+      {!isDashboardRoute && <Footer />}
+      
       <WhatsAppFloat />
       <ScrollToTop />
       {!isInitialLoad && <RouteChangeTracker />}
