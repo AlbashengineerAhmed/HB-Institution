@@ -1,0 +1,129 @@
+.roleSwitcher {
+  position: fixed;
+  top: 100px;
+  right: 20px;
+  z-index: 1000;
+  background: linear-gradient(135deg, var(--secondary-color), var(--gradient-end));
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: var(--box-shadow);
+  border: 1px solid rgba(var(--primary-color-rgb), 0.2);
+  min-width: 200px;
+}
+
+.switcherLabel {
+  color: var(--text-color);
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  text-align: center;
+  opacity: 0.9;
+}
+
+.dropdown {
+  position: relative;
+}
+
+.dropdownToggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background-color: rgba(var(--gradient-start-rgb), 0.5);
+  border: 2px solid rgba(var(--primary-color-rgb), 0.3);
+  border-radius: 8px;
+  color: var(--text-color);
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.dropdownToggle:hover {
+  background-color: rgba(var(--gradient-start-rgb), 0.7);
+  border-color: var(--primary-color);
+}
+
+.roleIcon {
+  font-size: 1.2rem;
+}
+
+.roleLabel {
+  flex: 1;
+  text-align: left;
+  font-size: 0.875rem;
+}
+
+.chevron {
+  font-size: 0.8rem;
+  transition: transform 0.3s ease;
+}
+
+.chevron.open {
+  transform: rotate(180deg);
+}
+
+.dropdownMenu {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 0;
+  right: 0;
+  background: linear-gradient(135deg, var(--secondary-color), var(--gradient-end));
+  border-radius: 8px;
+  box-shadow: var(--box-shadow);
+  border: 1px solid rgba(var(--primary-color-rgb), 0.2);
+  overflow: hidden;
+  z-index: 1001;
+}
+
+.roleOption {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: none;
+  border: none;
+  color: var(--text-color);
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  text-align: left;
+}
+
+.roleOption:hover {
+  background-color: rgba(var(--primary-color-rgb), 0.1);
+}
+
+.roleOption.active {
+  font-weight: 600;
+}
+
+.checkmark {
+  margin-left: auto;
+  color: var(--success-color);
+  font-weight: 700;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .roleSwitcher {
+    position: relative;
+    top: auto;
+    right: auto;
+    margin-bottom: 1rem;
+    width: 100%;
+  }
+  
+  .switcherLabel {
+    font-size: 0.75rem;
+  }
+  
+  .dropdownToggle {
+    padding: 0.6rem 0.8rem;
+  }
+  
+  .roleLabel {
+    font-size: 0.8rem;
+  }
+}

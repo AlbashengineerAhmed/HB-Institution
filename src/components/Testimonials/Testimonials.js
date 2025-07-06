@@ -1,6 +1,6 @@
 import React from 'react';
 import Slider from 'react-slick';
-import './Testimonials.css';
+import styles from './Testimonials.module.css';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
@@ -58,30 +58,30 @@ const Testimonials = () => {
   };
 
   return (
-    <section className="testimonials-section">
+    <section className={styles.testimonialsSection}>
       <div className="container">
         <div className="section-header">
           <h2 className="section-title">What Our Students Say</h2>
         </div>
         
-        <div className="testimonials-slider-container">
+        <div className={styles.testimonialsSliderContainer}>
           <Slider {...settings}>
             {testimonials.map(testimonial => (
-              <div className="testimonial-slide" key={testimonial.id}>
-                <div className="testimonial-card">
-                  <div className="testimonial-content">
-                    <div className="quote-icon">❝</div>
-                    <p className="testimonial-text">{testimonial.text}</p>
+              <div className={styles.testimonialSlide} key={testimonial.id}>
+                <div className={styles.testimonialCard}>
+                  <div className={styles.testimonialContent}>
+                    <div className={styles.quoteIcon}>❝</div>
+                    <p className={styles.testimonialText}>{testimonial.text}</p>
                   </div>
-                  <div className="testimonial-author">
+                  <div className={styles.testimonialAuthor}>
                     <img 
                       src={testimonial.image} 
                       alt={`${testimonial.name} - ${testimonial.role}`} 
-                      className="testimonial-avatar" 
+                      className={styles.testimonialAvatar} 
                     />
-                    <div className="testimonial-info">
-                      <h4 className="testimonial-name">{testimonial.name}</h4>
-                      <p className="testimonial-role">{testimonial.role}</p>
+                    <div className={styles.testimonialInfo}>
+                      <h4 className={styles.testimonialName}>{testimonial.name}</h4>
+                      <p className={styles.testimonialRole}>{testimonial.role}</p>
                     </div>
                   </div>
                 </div>

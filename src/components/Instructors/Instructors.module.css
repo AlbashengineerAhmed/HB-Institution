@@ -1,0 +1,329 @@
+.instructorsSection {
+  padding: 5rem 0;
+  background-color: var(--gradient-start); /* Dark Slate */
+  position: relative;
+  overflow: hidden;
+}
+
+/* Decorative shapes */
+.instructorShape {
+  position: absolute;
+  z-index: 1;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.instructorShape.shape1 {
+  top: 15%;
+  right: 8%;
+  width: 100px;
+  animation: float 8s ease-in-out infinite;
+}
+
+.instructorShape.shape2 {
+  bottom: 10%;
+  left: 5%;
+  width: 120px;
+  animation: float 7s ease-in-out infinite 1s;
+}
+
+.instructorShape.shape3 {
+  top: 30%;
+  left: 12%;
+  width: 60px;
+  animation: float 6s ease-in-out infinite 0.5s;
+}
+
+.instructorShape.shape4 {
+  bottom: 30%;
+  right: 12%;
+  width: 80px;
+  animation: float 9s ease-in-out infinite 1.5s;
+}
+
+.instructorShape.shape5 {
+  top: 50%;
+  left: 20%;
+  width: 70px;
+  animation: spin 15s linear infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.instructorsSection::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at top right, rgba(57, 63, 77, 0.8) 0%, rgba(29, 30, 34, 0.9) 70%); /* Gradient overlay */
+  z-index: 0;
+}
+
+.instructorsSection 
+
+.sectionSubtitle {
+  color: var(--light-text);
+  font-size: 1.1rem;
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.instructorsSliderContainer {
+  margin-top: 40px;
+  padding: 20px 10px;
+  width: 100%;
+}
+
+.instructorSlider {
+  margin: 0 -10px;
+}
+
+.instructorSlide {
+  padding: 15px;
+  outline: none;
+  animation: fadeInUp 0.8s ease-out forwards;
+  opacity: 0;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.instructorSlide:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.instructorSlide:nth-child(2) {
+  animation-delay: 0.3s;
+}
+
+.instructorSlide:nth-child(3) {
+  animation-delay: 0.5s;
+}
+
+.instructorSlide:nth-child(4) {
+  animation-delay: 0.7s;
+}
+
+.instructorCard {
+  background-color: var(--secondary-color); /* Deep Matte Grey */
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--box-shadow); /* Dark Slate with opacity */
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  height: 100%;
+  position: relative;
+  border: 1px solid rgba(254, 218, 106, 0.03); /* Are ya yellow?! with opacity */
+  display: flex;
+  flex-direction: column;
+  width: 100%; /* Increase card width */
+  max-width: 400px; /* Increased maximum width from 320px to 400px */
+  margin: 0 auto; /* Center the card */
+}
+
+.instructorCard:hover {
+  transform: translateY(-12px);
+}
+
+.instructorImageContainer {
+  height: 180px;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  background-color: var(--gradient-start);
+}
+
+.instructorImage {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  transition: transform 0.3s ease;
+}
+
+.instructorCard:hover .instructorImage {
+  transform: scale(1.05);
+}
+
+.instructorContent {
+  padding: 1.25rem;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.roleRatingRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 0.25rem;
+}
+
+.expertiseActionRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-top: 0.25rem;
+}
+
+.instructorName {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--light-text);
+  margin-bottom: 0.25rem;
+}
+
+.instructorRole {
+  font-size: 0.875rem;
+  color: var(--light-text);
+  font-style: italic;
+  margin: 0;
+}
+
+.instructorRating {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin: 0;
+}
+
+.ratingStars {
+  color: #FFD700;
+  letter-spacing: 2px;
+}
+
+.ratingValue {
+  font-weight: 600;
+  color: var(--light-text);
+}
+
+.instructorExpertise {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 6px;
+  margin: 0;
+}
+
+.expertiseTag {
+  background-color: rgba(254, 218, 106, 0.2);
+  color: var(--primary-color);
+  font-size: 0.7rem;
+  padding: 3px 8px;
+  border-radius: 20px;
+  display: inline-block;
+  transition: all 0.3s ease;
+}
+
+.instructorCard:hover .expertiseTag {
+  background-color: rgba(254, 218, 106, 0.3);
+}
+
+.viewProfileBtn {
+  display: inline-block;
+  background-color: var(--primary-color);
+  color: var(--light-text);
+  text-decoration: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.viewProfileBtn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(254, 218, 106, 0.15) 0%, rgba(254, 218, 106, 0.05) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.viewProfileBtn:hover {
+  background-color: var(--primary-color);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(254, 218, 106, 0.1);
+}
+
+.viewProfileBtn:hover::before {
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .instructorSection {
+    padding: 40px 20px;
+  }
+  
+  .instructorImageContainer {
+    height: 180px;
+  }
+  
+  .sectionSubtitle {
+    font-size: 1rem;
+    margin-top: 8px;
+    margin-bottom: 18px;
+  }
+}
+
+@media (max-width: 576px) {
+  .instructorsSection {
+    padding: 3rem 0;
+  }
+  
+  .instructorImageContainer {
+    height: 160px;
+  }
+  
+  .expertiseTag {
+    font-size: 0.65rem;
+    padding: 2px 6px;
+  }
+  
+  .instructorName {
+    font-size: 1rem;
+  }
+  
+  .instructorRole {
+    font-size: 0.8rem;
+  }
+  
+  .sectionSubtitle {
+    font-size: 0.95rem;
+    margin-top: 8px;
+    margin-bottom: 15px;
+  }
+}

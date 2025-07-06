@@ -1,0 +1,386 @@
+.manageInstructors {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Header Section */
+.instructorHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.searchSection {
+  flex: 1;
+  max-width: 400px;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background-color: var(--secondary-color);
+  border: 1px solid rgba(var(--primary-color-rgb), 0.3);
+  border-radius: 8px;
+  color: var(--text-color);
+  font-size: 0.875rem;
+  transition: var(--transition);
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.1);
+}
+
+.searchInput::placeholder {
+  color: rgba(var(--text-color-rgb), 0.6);
+}
+
+.filtersSection {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.filterSelect {
+  padding: 0.75rem 1rem;
+  background-color: var(--secondary-color);
+  border: 1px solid rgba(var(--primary-color-rgb), 0.3);
+  border-radius: 8px;
+  color: var(--text-color);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.filterSelect:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+.addInstructorBtn {
+  background: linear-gradient(135deg, var(--primary-color), var(--hover-color));
+  color: var(--secondary-color);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  white-space: nowrap;
+}
+
+.addInstructorBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(var(--primary-color-rgb), 0.3);
+}
+
+/* Instructors Grid */
+.instructorsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 1.5rem;
+}
+
+.instructorCard {
+  background: linear-gradient(135deg, var(--secondary-color), var(--gradient-end));
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: var(--box-shadow);
+  border: 1px solid rgba(var(--primary-color-rgb), 0.1);
+  transition: var(--transition);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.instructorCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(var(--gradient-start-rgb), 0.3);
+  border-color: rgba(var(--primary-color-rgb), 0.2);
+}
+
+/* Card Header */
+.cardHeader {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.instructorAvatar {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, var(--primary-color), var(--hover-color));
+  color: var(--secondary-color);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.25rem;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(var(--primary-color-rgb), 0.3);
+}
+
+.instructorBasicInfo {
+  flex: 1;
+}
+
+.instructorName {
+  color: var(--text-color);
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0 0 0.25rem 0;
+  line-height: 1.3;
+}
+
+.instructorEmail {
+  color: rgba(var(--text-color-rgb), 0.8);
+  font-size: 0.875rem;
+  margin: 0 0 0.25rem 0;
+}
+
+.instructorSpecialization {
+  color: var(--primary-color);
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+.cardBadges {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: flex-end;
+}
+
+/* Badges */
+.statusBadge,
+.roleBadge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.statusActive {
+  background-color: rgba(var(--success-color-rgb), 0.2);
+  color: var(--success-color);
+}
+
+.statusPending {
+  background-color: rgba(var(--warning-color-rgb), 0.2);
+  color: var(--warning-color);
+}
+
+.statusBlocked {
+  background-color: rgba(var(--error-color-rgb), 0.2);
+  color: var(--error-color);
+}
+
+.roleInstructor {
+  background-color: rgba(var(--info-color-rgb), 0.2);
+  color: var(--info-color);
+}
+
+.roleAdmin {
+  background-color: rgba(var(--primary-color-rgb), 0.2);
+  color: var(--primary-color);
+}
+
+/* Card Stats */
+.cardStats {
+  display: flex;
+  justify-content: space-around;
+  padding: 1rem;
+  background-color: rgba(var(--gradient-start-rgb), 0.5);
+  border-radius: 8px;
+  border: 1px solid rgba(var(--primary-color-rgb), 0.1);
+}
+
+.statItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.statValue {
+  color: var(--text-color);
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+
+.statLabel {
+  color: rgba(var(--text-color-rgb), 0.7);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Card Details */
+.cardDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.detailItem {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.detailLabel {
+  color: rgba(var(--text-color-rgb), 0.7);
+  font-size: 0.875rem;
+  font-weight: 500;
+  min-width: 100px;
+}
+
+.detailValue {
+  color: var(--text-color);
+  font-size: 0.875rem;
+  flex: 1;
+  word-break: break-word;
+}
+
+/* Card Actions */
+.cardActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(var(--primary-color-rgb), 0.1);
+}
+
+.actionBtn {
+  padding: 0.5rem 0.75rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  white-space: nowrap;
+  flex: 1;
+  justify-content: center;
+  min-width: 120px;
+}
+
+.approveBtn {
+  background-color: rgba(var(--success-color-rgb), 0.2);
+  color: var(--success-color);
+}
+
+.approveBtn:hover {
+  background-color: rgba(var(--success-color-rgb), 0.3);
+}
+
+.promoteBtn {
+  background-color: rgba(var(--primary-color-rgb), 0.2);
+  color: var(--primary-color);
+}
+
+.promoteBtn:hover {
+  background-color: rgba(var(--primary-color-rgb), 0.3);
+}
+
+.blockBtn {
+  background-color: rgba(var(--error-color-rgb), 0.2);
+  color: var(--error-color);
+}
+
+.blockBtn:hover {
+  background-color: rgba(var(--error-color-rgb), 0.3);
+}
+
+.unblockBtn {
+  background-color: rgba(var(--success-color-rgb), 0.2);
+  color: var(--success-color);
+}
+
+.unblockBtn:hover {
+  background-color: rgba(var(--success-color-rgb), 0.3);
+}
+
+.viewBtn {
+  background-color: rgba(var(--info-color-rgb), 0.2);
+  color: var(--info-color);
+}
+
+.viewBtn:hover {
+  background-color: rgba(var(--info-color-rgb), 0.3);
+}
+
+.deleteBtn {
+  background-color: rgba(var(--error-color-rgb), 0.2);
+  color: var(--error-color);
+}
+
+.deleteBtn:hover {
+  background-color: rgba(var(--error-color-rgb), 0.3);
+}
+
+/* Empty State */
+.emptyState {
+  text-align: center;
+  padding: 3rem;
+  color: rgba(var(--text-color-rgb), 0.6);
+  background: linear-gradient(135deg, var(--secondary-color), var(--gradient-end));
+  border-radius: 12px;
+  border: 1px solid rgba(var(--primary-color-rgb), 0.1);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .instructorHeader {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .filtersSection {
+    justify-content: space-between;
+  }
+  
+  .instructorsGrid {
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .filtersSection {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .instructorsGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .cardHeader {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .cardBadges {
+    flex-direction: row;
+    align-items: center;
+  }
+  
+  .cardActions {
+    flex-direction: column;
+  }
+  
+  .actionBtn {
+    min-width: auto;
+  }
+}

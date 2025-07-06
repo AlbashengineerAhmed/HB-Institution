@@ -1,0 +1,638 @@
+.contactSection {
+  padding: 100px 0;
+  background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%); /* Dark Slate to Deep Matte Grey */
+  position: relative;
+  overflow: hidden;
+}
+
+.contactSection::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(circle at 10% 20%, rgba(254, 218, 106, 0.05) 0%, transparent 60%); /* Are ya yellow?! with opacity */
+  z-index: 0;
+}
+
+.contactWrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 50px;
+  justify-content: space-between;
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.contactInfo {
+  flex: 1;
+  min-width: 300px;
+  padding: 30px;
+  background: var(--secondary-color); /* Deep Matte Grey */
+  border-radius: 15px;
+  box-shadow: var(--box-shadow); /* Dark Slate with opacity */
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(254, 218, 106, 0.1); /* Are ya yellow?! with opacity */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.contactInfo:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(254, 218, 106, 0.12); /* Are ya yellow?! with opacity */
+}
+
+/* Using global .sectionTitle styles */
+
+.contactDescription {
+  margin-bottom: 30px;
+  color: var(--text-color); /* Silver Fox */
+  line-height: 1.8;
+  font-size: 1.1rem;
+}
+
+.contactDetails {
+  margin-top: 30px;
+}
+
+.contactItem {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 25px;
+}
+
+.contactIcon {
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(135deg, var(--primary-color) 0%, rgba(254, 218, 106, 0.7) 100%); /* Are ya yellow?! with gradient */
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 18px;
+  color: var(--gradient-start); /* Dark Slate for contrast */
+  font-size: 22px;
+  box-shadow: 0 5px 15px rgba(254, 218, 106, 0.3); /* Are ya yellow?! with opacity */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.contactItem:hover .contactIcon {
+  transform: scale(1.1) rotate(5deg);
+  box-shadow: 0 8px 20px rgba(254, 218, 106, 0.4); /* Are ya yellow?! with opacity */
+}
+
+.contactText h4 {
+  margin: 0 0 8px 0;
+  font-size: 20px;
+  color: var(--text-color); /* Silver Fox */
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.contactText p {
+  margin: 0;
+  color: var(--text-color); /* Silver Fox */
+  font-size: 16px;
+  transition: color 0.3s ease;
+}
+
+.contactItem:hover .contactText h4 {
+  color: var(--primary-color); /* Are ya yellow?! */
+}
+
+.contactItem:hover .contactText p {
+  color: var(--light-text); /* Silver Fox */
+}
+
+.contactFormContainer {
+  flex: 1;
+  min-width: 300px;
+  background: linear-gradient(135deg, var(--secondary-color) 0%, var(--gradient-start) 100%); /* Deep Matte Grey to Dark Slate */
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(254, 218, 106, 0.1); /* Enhanced shadow */
+  border: 1px solid rgba(254, 218, 106, 0.15); /* Are ya yellow?! with opacity */
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.contactFormContainer::before {
+  content: '';
+  position: absolute;
+  top: -100px;
+  right: -100px;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(254, 218, 106, 0.3) 0%, rgba(254, 218, 106, 0.05) 70%); /* Are ya yellow?! with opacity */
+  border-radius: 50%;
+  z-index: 0;
+  animation: pulse-glow 6s infinite alternate;
+}
+
+.contactFormContainer::after {
+  content: '';
+  position: absolute;
+  bottom: -80px;
+  left: -80px;
+  width: 160px;
+  height: 160px;
+  background: radial-gradient(circle, rgba(254, 218, 106, 0.2) 0%, rgba(254, 218, 106, 0.03) 70%); /* Are ya yellow?! with opacity */
+  border-radius: 50%;
+  z-index: 0;
+  animation: pulse-glow 8s infinite alternate-reverse;
+}
+
+@keyframes pulse-glow {
+  0% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+}
+
+.contactFormContainer:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(254, 218, 106, 0.15); /* Are ya yellow?! with opacity */
+}
+
+.contactForm {
+  display: flex;
+  flex-direction: column;
+}
+
+.formGroup {
+  margin-bottom: 25px;
+  position: relative;
+}
+
+/* Standard label styles (for non-floating labels) */
+.formGroup:not(.floatingLabel) label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: 600;
+  color: var(--text-color); /* Silver Fox */
+  position: relative;
+  padding-left: 12px;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+}
+
+.formGroup:not(.floatingLabel) label::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 16px;
+  background: var(--primary-color); /* Are ya yellow?! */
+  border-radius: 2px;
+}
+
+.formGroup:not(.floatingLabel):hover label {
+  color: var(--primary-color); /* Are ya yellow?! */
+  transform: translateX(3px);
+}
+
+/* Floating label styles */
+.floatingLabel {
+  position: relative;
+}
+
+.floatingLabel input,
+.floatingLabel textarea {
+  padding: 22px 18px 8px; /* Adjusted padding to accommodate higher label */
+}
+
+.floatingLabel label {
+  position: absolute;
+  top: 14px; /* Moved higher from 17px */
+  left: 18px;
+  font-size: 14px; /* Smaller font size from 16px */
+  color: var(--text-color);
+  opacity: 0.7;
+  pointer-events: none;
+  transition: all 0.25s ease;
+  transform-origin: left top;
+  margin: 0;
+  padding: 0;
+  z-index: 1;
+  font-weight: 600; /* Make placeholder bolder */
+}
+
+.floatingLabel input:focus ~ label,
+.floatingLabel textarea:focus ~ label,
+.floatingLabel input:not(:placeholder-shown) ~ label,
+.floatingLabel textarea:not(:placeholder-shown) ~ label,
+.floatingLabel input:hover ~ label,
+.floatingLabel textarea:hover ~ label {
+  transform: translateY(-16px) scale(0.8); /* Adjusted transform to move higher and scale smaller */
+  color: var(--primary-color);
+  opacity: 1;
+  font-weight: 600;
+}
+
+.inputHighlight {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  width: 0;
+  background: linear-gradient(90deg, var(--primary-color), var(--gradient-end));
+  transition: width 0.3s ease;
+  z-index: 2;
+}
+
+.borderLabelInput:focus ~ .inputHighlight,
+.borderLabelInput:hover ~ .inputHighlight {
+  width: 100%;
+}
+
+/* Input with Border Label Styles */
+.formGroup {
+  position: relative;
+  margin-bottom: 20px;
+  transition: all 0.3s ease;
+}
+
+.borderLabelInput {
+  position: relative;
+  width: 100%;
+  padding: 15px 18px;
+  border: 2px solid var(--gradient-end); /* Deep Matte Grey */
+  border-radius: 12px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  background-color: rgba(29, 30, 34, 0.7); /* Dark Slate with transparency */
+  color: var(--text-color); /* Silver Fox */
+  box-shadow: 0 4px 10px rgba(254, 218, 106, 0.05); /* Are ya yellow?! with opacity */
+  backdrop-filter: blur(5px);
+}
+
+/* Move the pseudo-element to the parent form-group */
+.formGroup::before {
+  content: attr(data-label);
+  position: absolute;
+  top: -10px;
+  left: 15px;
+  padding: 0 8px;
+  font-size: 14px;
+  color: var(--text-color);
+  opacity: 0;
+  background-color: rgb(29, 30, 34); /* Solid background instead of transparent */
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.formGroup:hover::before {
+  opacity: 1; /* Fully visible on hover */
+  color: var(--primary-color);
+}
+
+.formGroup:focus-within::before {
+  opacity: 0.9; /* Almost fully visible when focused */
+  color: var(--primary-color);
+  transform: translateX(10px);
+}
+
+.borderLabelInput:focus {
+  border-color: var(--primary-color); /* Are ya yellow?! */
+  border-width: 3px; /* Thicker border when focused */
+  box-shadow: 0 8px 20px rgba(254, 218, 106, 0.15); /* Are ya yellow?! with opacity */
+  transform: translateY(-3px);
+  background-color: rgba(29, 30, 34, 0.9); /* Darker background when focused */
+  outline: none;
+}
+
+.borderLabelInput:hover {
+  border-color: rgba(254, 218, 106, 0.7); /* Are ya yellow?! with opacity */
+  box-shadow: 0 6px 15px rgba(254, 218, 106, 0.1); /* Are ya yellow?! with opacity */
+  transform: translateY(-2px);
+}
+
+/* Ensure textarea has the same styling */
+textarea.borderLabelInput {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.submitButton {
+  background: linear-gradient(135deg, var(--primary-color) 0%, rgba(254, 218, 106, 0.8) 100%); /* Are ya yellow?! with gradient */
+  color: var(--gradient-start); /* Dark Slate for contrast */
+  border: none;
+  padding: 16px 36px;
+  font-size: 16px;
+  font-weight: 700;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 25px;
+  align-self: flex-start;
+  box-shadow: 0 8px 20px rgba(254, 218, 106, 0.3); /* Are ya yellow?! with opacity */
+  position: relative;
+  overflow: hidden;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.submitButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, rgba(254, 218, 106, 0) 0%, rgba(254, 218, 106, 0.3) 50%, rgba(254, 218, 106, 0) 100%); /* Are ya yellow?! with opacity */
+  transition: all 0.6s ease;
+}
+
+.submitButton::after {
+  content: '→';
+  margin-left: 8px;
+  font-size: 18px;
+  transition: transform 0.3s ease;
+  display: inline-block;
+}
+
+.submitButton:hover {
+  background: linear-gradient(135deg, var(--hover-color) 0%, var(--primary-color) 100%); /* Slightly darker Are ya yellow?! to Are ya yellow?! */
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(254, 218, 106, 0.5); /* Are ya yellow?! with opacity */
+}
+
+.submitButton:hover::after {
+  transform: translateX(5px);
+}
+
+.submitButton:hover::before {
+  left: 100%;
+}
+
+/* Form status styles */
+.formStatus {
+  background: rgba(29, 30, 34, 0.8);
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  backdrop-filter: blur(5px);
+  border: 1px solid;
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.formStatus.sending {
+  border-color: var(--primary-color);
+}
+
+.formStatus.success {
+  border-color: var(--success-color);
+}
+
+.statusIcon {
+  font-size: 24px;
+  margin-right: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.formStatus.sending .statusIcon {
+  color: var(--primary-color);
+}
+
+.formStatus.success .statusIcon {
+  color: var(--success-color);
+}
+
+.statusMessage {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text-color);
+  flex-grow: 1;
+}
+
+/* Disabled button state */
+.submitButton.disabled {
+  background: linear-gradient(135deg, #a8a8a8 0%, #7a7a7a 100%);
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.submitButton.disabled::before,
+.submitButton.disabled::after {
+  display: none;
+}
+
+@media (max-width: 992px) {
+  .contactWrapper {
+    flex-direction: column;
+    gap: 30px;
+  }
+  
+  .contactInfo,
+  .contactFormContainer {
+    width: 100%;
+  }
+  
+  /* Using global .section-title styles */
+}
+
+@media (max-width: 768px) {
+  .contactSection {
+    padding: 60px 0;
+  }
+  
+  .contactInfo,
+  .contactFormContainer {
+    padding: 25px;
+    min-width: auto;
+  }
+  
+  /* Using global .section-title styles */
+  
+  .contactDescription {
+    font-size: 0.95rem;
+    margin-bottom: 20px;
+  }
+  
+  .contactDetails {
+    margin-top: 20px;
+  }
+  
+  .contactItem {
+    margin-bottom: 20px;
+  }
+  
+  .contactIcon {
+    width: 48px;
+    height: 48px;
+    font-size: 18px;
+    margin-right: 15px;
+  }
+  
+  .contactText h4 {
+    font-size: 18px;
+    margin-bottom: 5px;
+  }
+  
+  .contactText p {
+    font-size: 14px;
+  }
+  
+  .submitButton {
+    width: 100%;
+    padding: 14px 20px;
+    font-size: 15px;
+    margin-top: 15px;
+  }
+  
+  .formGroup {
+    margin-bottom: 18px;
+  }
+  
+  .formGroup::before {
+    font-size: 13px;
+  }
+  
+  .borderLabelInput {
+    padding: 12px 15px;
+    font-size: 15px;
+    border-radius: 10px;
+  }
+  
+  textarea.borderLabelInput {
+    min-height: 100px;
+  }
+  
+  .formStatus {
+    padding: 12px;
+    margin-bottom: 15px;
+  }
+  
+  .statusIcon {
+    width: 35px;
+    height: 35px;
+    font-size: 20px;
+    margin-right: 10px;
+  }
+  
+  .statusMessage {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 576px) {
+  .contactSection {
+    padding: 40px 0;
+  }
+  
+  .contactWrapper {
+    gap: 20px;
+  }
+  
+  .contactInfo,
+  .contactFormContainer {
+    padding: 20px;
+    border-radius: 12px;
+  }
+  
+  /* Using global .section-title styles */
+  
+  .contactDescription {
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+    line-height: 1.6;
+  }
+  
+  .contactDetails {
+    margin-top: 15px;
+  }
+  
+  .contactItem {
+    margin-bottom: 15px;
+    align-items: center;
+  }
+  
+  .contactIcon {
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+    margin-right: 12px;
+  }
+  
+  .contactText h4 {
+    font-size: 16px;
+    margin-bottom: 3px;
+  }
+  
+  .contactText p {
+    font-size: 13px;
+  }
+  
+  .submitButton {
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+  
+  .submitButton::after {
+    font-size: 16px;
+    margin-left: 5px;
+  }
+  
+  .formGroup {
+    margin-bottom: 15px;
+  }
+  
+  .borderLabelInput {
+    padding: 10px 12px;
+    font-size: 14px;
+    border-radius: 8px;
+  }
+  
+  textarea.borderLabelInput {
+    min-height: 80px;
+  }
+  
+  .formStatus {
+    padding: 10px;
+    margin-bottom: 12px;
+  }
+  
+  .statusIcon {
+    width: 30px;
+    height: 30px;
+    font-size: 16px;
+    margin-right: 8px;
+  }
+  
+  .statusMessage {
+    font-size: 13px;
+  }
+}

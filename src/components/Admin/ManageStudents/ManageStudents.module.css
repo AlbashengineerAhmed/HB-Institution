@@ -1,0 +1,483 @@
+.manageStudents {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Stats Section */
+.statsSection {
+  background: linear-gradient(135deg, var(--secondary-color), var(--gradient-end));
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: var(--box-shadow);
+  border: 1px solid rgba(var(--primary-color-rgb), 0.1);
+}
+
+.statsTitle {
+  color: var(--text-color);
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0 0 1.5rem 0;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.statCard {
+  background-color: rgba(var(--gradient-start-rgb), 0.5);
+  border-radius: 8px;
+  padding: 1rem;
+  border: 1px solid rgba(var(--primary-color-rgb), 0.1);
+  transition: var(--transition);
+}
+
+.statCard:hover {
+  background-color: rgba(var(--gradient-start-rgb), 0.7);
+  border-color: rgba(var(--primary-color-rgb), 0.2);
+}
+
+.statCourse {
+  color: var(--text-color);
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin: 0 0 0.75rem 0;
+  line-height: 1.3;
+}
+
+.statNumbers {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.statItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.statValue {
+  color: var(--primary-color);
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.statLabel {
+  color: rgba(var(--text-color-rgb), 0.7);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.progressBar {
+  width: 100%;
+  height: 6px;
+  background-color: rgba(var(--text-color-rgb), 0.2);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary-color), var(--hover-color));
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+/* Header Section */
+.studentHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.searchSection {
+  flex: 1;
+  max-width: 400px;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background-color: var(--secondary-color);
+  border: 1px solid rgba(var(--primary-color-rgb), 0.3);
+  border-radius: 8px;
+  color: var(--text-color);
+  font-size: 0.875rem;
+  transition: var(--transition);
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.1);
+}
+
+.searchInput::placeholder {
+  color: rgba(var(--text-color-rgb), 0.6);
+}
+
+.filtersSection {
+  display: flex;
+  gap: 1rem;
+}
+
+.filterSelect {
+  padding: 0.75rem 1rem;
+  background-color: var(--secondary-color);
+  border: 1px solid rgba(var(--primary-color-rgb), 0.3);
+  border-radius: 8px;
+  color: var(--text-color);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.filterSelect:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+/* Table Container */
+.tableContainer {
+  background: linear-gradient(135deg, var(--secondary-color), var(--gradient-end));
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: var(--box-shadow);
+  border: 1px solid rgba(var(--primary-color-rgb), 0.1);
+  overflow-x: auto;
+}
+
+.studentsTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.studentsTable th {
+  background-color: rgba(var(--primary-color-rgb), 0.1);
+  color: var(--text-color);
+  font-weight: 600;
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 2px solid rgba(var(--primary-color-rgb), 0.2);
+  white-space: nowrap;
+}
+
+.studentRow {
+  border-bottom: 1px solid rgba(var(--primary-color-rgb), 0.1);
+  transition: var(--transition);
+}
+
+.studentRow:hover {
+  background-color: rgba(var(--primary-color-rgb), 0.05);
+}
+
+.studentsTable td {
+  padding: 1rem;
+  vertical-align: top;
+}
+
+/* Student Info Cell */
+.studentInfo {
+  min-width: 250px;
+}
+
+.studentDetails {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.studentAvatar {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, var(--primary-color), var(--hover-color));
+  color: var(--secondary-color);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.studentData {
+  flex: 1;
+}
+
+.studentName {
+  color: var(--text-color);
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 0.25rem 0;
+}
+
+.studentEmail,
+.studentPhone,
+.joinDate {
+  color: rgba(var(--text-color-rgb), 0.8);
+  font-size: 0.8rem;
+  margin: 0 0 0.25rem 0;
+}
+
+/* Courses Cell */
+.coursesCell {
+  min-width: 200px;
+}
+
+.coursesList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.courseTag {
+  background-color: rgba(var(--info-color-rgb), 0.2);
+  color: var(--info-color);
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: 500;
+  align-self: flex-start;
+}
+
+.coursesStats {
+  margin-top: 0.5rem;
+}
+
+.coursesCount {
+  color: rgba(var(--text-color-rgb), 0.7);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+/* Progress Cell */
+.progressCell {
+  text-align: center;
+  min-width: 100px;
+}
+
+.progressContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.progressCircle {
+  position: relative;
+  width: 60px;
+  height: 60px;
+}
+
+.progressSvg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.progressBg {
+  fill: none;
+  stroke: rgba(var(--text-color-rgb), 0.2);
+  stroke-width: 3;
+}
+
+.progressBar {
+  fill: none;
+  stroke-width: 3;
+  stroke-linecap: round;
+  transition: stroke-dasharray 0.3s ease;
+}
+
+.progressText {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--text-color);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* Status Cell */
+.statusCell {
+  text-align: center;
+  min-width: 100px;
+}
+
+.statusBadge {
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.statusActive {
+  background-color: rgba(var(--success-color-rgb), 0.2);
+  color: var(--success-color);
+}
+
+.statusSuspended {
+  background-color: rgba(var(--warning-color-rgb), 0.2);
+  color: var(--warning-color);
+}
+
+.statusBanned {
+  background-color: rgba(var(--error-color-rgb), 0.2);
+  color: var(--error-color);
+}
+
+/* Activity Cell */
+.activityCell {
+  text-align: center;
+  min-width: 120px;
+}
+
+.lastActivity {
+  color: rgba(var(--text-color-rgb), 0.8);
+  font-size: 0.875rem;
+}
+
+/* Actions Cell */
+.actionsCell {
+  min-width: 200px;
+}
+
+.actionButtons {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.actionBtn {
+  padding: 0.5rem 0.75rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  white-space: nowrap;
+}
+
+.suspendBtn {
+  background-color: rgba(var(--warning-color-rgb), 0.2);
+  color: var(--warning-color);
+}
+
+.suspendBtn:hover {
+  background-color: rgba(var(--warning-color-rgb), 0.3);
+}
+
+.activateBtn {
+  background-color: rgba(var(--success-color-rgb), 0.2);
+  color: var(--success-color);
+}
+
+.activateBtn:hover {
+  background-color: rgba(var(--success-color-rgb), 0.3);
+}
+
+.banBtn {
+  background-color: rgba(var(--error-color-rgb), 0.2);
+  color: var(--error-color);
+}
+
+.banBtn:hover {
+  background-color: rgba(var(--error-color-rgb), 0.3);
+}
+
+.viewBtn {
+  background-color: rgba(var(--info-color-rgb), 0.2);
+  color: var(--info-color);
+}
+
+.viewBtn:hover {
+  background-color: rgba(var(--info-color-rgb), 0.3);
+}
+
+.deleteBtn {
+  background-color: rgba(var(--error-color-rgb), 0.2);
+  color: var(--error-color);
+}
+
+.deleteBtn:hover {
+  background-color: rgba(var(--error-color-rgb), 0.3);
+}
+
+/* Empty State */
+.emptyState {
+  text-align: center;
+  padding: 3rem;
+  color: rgba(var(--text-color-rgb), 0.6);
+  background: linear-gradient(135deg, var(--secondary-color), var(--gradient-end));
+  border-radius: 12px;
+  border: 1px solid rgba(var(--primary-color-rgb), 0.1);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .studentHeader {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .filtersSection {
+    justify-content: flex-end;
+  }
+  
+  .statsGrid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+  
+  .tableContainer {
+    padding: 1rem;
+  }
+  
+  .studentsTable th,
+  .studentsTable td {
+    padding: 0.75rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .filtersSection {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .actionButtons {
+    flex-direction: column;
+  }
+  
+  .actionBtn {
+    justify-content: center;
+  }
+  
+  .studentInfo {
+    min-width: 200px;
+  }
+  
+  .coursesCell {
+    min-width: 150px;
+  }
+  
+  .progressCircle {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .progressText {
+    font-size: 0.7rem;
+  }
+}

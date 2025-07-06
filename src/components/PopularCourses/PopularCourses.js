@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Slider from 'react-slick';
-import './PopularCourses.css';
+import styles from './PopularCourses.module.css';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
@@ -47,75 +47,74 @@ const PopularCourses = () => {
     autoplaySpeed: 3000,
     pauseOnHover: true,
     centerMode: false,
-    centerPadding: '30px',
     className: 'course-slider',
     responsive: [
       {
         breakpoint: 1024,
         settings: {
           slidesToShow: 2,
-          slidesToScroll: 1,
-          centerPadding: '20px'
+          slidesToScroll: 1
         }
       },
       {
         breakpoint: 600,
         settings: {
           slidesToShow: 1,
-          slidesToScroll: 1,
-          centerPadding: '15px'
+          slidesToScroll: 1
         }
       }
     ]
   };
 
   return (
-    <section className="popular-courses-section">
+    <section className={styles.popularCoursesSection}>
       {/* Decorative shapes */}
-      <div className="course-shape shape-1">
+      <div className={`${styles.courseShape} ${styles.shape1}`}>
         <img src="/images/course-2-shape-1.png" alt="" />
       </div>
-      <div className="course-shape shape-2">
+      <div className={`${styles.courseShape} ${styles.shape2}`}>
         <img src="/images/course-2-svg-1.svg" alt="" />
       </div>
-      <div className="course-shape shape-3">
+      <div className={`${styles.courseShape} ${styles.shape3}`}>
         <img src="/images/cat-2-icon-2.svg" alt="" />
       </div>
-      <div className="course-shape shape-4">
+      <div className={`${styles.courseShape} ${styles.shape4}`}>
         <img src="/images/cat-2-icon-4.svg" alt="" />
       </div>
-      <div className="course-shape shape-5">
+      <div className={`${styles.courseShape} ${styles.shape5}`}>
         <img src="/images/cat-2-icon-6.svg" alt="" />
       </div>
-      <div className="course-shape shape-6">
+      <div className={`${styles.courseShape} ${styles.shape6}`}>
         <img src="/images/cat-2-icon-8.svg" alt="" />
       </div>
       
-      <div className="container">
-        <div className="section-header">
-          <h2 className="section-title">Popular Courses</h2>
-          <Link to="/courses" className="view-all-link">View All</Link>
+      <div className={`container ${styles.container}`}>
+        <div className={`section-header ${styles.sectionHeader}`}>
+          <h2 className={`section-title ${styles.sectionTitle}`}>Popular Courses</h2>
+          <Link to="/courses" className={`view-all-link ${styles.viewAllLink}`}>View All</Link>
         </div>
         
-        <div className="courses-slider-container">
+        <div className={styles.coursesSliderContainer}>
           <Slider {...settings}>
             {courses.map(course => (
-              <div key={course.id} className="course-card">
-                <div className="course-image">
-                  <img src={course.image} alt={course.title} />
-                  <div className="course-category">{course.category}</div>
-                </div>
-                <div className="course-content">
-                  <h3 className="course-title">{course.title}</h3>
-                  <div className="course-meta">
-                    <div className="course-rating">
-                      <span className="rating-value">{course.rating}</span>
-                      <span className="rating-stars">★★★★★</span>
-                    </div>
-                    <div className="course-students">{course.students} students</div>
+              <div key={course.id} className={styles.courseSlide}>
+                <div className={styles.courseCard}>
+                  <div className={styles.courseImageContainer}>
+                    <img src={course.image} alt={course.title} className={styles.courseImage} />
+                    <div className={styles.courseCategory}>{course.category}</div>
                   </div>
-                  <div className="course-price">${course.price}</div>
-                  <Link to={`/course/${course.id}`} className="enroll-button">Enroll Now</Link>
+                  <div className={styles.courseContent}>
+                    <h3 className={styles.courseTitle}>{course.title}</h3>
+                    <div className={styles.courseMeta}>
+                      <div className={styles.courseRating}>
+                        <span className={styles.ratingValue}>{course.rating}</span>
+                        <span className={styles.ratingStars}>★★★★★</span>
+                      </div>
+                      <div className={styles.courseStudents}>{course.students} students</div>
+                    </div>
+                    <div className={styles.coursePrice}>${course.price}</div>
+                    <Link to={`/course/${course.id}`} className={styles.enrollButton}>Enroll Now</Link>
+                  </div>
                 </div>
               </div>
             ))}

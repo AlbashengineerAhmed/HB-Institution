@@ -1,0 +1,127 @@
+.statsCard {
+  background: linear-gradient(135deg, var(--secondary-color), var(--gradient-end));
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: var(--box-shadow);
+  border: 1px solid rgba(var(--primary-color-rgb), 0.1);
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+
+.statsCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary-color), var(--hover-color));
+}
+
+.statsCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(var(--gradient-start-rgb), 0.3);
+  border-color: rgba(var(--primary-color-rgb), 0.2);
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.cardIcon {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, var(--primary-color), var(--hover-color));
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  box-shadow: 0 4px 12px rgba(var(--primary-color-rgb), 0.3);
+}
+
+.changeIndicator {
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.changeIndicator.positive {
+  background-color: rgba(var(--success-color-rgb), 0.2);
+  color: var(--success-color);
+}
+
+.changeIndicator.positive::before {
+  content: '↗';
+  font-size: 0.875rem;
+}
+
+.changeIndicator.negative {
+  background-color: rgba(var(--error-color-rgb), 0.2);
+  color: var(--error-color);
+}
+
+.changeIndicator.negative::before {
+  content: '↘';
+  font-size: 0.875rem;
+}
+
+.cardContent {
+  margin-bottom: 1rem;
+}
+
+.cardValue {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: var(--text-color);
+  margin: 0 0 0.5rem 0;
+  line-height: 1;
+}
+
+.cardTitle {
+  font-size: 0.875rem;
+  color: rgba(var(--text-color-rgb), 0.8);
+  margin: 0;
+  font-weight: 500;
+}
+
+.cardFooter {
+  padding-top: 1rem;
+  border-top: 1px solid rgba(var(--primary-color-rgb), 0.1);
+}
+
+.footerText {
+  font-size: 0.75rem;
+  color: rgba(var(--text-color-rgb), 0.6);
+  font-weight: 400;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .statsCard {
+    padding: 1.25rem;
+  }
+  
+  .cardIcon {
+    width: 45px;
+    height: 45px;
+    font-size: 1.25rem;
+  }
+  
+  .cardValue {
+    font-size: 2rem;
+  }
+  
+  .changeIndicator {
+    padding: 0.2rem 0.6rem;
+    font-size: 0.7rem;
+  }
+}

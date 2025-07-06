@@ -1,58 +1,101 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import './AuthPages.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { resetPassword, clearError, clearResetState } from '../../store/slices/authSlice';
+import styles from './AuthPages.module.css';
 import logo from '../../assets/images/logo-black.webp';
 // Using register.png for the auth page image
 const authImage = process.env.PUBLIC_URL + '/images/register.png';
 
 const ResetPasswordPage = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { isLoading, error, resetEmail, isCodeVerified } = useSelector((state) => state.auth);
+
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [error, setError] = useState('');
-  const navigate = useNavigate();
+  const [validationErrors, setValidationErrors] = useState({});
 
-  const handleSubmit = (e) => {
+  useEffect(() => {
+    // Redirect if not coming from verification
+    if (!isCodeVerified || !resetEmail) {
+      navigate('/forgot-password');
+    }
+  }, [isCodeVerified, resetEmail, navigate]);
+
+  useEffect(() => {
+    // Clear errors when component mounts
+    dispatch(clearError());
+  }, [dispatch]);
+
+  const validateForm = () => {
+    const errors = {};
+
+    if (!password) errors.password = 'Password is required';
+    if (!confirmPassword) errors.confirmPassword = 'Please confirm your password';
+    if (password && confirmPassword && password !== confirmPassword) {
+      errors.confirmPassword = 'Passwords do not match';
+    }
+
+    // Password validation
+    if (password && password.length < 6) {
+      errors.password = 'Password must be at least 6 characters long';
+    }
+
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Validate passwords match
-    if (password !== confirmPassword) {
-      setError('Passwords do not match');
+    if (!validateForm()) {
       return;
     }
-    
-    // Handle password reset logic here
-    console.log('Password reset with:', password);
-    
-    // Navigate to login page after successful reset
-    navigate('/login', { state: { resetSuccess: true } });
+
+    try {
+      await dispatch(resetPassword({ 
+        email: resetEmail, 
+        newPassword: password 
+      })).unwrap();
+      
+      // Clear reset state and navigate to login
+      dispatch(clearResetState());
+      navigate('/login');
+    } catch (error) {
+      // Error is handled by Redux and displayed in the UI
+      console.error('Password reset failed:', error);
+    }
   };
 
   return (
-    <div className="auth-container">
-      <div className="auth-left-panel">
-        <div className="auth-image-container">
-          <img src={authImage} alt="Reset Password" className="auth-image" />
+    <div className={styles.authContainer}>
+      <div className={styles.authLeftPanel}>
+        <div className={styles.authImageContainer}>
+          <img src={authImage} alt="Reset Password" className={styles.authImage} />
         </div>
       </div>
       
-      <div className="auth-right-panel">
-        <div className="auth-form-container">
-          <div className="auth-logo">
+      <div className={styles.authRightPanel}>
+        <div className={styles.authFormContainer}>
+          <div className={styles.authLogo}>
             <img src={logo} alt="Website Logo" />
           </div>
-          <h2 className="auth-title">Reset Your Password</h2>
+          <h2 className={styles.authTitle}>Reset Your Password</h2>
           
-          <p className="auth-description">Create a new password for your account.</p>
+          <p className={styles.authSubtitle}>Create a new password for your account.</p>
           
-          <form onSubmit={handleSubmit} className="auth-form">
-            {error && <div className="error-message">{error}</div>}
-            
-            <div className="form-group">
-              <label htmlFor="password">
-                <i className="fas fa-lock"></i>
-              </label>
+          {/* Display errors */}
+          {error && (
+            <div className={styles.errorMessage}>
+              {error}
+            </div>
+          )}
+          
+          <form onSubmit={handleSubmit} className={styles.authForm}>
+            <div className={styles.formGroup}>
               <input
                 type={showPassword ? "text" : "password"}
                 id="password"
@@ -60,20 +103,21 @@ const ResetPasswordPage = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                className={validationErrors.password ? styles.errorInput : ''}
               />
               <button 
                 type="button" 
-                className="toggle-password"
+                className={styles.togglePassword}
                 onClick={() => setShowPassword(!showPassword)}
               >
                 {showPassword ? <i className="fas fa-eye-slash"></i> : <i className="fas fa-eye"></i>}
               </button>
+              {validationErrors.password && (
+                <span className={styles.fieldError}>{validationErrors.password}</span>
+              )}
             </div>
             
-            <div className="form-group">
-              <label htmlFor="confirmPassword">
-                <i className="fas fa-lock"></i>
-              </label>
+            <div className={styles.formGroup}>
               <input
                 type={showConfirmPassword ? "text" : "password"}
                 id="confirmPassword"
@@ -81,52 +125,38 @@ const ResetPasswordPage = () => {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
+                className={validationErrors.confirmPassword ? styles.errorInput : ''}
               />
               <button 
                 type="button" 
-                className="toggle-password"
+                className={styles.togglePassword}
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
               >
                 {showConfirmPassword ? <i className="fas fa-eye-slash"></i> : <i className="fas fa-eye"></i>}
               </button>
+              {validationErrors.confirmPassword && (
+                <span className={styles.fieldError}>{validationErrors.confirmPassword}</span>
+              )}
             </div>
             
-            <div className="password-requirements">
-              <p>Password must:</p>
-              <ul>
-                <li className={password.length >= 8 ? 'met' : ''}>
-                  <i className={password.length >= 8 ? 'fas fa-check' : 'fas fa-times'}></i>
-                  Be at least 8 characters long
-                </li>
-                <li className={/[A-Z]/.test(password) ? 'met' : ''}>
-                  <i className={/[A-Z]/.test(password) ? 'fas fa-check' : 'fas fa-times'}></i>
-                  Include at least one uppercase letter
-                </li>
-                <li className={/[0-9]/.test(password) ? 'met' : ''}>
-                  <i className={/[0-9]/.test(password) ? 'fas fa-check' : 'fas fa-times'}></i>
-                  Include at least one number
-                </li>
-                <li className={/[!@#$%^&*]/.test(password) ? 'met' : ''}>
-                  <i className={/[!@#$%^&*]/.test(password) ? 'fas fa-check' : 'fas fa-times'}></i>
-                  Include at least one special character (!@#$%^&*)
-                </li>
-              </ul>
+            <div className={styles.passwordRequirements}>
+              <p>Password must be at least 6 characters long</p>
             </div>
             
             <button 
               type="submit" 
-              className="auth-button"
-              disabled={password.length < 8 || password !== confirmPassword}
+              className={styles.authButton}
+              disabled={password.length < 6 || password !== confirmPassword || isLoading}
             >
-              Reset Password
+              {isLoading ? 'Resetting...' : 'Reset Password'}
             </button>
           </form>
           
-          <div className="auth-links">
+          <div className={styles.authLinks}>
             <p>Remember your password? <Link to="/login">Sign In</Link></p>
           </div>
           
-          <div className="auth-footer">
+          <div className={styles.authFooter}>
             <Link to="/terms">Terms of Service</Link>
             <Link to="/privacy">Privacy Policy</Link>
           </div>

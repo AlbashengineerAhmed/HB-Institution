@@ -1,0 +1,362 @@
+/* Using global color variables from global.css */
+
+/* General Styles */
+.programsPage {
+  font-family: 'Roboto', sans-serif;
+  color: var(--text-color);
+  line-height: 1.6;
+}
+
+/* Using global styles */
+
+.sectionTitle::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 3px;
+  background-color: var(--secondary-color);
+}
+
+/* Banner Section */
+.programsBanner {
+  background: linear-gradient(rgba(63, 81, 181, 0.8), rgba(63, 81, 181, 0.9)), url('/images/hero-2-thumb-1.png');
+  background-size: cover;
+  background-position: center;
+  color: var(--white);
+  padding: 100px 0;
+  text-align: center;
+}
+
+.bannerTitle {
+  font-size: 3.5rem;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+}
+
+.bannerDescription {
+  font-size: 1.2rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Programs Overview Section */
+.programsOverviewSection {
+  padding: 80px 0;
+  background-color: var(--white);
+}
+
+.overviewContent {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+
+.overviewImage {
+  flex: 1;
+}
+
+.overviewImage img {
+  width: 100%;
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+}
+
+.overviewText {
+  flex: 1;
+}
+
+.overviewText p {
+  margin-bottom: 1.5rem;
+  font-size: 1.1rem;
+  color: var(--light-text);
+}
+
+/* Program Sections */
+.programSection {
+  padding: 80px 0;
+}
+
+.programSection:nth-child(odd) {
+  background-color: var(--light-bg);
+}
+
+.programContent {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+
+.programContent.reverse {
+  flex-direction: row-reverse;
+}
+
+.programInfo {
+  flex: 1;
+}
+
+.programImage {
+  flex: 1;
+}
+
+.programImage img {
+  width: 100%;
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+}
+
+.programTitle {
+  font-size: 2.2rem;
+  color: var(--primary-color);
+  margin-bottom: 1.5rem;
+}
+
+.programDescription {
+  font-size: 1.1rem;
+  color: var(--light-text);
+  margin-bottom: 2rem;
+}
+
+.programDetails {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  margin-bottom: 2rem;
+}
+
+.detailItem {
+  display: flex;
+  align-items: center;
+}
+
+.detailLabel {
+  font-weight: 700;
+  margin-right: 10px;
+  color: var(--primary-color);
+}
+
+.detailValue {
+  color: var(--light-text);
+}
+
+.specializationsTitle,
+.featuresTitle,
+.benefitsTitle,
+.componentsTitle {
+  font-size: 1.3rem;
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+}
+
+.specializationsList,
+.featuresList,
+.benefitsList,
+.componentsList {
+  list-style-type: none;
+  padding-left: 0;
+  margin-bottom: 2rem;
+}
+
+.specializationsList li,
+.featuresList li,
+.benefitsList li,
+.componentsList li {
+  position: relative;
+  padding-left: 25px;
+  margin-bottom: 10px;
+}
+
+.specializationsList li::before,
+.featuresList li::before,
+.benefitsList li::before,
+.componentsList li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--secondary-color);
+  font-weight: bold;
+}
+
+.programCta {
+  display: flex;
+  gap: 15px;
+}
+
+.btnProgram,
+.btnApply {
+  display: inline-block;
+  padding: 12px 25px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+.btnProgram {
+  background-color: var(--primary-color);
+  color: var(--white);
+}
+
+.btnProgram:hover {
+  background-color: #303f9f;
+}
+
+.btnApply {
+  background-color: var(--secondary-color);
+  color: var(--white);
+}
+
+.btnApply:hover {
+  background-color: #c51162;
+}
+
+/* Admission Process Section */
+.admissionSection {
+  padding: 80px 0;
+  background-color: var(--white);
+}
+
+.admissionSteps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  margin-bottom: 3rem;
+}
+
+.stepCard {
+  background-color: var(--light-bg);
+  border-radius: 8px;
+  padding: 30px;
+  box-shadow: var(--shadow);
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+
+.stepCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.stepNumber {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 40px;
+  height: 40px;
+  background-color: var(--primary-color);
+  color: var(--white);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.stepTitle {
+  font-size: 1.3rem;
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+}
+
+.stepDescription {
+  color: var(--light-text);
+}
+
+.admissionCta {
+  text-align: center;
+}
+
+.btnApplyNow {
+  display: inline-block;
+  padding: 15px 40px;
+  background-color: var(--secondary-color);
+  color: var(--white);
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: 600;
+  font-size: 1.2rem;
+  transition: var(--transition);
+}
+
+.btnApplyNow:hover {
+  background-color: #c51162;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive Styles */
+@media (max-width: 992px) {
+  .overviewContent,
+  .programContent {
+    flex-direction: column;
+  }
+  
+  .programContent.reverse {
+    flex-direction: column;
+  }
+  
+  .admissionSteps {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .bannerTitle {
+    font-size: 3rem;
+  }
+  
+  .sectionTitle,
+  .programTitle {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .programDetails {
+    grid-template-columns: 1fr;
+  }
+  
+  .admissionSteps {
+    grid-template-columns: 1fr;
+  }
+  
+  .bannerTitle {
+    font-size: 2.5rem;
+  }
+  
+  .sectionTitle,
+  .programTitle {
+    font-size: 1.8rem;
+  }
+  
+  .programCta {
+    flex-direction: column;
+  }
+  
+  .btnProgram,
+  .btnApply {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+@media (max-width: 576px) {
+  .bannerTitle {
+    font-size: 2rem;
+  }
+  
+  .bannerDescription {
+    font-size: 1rem;
+  }
+  
+  .sectionTitle,
+  .programTitle {
+    font-size: 1.5rem;
+  }
+  
+  .stepCard {
+    padding: 20px;
+  }
+}

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import './Hero.css';
+import styles from './Hero.module.css';
 
 const Hero = () => {
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
@@ -79,81 +79,81 @@ const Hero = () => {
 
 
   return (
-    <section className="hero-section">
+    <section className={styles.heroSection}>
       {/* Decorative shapes */}
-      <div className="shape shape-1">
+      <div className={`${styles.shape} ${styles.shape1}`}>
         <img src="/images/hero-2-shape-2.png" alt="" />
       </div>
-      <div className="shape shape-2">
+      <div className={`${styles.shape} ${styles.shape2}`}>
         <img src="/images/hero-2-shape-3.png" alt="" />
       </div>
-      <div className="shape shape-3">
+      <div className={`${styles.shape} ${styles.shape3}`}>
         <img src="/images/hero-2-shape-4.png" alt="" />
       </div>
-      <div className="shape shape-4">
+      <div className={`${styles.shape} ${styles.shape4}`}>
         <img src="/images/wave.png" alt="" />
       </div>
-      <div className="shape shape-5">
+      <div className={`${styles.shape} ${styles.shape5}`}>
         <img src="/images/testimonial-shape-1.png" alt="" />
       </div>
-      <div className="shape shape-6">
+      <div className={`${styles.shape} ${styles.shape6}`}>
         <img src="/images/hero-2-svg-1.svg" alt="" />
       </div>
-      <div className="shape shape-7">
+      <div className={`${styles.shape} ${styles.shape7}`}>
         <img src="/images/banner-2-svg-1.svg" alt="" />
       </div>
 
-      <div className="container hero-container">
-        <div className="hero-content">
-          <div className="hero-badge">
+      <div className={`container ${styles.heroContainer}`}>
+        <div className={styles.heroContent}>
+          <div className={styles.heroBadge}>
             <img src="/images/funfact-2-icon-2.svg" alt="" />
             <span>Top Rated Institution</span>
           </div>
-          <h1 className="hero-title">
+          <h1 className={styles.heroTitle}>
           Unlock Your Potential
-            <span className="highlight">With HB Institution</span>
-            <img src="/images/line-2-category.svg" alt="" className="title-underline" />
+            <span className={styles.highlight}>With HB Institution</span>
+            <img src="/images/line-2-category.svg" alt="" className={styles.titleUnderline} />
           </h1>
-          <p className="hero-description">
+          <p className={styles.heroDescription}>
             Explore world-class programs designed to enhance your knowledge, sharpen your skills, and accelerate your academic and professional growth. Join HB Institution and begin your journey toward excellence.
           </p>
-          <div className="hero-buttons">
-            <Link to="/programs" className="cta-button primary-btn">Get Started Now</Link>
-            <Link to="/about" className="cta-button secondary-btn">Learn More</Link>
+          <div className={styles.heroButtons}>
+            <Link to="/programs" className={`${styles.ctaButton} ${styles.primaryBtn}`}>Get Started Now</Link>
+            <Link to="/about" className={`${styles.ctaButton} ${styles.secondaryBtn}`}>Learn More</Link>
           </div>
           
-          <div className="hero-stats">
-            <div className="stat-item">
-              <div className="stat-number">10K+</div>
-              <div className="stat-label">Students</div>
+          <div className={styles.heroStats}>
+            <div className={styles.statItem}>
+              <div className={styles.statNumber}>10K+</div>
+              <div className={styles.statLabel}>Students</div>
             </div>
-            <div className="stat-divider"></div>
-            <div className="stat-item">
-              <div className="stat-number">200+</div>
-              <div className="stat-label">Courses</div>
+            <div className={styles.statDivider}></div>
+            <div className={styles.statItem}>
+              <div className={styles.statNumber}>200+</div>
+              <div className={styles.statLabel}>Courses</div>
             </div>
-            <div className="stat-divider"></div>
-            <div className="stat-item">
-              <div className="stat-number">98%</div>
-              <div className="stat-label">Success Rate</div>
+            <div className={styles.statDivider}></div>
+            <div className={styles.statItem}>
+              <div className={styles.statNumber}>98%</div>
+              <div className={styles.statLabel}>Success Rate</div>
             </div>
           </div>
         </div>
         
-        <div className="hero-image-container">
-          <div className="hero-video-wrapper">
-            <img src="/images/hero-2-thumb-1.png" alt="Student learning" className="hero-image" />
+        <div className={styles.heroImageContainer}>
+          <div className={styles.heroVideoWrapper}>
+            <img src="/images/hero-2-thumb-1.png" alt="Student learning" className={styles.heroImage} />
             {!isVideoPlaying && (
-              <div className="video-play-button" onClick={handlePlayVideo}>
+              <div className={styles.videoPlayButton} onClick={handlePlayVideo}>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M8 5v14l11-7z" />
                 </svg>
               </div>
             )}
             {isVideoPlaying ? (
-              <div className="video-container">
-                <div className="hero-video playing" ref={playerContainerRef}></div>
-                <button className="video-close-button" onClick={handleCloseVideo}>
+              <div className={styles.videoContainer}>
+                <div className={`${styles.heroVideo} ${styles.playing}`} ref={playerContainerRef}></div>
+                <button className={styles.videoCloseButton} onClick={handleCloseVideo}>
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
                   </svg>
@@ -161,49 +161,49 @@ const Hero = () => {
               </div>
             ) : null}
           </div>
-          <div className="floating-icon icon-1">
+          <div className={`${styles.floatingIcon} ${styles.icon1}`}>
             <img src="/images/cat-2-icon-1.svg" alt="" />
           </div>
-          <div className="floating-icon icon-2">
+          <div className={`${styles.floatingIcon} ${styles.icon2}`}>
             <img src="/images/cat-2-icon-3.svg" alt="" />
           </div>
-          <div className="floating-icon icon-3">
+          <div className={`${styles.floatingIcon} ${styles.icon3}`}>
             <img src="/images/cat-2-icon-5.svg" alt="" />
           </div>
-          <div className="floating-icon icon-4">
+          <div className={`${styles.floatingIcon} ${styles.icon4}`}>
             <img src="/images/cat-2-icon-7.svg" alt="" />
           </div>
         </div>
       </div>
       
-      <div className="hero-cards-container">
-        <div className="hero-card">
-          <div className="hero-card-icon">
+      <div className={styles.heroCardsContainer}>
+        <div className={styles.heroCard}>
+          <div className={styles.heroCardIcon}>
             <img src="/images/funfact-2-icon-1.svg" alt="" />
           </div>
-          <h3 className="hero-card-title">Expert Instructors</h3>
-          <p className="hero-card-description">Learn from industry professionals with years of experience</p>
+          <h3 className={styles.heroCardTitle}>Expert Instructors</h3>
+          <p className={styles.heroCardDescription}>Learn from industry professionals with years of experience</p>
         </div>
-        <div className="hero-card">
-          <div className="hero-card-icon">
+        <div className={styles.heroCard}>
+          <div className={styles.heroCardIcon}>
             <img src="/images/funfact-2-icon-2.svg" alt="" />
           </div>
-          <h3 className="hero-card-title">Quality Education</h3>
-          <p className="hero-card-description">Curriculum designed to meet industry standards</p>
+          <h3 className={styles.heroCardTitle}>Quality Education</h3>
+          <p className={styles.heroCardDescription}>Curriculum designed to meet industry standards</p>
         </div>
-        <div className="hero-card">
-          <div className="hero-card-icon">
+        <div className={styles.heroCard}>
+          <div className={styles.heroCardIcon}>
             <img src="/images/funfact-2-icon-3.svg" alt="" />
           </div>
-          <h3 className="hero-card-title">Flexible Learning</h3>
-          <p className="hero-card-description">Study at your own pace with 24/7 access to materials</p>
+          <h3 className={styles.heroCardTitle}>Flexible Learning</h3>
+          <p className={styles.heroCardDescription}>Study at your own pace with 24/7 access to materials</p>
         </div>
-        <div className="hero-card">
-          <div className="hero-card-icon">
+        <div className={styles.heroCard}>
+          <div className={styles.heroCardIcon}>
             <img src="/images/funfact-2-icon-4.svg" alt="" />
           </div>
-          <h3 className="hero-card-title">Career Support</h3>
-          <p className="hero-card-description">Get placement assistance and career guidance</p>
+          <h3 className={styles.heroCardTitle}>Career Support</h3>
+          <p className={styles.heroCardDescription}>Get placement assistance and career guidance</p>
         </div>
       </div>
     </section>

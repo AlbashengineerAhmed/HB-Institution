@@ -1,0 +1,631 @@
+.myStudents {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Header Section */
+.studentsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.filtersSection {
+  display: flex;
+  gap: 1rem;
+  flex: 1;
+}
+
+.searchSection {
+  flex: 1;
+  max-width: 300px;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background-color: var(--secondary-color);
+  border: 1px solid rgba(var(--primary-color-rgb), 0.3);
+  border-radius: 8px;
+  color: var(--text-color);
+  font-size: 0.875rem;
+  transition: var(--transition);
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.1);
+}
+
+.searchInput::placeholder {
+  color: rgba(var(--text-color-rgb), 0.6);
+}
+
+.courseSelect {
+  padding: 0.75rem 1rem;
+  background-color: var(--secondary-color);
+  border: 1px solid rgba(var(--primary-color-rgb), 0.3);
+  border-radius: 8px;
+  color: var(--text-color);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: var(--transition);
+  min-width: 200px;
+}
+
+.courseSelect:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+.actionsSection {
+  display: flex;
+  gap: 1rem;
+}
+
+.messageBtn {
+  background: linear-gradient(135deg, var(--primary-color), var(--hover-color));
+  color: var(--secondary-color);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-size: 0.875rem;
+}
+
+.messageBtn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(var(--primary-color-rgb), 0.3);
+}
+
+.messageBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Table Container */
+.tableContainer {
+  background: linear-gradient(135deg, var(--secondary-color), var(--gradient-end));
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: var(--box-shadow);
+  border: 1px solid rgba(var(--primary-color-rgb), 0.1);
+  overflow-x: auto;
+}
+
+.studentsTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.studentsTable th {
+  background-color: rgba(var(--primary-color-rgb), 0.1);
+  color: var(--text-color);
+  font-weight: 600;
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 2px solid rgba(var(--primary-color-rgb), 0.2);
+  white-space: nowrap;
+}
+
+.studentRow {
+  border-bottom: 1px solid rgba(var(--primary-color-rgb), 0.1);
+  transition: var(--transition);
+}
+
+.studentRow:hover {
+  background-color: rgba(var(--primary-color-rgb), 0.05);
+}
+
+.studentsTable td {
+  padding: 1rem;
+  vertical-align: top;
+}
+
+.selectAllCheckbox,
+.studentCheckbox {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--primary-color);
+  cursor: pointer;
+}
+
+/* Student Info Cell */
+.studentInfo {
+  min-width: 250px;
+}
+
+.studentDetails {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.studentAvatar {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, var(--primary-color), var(--hover-color));
+  color: var(--secondary-color);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.studentData {
+  flex: 1;
+}
+
+.studentName {
+  color: var(--text-color);
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 0.25rem 0;
+}
+
+.studentEmail,
+.studentCountry {
+  color: rgba(var(--text-color-rgb), 0.8);
+  font-size: 0.8rem;
+  margin: 0 0 0.25rem 0;
+}
+
+/* Course Info Cell */
+.courseInfo {
+  min-width: 200px;
+}
+
+.courseName {
+  color: var(--text-color);
+  font-weight: 600;
+  font-size: 0.875rem;
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.enrollmentDate {
+  color: rgba(var(--text-color-rgb), 0.7);
+  font-size: 0.8rem;
+}
+
+/* Progress Cell */
+.progressCell {
+  text-align: center;
+  min-width: 120px;
+}
+
+.progressContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.progressCircle {
+  position: relative;
+  width: 60px;
+  height: 60px;
+}
+
+.progressSvg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.progressBg {
+  fill: none;
+  stroke: rgba(var(--text-color-rgb), 0.2);
+  stroke-width: 3;
+}
+
+.progressBar {
+  fill: none;
+  stroke-width: 3;
+  stroke-linecap: round;
+  transition: stroke-dasharray 0.3s ease;
+}
+
+.progressText {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--text-color);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.modulesProgress {
+  color: rgba(var(--text-color-rgb), 0.7);
+  font-size: 0.75rem;
+}
+
+/* Grade Cell */
+.gradeCell {
+  text-align: center;
+  min-width: 80px;
+}
+
+.gradeBadge {
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.gradeAPlus {
+  background-color: rgba(var(--success-color-rgb), 0.2);
+  color: var(--success-color);
+}
+
+.gradeA {
+  background-color: rgba(var(--success-color-rgb), 0.15);
+  color: var(--success-color);
+}
+
+.gradeBPlus {
+  background-color: rgba(var(--info-color-rgb), 0.2);
+  color: var(--info-color);
+}
+
+.gradeB {
+  background-color: rgba(var(--info-color-rgb), 0.15);
+  color: var(--info-color);
+}
+
+.gradeCPlus {
+  background-color: rgba(var(--warning-color-rgb), 0.2);
+  color: var(--warning-color);
+}
+
+.gradeC {
+  background-color: rgba(var(--warning-color-rgb), 0.15);
+  color: var(--warning-color);
+}
+
+/* Status Cell */
+.statusCell {
+  text-align: center;
+  min-width: 100px;
+}
+
+.statusBadge {
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.statusActive {
+  background-color: rgba(var(--success-color-rgb), 0.2);
+  color: var(--success-color);
+}
+
+.statusInactive {
+  background-color: rgba(var(--warning-color-rgb), 0.2);
+  color: var(--warning-color);
+}
+
+.statusCompleted {
+  background-color: rgba(var(--info-color-rgb), 0.2);
+  color: var(--info-color);
+}
+
+/* Activity Cell */
+.activityCell {
+  text-align: center;
+  min-width: 120px;
+}
+
+.lastActivity {
+  color: rgba(var(--text-color-rgb), 0.8);
+  font-size: 0.875rem;
+}
+
+/* Actions Cell */
+.actionsCell {
+  min-width: 100px;
+}
+
+.actionButtons {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.actionBtn {
+  padding: 0.5rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: var(--transition);
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.viewBtn {
+  background-color: rgba(var(--info-color-rgb), 0.2);
+  color: var(--info-color);
+}
+
+.viewBtn:hover {
+  background-color: rgba(var(--info-color-rgb), 0.3);
+}
+
+.actionBtn.messageBtn {
+  background-color: rgba(var(--primary-color-rgb), 0.2);
+  color: var(--primary-color);
+  padding: 0.5rem;
+  width: 36px;
+  height: 36px;
+}
+
+.actionBtn.messageBtn:hover {
+  background-color: rgba(var(--primary-color-rgb), 0.3);
+}
+
+/* Empty State */
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+  background: linear-gradient(135deg, var(--secondary-color), var(--gradient-end));
+  border-radius: 16px;
+  border: 1px solid rgba(var(--primary-color-rgb), 0.1);
+}
+
+.emptyIcon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  opacity: 0.7;
+}
+
+.emptyTitle {
+  color: var(--text-color);
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0 0 1rem 0;
+}
+
+.emptyText {
+  color: rgba(var(--text-color-rgb), 0.7);
+  font-size: 1rem;
+  margin: 0;
+  max-width: 400px;
+}
+
+/* Message Modal */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.messageModal {
+  background: linear-gradient(135deg, var(--secondary-color), var(--gradient-end));
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: var(--box-shadow);
+  border: 1px solid rgba(var(--primary-color-rgb), 0.1);
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.modalTitle {
+  color: var(--text-color);
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.closeBtn {
+  background: none;
+  border: none;
+  color: rgba(var(--text-color-rgb), 0.7);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  transition: var(--transition);
+}
+
+.closeBtn:hover {
+  color: var(--text-color);
+}
+
+.messageForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.recipientsInfo {
+  background-color: rgba(var(--info-color-rgb), 0.1);
+  border: 1px solid rgba(var(--info-color-rgb), 0.3);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.recipientsInfo p {
+  color: rgba(var(--text-color-rgb), 0.8);
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.formLabel {
+  color: var(--text-color);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.formInput,
+.formTextarea {
+  padding: 0.75rem 1rem;
+  background-color: rgba(var(--gradient-start-rgb), 0.5);
+  border: 1px solid rgba(var(--primary-color-rgb), 0.3);
+  border-radius: 8px;
+  color: var(--text-color);
+  font-size: 0.875rem;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.formInput:focus,
+.formTextarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.1);
+}
+
+.formTextarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.modalActions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+.cancelBtn {
+  background-color: rgba(var(--error-color-rgb), 0.2);
+  color: var(--error-color);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.cancelBtn:hover {
+  background-color: rgba(var(--error-color-rgb), 0.3);
+}
+
+.sendBtn {
+  background: linear-gradient(135deg, var(--primary-color), var(--hover-color));
+  color: var(--secondary-color);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.sendBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(var(--primary-color-rgb), 0.3);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .studentsHeader {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .filtersSection {
+    justify-content: space-between;
+  }
+  
+  .actionsSection {
+    justify-content: flex-end;
+  }
+  
+  .tableContainer {
+    padding: 1rem;
+  }
+  
+  .studentsTable th,
+  .studentsTable td {
+    padding: 0.75rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .filtersSection {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .courseSelect {
+    min-width: auto;
+  }
+  
+  .actionButtons {
+    flex-direction: column;
+  }
+  
+  .studentInfo {
+    min-width: 200px;
+  }
+  
+  .courseInfo {
+    min-width: 150px;
+  }
+  
+  .progressCircle {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .progressText {
+    font-size: 0.7rem;
+  }
+  
+  .messageModal {
+    padding: 1.5rem;
+  }
+  
+  .modalActions {
+    flex-direction: column;
+  }
+}

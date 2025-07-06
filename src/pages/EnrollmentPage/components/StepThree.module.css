@@ -1,0 +1,318 @@
+/* Step Three - Using Global Colors */
+.stepThree {
+  width: 100%;
+}
+
+.stepHeader {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.stepHeader h2 {
+  color: var(--text-color);
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.stepHeader p {
+  color: var(--text-color);
+  font-size: 0.9rem;
+  margin: 0;
+  opacity: 0.8;
+}
+
+/* Loading State */
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  color: var(--text-color);
+}
+
+.loadingSpinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--border-color);
+  border-top: 3px solid var(--primary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading p {
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+/* Error State */
+.error {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-color);
+}
+
+.error h3 {
+  color: var(--text-color);
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.error p {
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.retryButton {
+  padding: 0.75rem 1.5rem;
+  background: var(--primary-color);
+  color: var(--gradient-start);
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.retryButton:hover {
+  background: var(--hover-color);
+}
+
+/* No Instructors */
+.noInstructors {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-color);
+}
+
+.noInstructors h3 {
+  color: var(--text-color);
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.noInstructors p {
+  font-size: 0.9rem;
+  margin: 0;
+  opacity: 0.8;
+}
+
+/* Instructors Container */
+.instructorsContainer {
+  margin-bottom: 2rem;
+}
+
+.instructorsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.instructorCard {
+  background: var(--gradient-start);
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.instructorCard:hover {
+  border-color: var(--primary-color);
+  transform: translateY(-2px);
+}
+
+.instructorCard.selected {
+  border-color: var(--primary-color);
+  background: var(--secondary-color);
+}
+
+.instructorHeader {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.instructorAvatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gradient-start);
+  font-weight: 700;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.instructorAvatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.instructorInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.instructorInfo h3 {
+  color: var(--text-color);
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  line-height: 1.3;
+}
+
+.instructorEmail {
+  color: var(--text-color);
+  font-size: 0.8rem;
+  margin: 0;
+  opacity: 0.7;
+}
+
+.selectIndicator {
+  width: 20px;
+  height: 20px;
+  color: var(--success-color);
+  flex-shrink: 0;
+}
+
+.selectIndicator svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Specializations */
+.specializations {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.specializationTag {
+  background: var(--primary-color);
+  color: var(--gradient-start);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.moreSpecs {
+  background: var(--border-color);
+  color: var(--text-color);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+/* Step Actions */
+.stepActions {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.prevButton,
+.nextButton {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  min-width: 120px;
+}
+
+.prevButton {
+  background: transparent;
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+}
+
+.prevButton:hover {
+  background: var(--secondary-color);
+  border-color: var(--primary-color);
+}
+
+.nextButton {
+  background: var(--primary-color);
+  color: var(--gradient-start);
+}
+
+.nextButton:hover:not(.disabled) {
+  background: var(--hover-color);
+  transform: translateY(-1px);
+}
+
+.nextButton.disabled {
+  background: var(--border-color);
+  color: var(--text-color);
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .instructorsGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .stepActions {
+    flex-direction: column;
+  }
+  
+  .prevButton,
+  .nextButton {
+    width: 100%;
+  }
+  
+  .instructorCard {
+    padding: 1rem;
+  }
+  
+  .instructorHeader {
+    gap: 0.75rem;
+  }
+  
+  .instructorAvatar {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .stepHeader h2 {
+    font-size: 1.25rem;
+  }
+  
+  .instructorCard {
+    padding: 0.75rem;
+  }
+  
+  .instructorInfo h3 {
+    font-size: 0.9rem;
+  }
+  
+  .instructorEmail {
+    font-size: 0.75rem;
+  }
+}
