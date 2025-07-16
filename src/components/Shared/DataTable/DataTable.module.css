@@ -1,0 +1,384 @@
+/* DataTable Styles */
+.dataTable {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+/* Header */
+.tableHeader {
+  padding: 20px 24px;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.tableTitle {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.tableControls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* Search */
+.searchBox {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.searchInput {
+  padding: 8px 12px 8px 36px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  width: 250px;
+  transition: border-color 0.2s;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.searchIcon {
+  position: absolute;
+  left: 12px;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+/* Filters */
+.filterGroup {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.filterLabel {
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+  white-space: nowrap;
+}
+
+.filterSelect {
+  padding: 6px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+  background: white;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.filterSelect:focus {
+  outline: none;
+  border-color: #3b82f6;
+}
+
+/* Table */
+.tableWrapper {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table thead th {
+  background: #f9fafb;
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 600;
+  color: #374151;
+  border-bottom: 1px solid #e5e7eb;
+  white-space: nowrap;
+}
+
+.table thead th.sortable {
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s;
+}
+
+.table thead th.sortable:hover {
+  background: #f3f4f6;
+}
+
+.headerContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.sortIcon {
+  font-size: 12px;
+  color: #6b7280;
+  opacity: 0.7;
+}
+
+.tableRow {
+  transition: background-color 0.2s;
+}
+
+.tableRow:hover {
+  background: #f9fafb;
+}
+
+.tableRow.clickable {
+  cursor: pointer;
+}
+
+.tableRow.clickable:hover {
+  background: #f3f4f6;
+}
+
+.tableCell {
+  padding: 12px 16px;
+  border-bottom: 1px solid #f3f4f6;
+  color: #374151;
+  vertical-align: middle;
+}
+
+.emptyState {
+  padding: 48px 16px;
+  text-align: center;
+  color: #6b7280;
+  font-style: italic;
+}
+
+/* Pagination */
+.pagination {
+  padding: 16px 24px;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.paginationInfo {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.paginationControls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.paginationBtn {
+  padding: 6px 12px;
+  border: 1px solid #d1d5db;
+  background: white;
+  color: #374151;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.paginationBtn:hover:not(:disabled) {
+  background: #f3f4f6;
+  border-color: #9ca3af;
+}
+
+.paginationBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.paginationBtn.active {
+  background: #3b82f6;
+  border-color: #3b82f6;
+  color: white;
+}
+
+.paginationEllipsis {
+  padding: 6px 8px;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+/* Status Badges */
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.statusBadge.present {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.statusBadge.absent {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.statusBadge.late {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.statusBadge.completed {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.statusBadge.pending {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.statusBadge.inProgress {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+/* Progress Bar */
+.progressBar {
+  width: 100px;
+  height: 8px;
+  background: #f3f4f6;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+  transition: width 0.3s ease;
+}
+
+/* Score Display */
+.scoreDisplay {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+}
+
+.scoreDisplay.excellent {
+  color: #059669;
+}
+
+.scoreDisplay.good {
+  color: #0891b2;
+}
+
+.scoreDisplay.average {
+  color: #d97706;
+}
+
+.scoreDisplay.poor {
+  color: #dc2626;
+}
+
+/* Action Buttons */
+.actionButtons {
+  display: flex;
+  gap: 8px;
+}
+
+.actionBtn {
+  padding: 4px 8px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.2s;
+}
+
+.actionBtn.view {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.actionBtn.edit {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.actionBtn.delete {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.actionBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .tableHeader {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .tableControls {
+    justify-content: space-between;
+  }
+  
+  .searchInput {
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  .pagination {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .paginationControls {
+    justify-content: center;
+  }
+  
+  .table {
+    font-size: 14px;
+  }
+  
+  .tableCell {
+    padding: 8px 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .tableHeader {
+    padding: 16px;
+  }
+  
+  .pagination {
+    padding: 12px 16px;
+  }
+  
+  .paginationBtn {
+    padding: 4px 8px;
+    font-size: 12px;
+  }
+}

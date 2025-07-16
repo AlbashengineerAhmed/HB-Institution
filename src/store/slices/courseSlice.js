@@ -28,10 +28,16 @@ api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('authToken');
     if (token) {
-      config.headers.BearerKey = token;
+      config.headers.authorization = `Bearer ${token}`;
     }
     return config;
   },
+  (error) => Promise.reject(error)
+);
+
+// Response interceptor for better error handling
+api.interceptors.response.use(
+  (response) => response,
   (error) => Promise.reject(error)
 );
 
@@ -40,8 +46,6 @@ export const fetchCourses = createAsyncThunk(
   'courses/fetchCourses',
   async (params = {}, { rejectWithValue }) => {
     try {
-      console.log('Fetching courses with params:', params);
-      
       // Build query string from params
       const queryParams = new URLSearchParams();
       if (params.category) queryParams.append('category', params.category);
@@ -53,13 +57,8 @@ export const fetchCourses = createAsyncThunk(
       const url = queryString ? `/courses/?${queryString}` : '/courses/';
       
       const response = await api.get(url);
-      console.log('Courses response:', response.data);
-      
       return response.data;
     } catch (error) {
-      console.error('Fetch courses error:', error);
-      console.error('Error response:', error.response?.data);
-      
       const errorMessage = getErrorMessage(error, 'Failed to fetch courses');
       toast.error(errorMessage);
       return rejectWithValue(errorMessage);
@@ -71,16 +70,9 @@ export const fetchCourseById = createAsyncThunk(
   'courses/fetchCourseById',
   async (courseId, { rejectWithValue }) => {
     try {
-      console.log('Fetching course by ID:', courseId);
-      
       const response = await api.get(`/courses/${courseId}`);
-      console.log('Course by ID response:', response.data);
-      
       return response.data;
     } catch (error) {
-      console.error('Fetch course by ID error:', error);
-      console.error('Error response:', error.response?.data);
-      
       const errorMessage = getErrorMessage(error, 'Failed to fetch course details');
       toast.error(errorMessage);
       return rejectWithValue(errorMessage);
@@ -92,16 +84,9 @@ export const searchCourses = createAsyncThunk(
   'courses/searchCourses',
   async (searchTerm, { rejectWithValue }) => {
     try {
-      console.log('Searching courses with term:', searchTerm);
-      
       const response = await api.get(`/courses/?search=${encodeURIComponent(searchTerm)}`);
-      console.log('Search courses response:', response.data);
-      
       return response.data;
     } catch (error) {
-      console.error('Search courses error:', error);
-      console.error('Error response:', error.response?.data);
-      
       const errorMessage = getErrorMessage(error, 'Failed to search courses');
       toast.error(errorMessage);
       return rejectWithValue(errorMessage);
@@ -113,17 +98,63 @@ export const fetchCoursesByCategory = createAsyncThunk(
   'courses/fetchCoursesByCategory',
   async (categoryId, { rejectWithValue }) => {
     try {
-      console.log('Fetching courses by category:', categoryId);
-      
       const response = await api.get(`/courses/?category=${categoryId}`);
-      console.log('Courses by category response:', response.data);
-      
       return response.data;
     } catch (error) {
-      console.error('Fetch courses by category error:', error);
-      console.error('Error response:', error.response?.data);
-      
       const errorMessage = getErrorMessage(error, 'Failed to fetch courses by category');
+      toast.error(errorMessage);
+      return rejectWithValue(errorMessage);
+    }
+  }
+);
+
+export const createCourse = createAsyncThunk(
+  'courses/createCourse',
+  async ({ categoryId, courseData }, { rejectWithValue }) => {
+    try {
+      // Create FormData for file upload
+      const formData = new FormData();
+      formData.append('title', courseData.title);
+      formData.append('description', courseData.description);
+      formData.append('price', courseData.price);
+      formData.append('duration', courseData.duration);
+      
+      // Handle multiple levels
+      if (courseData.levels && Array.isArray(courseData.levels)) {
+        courseData.levels.forEach(level => {
+          formData.append('levels', level);
+        });
+      }
+      
+      if (courseData.image) {
+        formData.append('image', courseData.image);
+      }
+      
+      const response = await api.post(`/courses/${categoryId}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      
+      toast.success('Course created successfully!');
+      return response.data;
+    } catch (error) {
+      const errorMessage = getErrorMessage(error, 'Failed to create course');
+      toast.error(errorMessage);
+      return rejectWithValue(errorMessage);
+    }
+  }
+);
+
+export const deleteCourse = createAsyncThunk(
+  'courses/deleteCourse',
+  async (courseId, { rejectWithValue }) => {
+    try {
+      const response = await api.delete(`/courses/${courseId}`);
+      toast.success('Course deleted successfully!');
+      return { courseId, data: response.data };
+    } catch (error) {
+      const errorMessage = getErrorMessage(error, 'Failed to delete course');
       toast.error(errorMessage);
       return rejectWithValue(errorMessage);
     }
@@ -257,6 +288,48 @@ const courseSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchCoursesByCategory.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      })
+      
+      // Create Course
+      .addCase(createCourse.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(createCourse.fulfilled, (state, action) => {
+        state.isLoading = false;
+        // Handle the response format: action.payload.course
+        const newCourse = action.payload.course || action.payload.data;
+        if (newCourse) {
+          state.courses.push(newCourse);
+          state.filteredCourses.push(newCourse);
+        }
+        state.error = null;
+      })
+      .addCase(createCourse.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      })
+      
+      // Delete Course
+      .addCase(deleteCourse.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(deleteCourse.fulfilled, (state, action) => {
+        state.isLoading = false;
+        const deletedCourseId = action.payload.courseId;
+        // Remove the deleted course from both arrays
+        state.courses = state.courses.filter(course => 
+          (course.id || course._id) !== deletedCourseId
+        );
+        state.filteredCourses = state.filteredCourses.filter(course => 
+          (course.id || course._id) !== deletedCourseId
+        );
+        state.error = null;
+      })
+      .addCase(deleteCourse.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
       });

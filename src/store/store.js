@@ -3,6 +3,7 @@ import authReducer from './slices/authSlice';
 import categoryReducer from './slices/categorySlice';
 import courseReducer from './slices/courseSlice';
 import enrollmentReducer from './slices/enrollmentSlice';
+import unitReducer from './slices/unitSlice';
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     categories: categoryReducer,
     courses: courseReducer,
     enrollment: enrollmentReducer,
+    units: unitReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

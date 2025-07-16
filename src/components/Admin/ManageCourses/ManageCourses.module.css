@@ -1,32 +1,119 @@
+/* ManageCourses.module.css */
+
 .manageCourses {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+  padding: 20px;
+  background: var(--gradient-start);
+  min-height: 100vh;
 }
 
-/* Header Section */
+/* Authentication Error Styles */
+.authError {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  background: var(--secondary-color);
+  border-radius: 12px;
+  box-shadow: var(--box-shadow);
+  text-align: center;
+  padding: 40px;
+}
+
+.errorIcon {
+  font-size: 4rem;
+  margin-bottom: 20px;
+  opacity: 0.7;
+}
+
+.authError h3 {
+  color: var(--error-color);
+  margin-bottom: 10px;
+  font-size: 1.5rem;
+}
+
+.authError p {
+  color: var(--light-text);
+  margin-bottom: 30px;
+  font-size: 1.1rem;
+  opacity: 0.8;
+}
+
+.loginButton {
+  background: var(--primary-color);
+  color: var(--secondary-color);
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.loginButton:hover {
+  background: var(--hover-color);
+  transform: translateY(-2px);
+}
+
+/* Header Styles */
 .courseHeader {
+  background: var(--secondary-color);
+  border-radius: 12px;
+  box-shadow: var(--box-shadow);
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.headerTop {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 1rem;
-  margin-bottom: 1rem;
+  margin-bottom: 20px;
+}
+
+.headerTop h2 {
+  margin: 0;
+  color: var(--primary-color);
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+.createBtn {
+  background: var(--primary-color);
+  color: var(--secondary-color);
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.createBtn:hover {
+  background: var(--hover-color);
+  transform: translateY(-2px);
 }
 
 .searchSection {
-  flex: 1;
-  max-width: 400px;
+  margin-bottom: 20px;
 }
 
 .searchInput {
   width: 100%;
-  padding: 0.75rem 1rem;
-  background-color: var(--secondary-color);
-  border: 1px solid rgba(var(--primary-color-rgb), 0.3);
+  max-width: 400px;
+  padding: 12px 16px;
+  border: 2px solid rgba(var(--primary-color-rgb), 0.3);
   border-radius: 8px;
+  font-size: 1rem;
+  background: var(--gradient-start);
   color: var(--text-color);
-  font-size: 0.875rem;
   transition: var(--transition);
+}
+
+.searchInput::placeholder {
+  color: rgba(var(--text-color-rgb), 0.6);
 }
 
 .searchInput:focus {
@@ -35,22 +122,19 @@
   box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.1);
 }
 
-.searchInput::placeholder {
-  color: rgba(var(--text-color-rgb), 0.6);
-}
-
 .filtersSection {
   display: flex;
-  gap: 1rem;
+  gap: 16px;
+  flex-wrap: wrap;
 }
 
 .filterSelect {
-  padding: 0.75rem 1rem;
-  background-color: var(--secondary-color);
-  border: 1px solid rgba(var(--primary-color-rgb), 0.3);
-  border-radius: 8px;
+  padding: 10px 14px;
+  border: 2px solid rgba(var(--primary-color-rgb), 0.3);
+  border-radius: 6px;
+  font-size: 0.95rem;
+  background: var(--gradient-start);
   color: var(--text-color);
-  font-size: 0.875rem;
   cursor: pointer;
   transition: var(--transition);
 }
@@ -60,29 +144,225 @@
   border-color: var(--primary-color);
 }
 
-/* Table Container */
-.tableContainer {
-  background: linear-gradient(135deg, var(--secondary-color), var(--gradient-end));
+/* Create Form Styles */
+.createForm {
+  background: var(--secondary-color);
   border-radius: 12px;
-  padding: 1.5rem;
   box-shadow: var(--box-shadow);
-  border: 1px solid rgba(var(--primary-color-rgb), 0.1);
-  overflow-x: auto;
+  padding: 32px;
+  margin-bottom: 24px;
+}
+
+.createForm h3 {
+  margin: 0 0 24px 0;
+  color: var(--primary-color);
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.formGroup {
+  margin-bottom: 20px;
+}
+
+.formGroup label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+.formGroup input,
+.formGroup select,
+.formGroup textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid rgba(var(--primary-color-rgb), 0.3);
+  border-radius: 8px;
+  font-size: 1rem;
+  background: var(--gradient-start);
+  color: var(--text-color);
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.formGroup input:focus,
+.formGroup select:focus,
+.formGroup textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.1);
+}
+
+.formGroup input::placeholder,
+.formGroup textarea::placeholder {
+  color: rgba(var(--text-color-rgb), 0.6);
+}
+
+.formGroup textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.charCount {
+  display: block;
+  margin-top: 4px;
+  color: var(--light-text);
+  opacity: 0.7;
+  font-size: 0.85rem;
+}
+
+.levelCheckboxes {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-weight: normal;
+  color: var(--text-color);
+}
+
+.checkboxLabel input[type="checkbox"] {
+  width: auto;
+  margin: 0;
+  accent-color: var(--primary-color);
+}
+
+.fileInput {
+  padding: 8px !important;
+  border: 2px dashed rgba(var(--primary-color-rgb), 0.3) !important;
+  background: var(--gradient-start);
+  cursor: pointer;
+}
+
+.fileInput:hover {
+  border-color: var(--primary-color) !important;
+  background: rgba(var(--primary-color-rgb), 0.1);
+}
+
+.fileHint {
+  display: block;
+  margin-top: 4px;
+  color: var(--light-text);
+  opacity: 0.7;
+  font-size: 0.85rem;
+}
+
+.imagePreview {
+  margin-top: 16px;
+  position: relative;
+  display: inline-block;
+}
+
+.imagePreview img {
+  max-width: 200px;
+  max-height: 200px;
+  border-radius: 8px;
+  border: 2px solid rgba(var(--primary-color-rgb), 0.3);
+}
+
+.removeImageBtn {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: var(--error-color);
+  color: var(--text-color);
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+.removeImageBtn:hover {
+  background: rgba(var(--error-color-rgb), 0.8);
+}
+
+.formActions {
+  display: flex;
+  gap: 16px;
+  justify-content: flex-end;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(var(--primary-color-rgb), 0.2);
+}
+
+.cancelBtn {
+  background: var(--gradient-start);
+  color: var(--text-color);
+  border: 2px solid rgba(var(--primary-color-rgb), 0.3);
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: var(--transition);
+}
+
+.cancelBtn:hover {
+  background: rgba(var(--primary-color-rgb), 0.1);
+  border-color: var(--primary-color);
+}
+
+.submitBtn {
+  background: var(--primary-color);
+  color: var(--secondary-color);
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+.submitBtn:hover:not(:disabled) {
+  background: var(--hover-color);
+  transform: translateY(-1px);
+}
+
+.submitBtn:disabled {
+  background: rgba(var(--primary-color-rgb), 0.5);
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Table Styles */
+.tableContainer {
+  background: var(--secondary-color);
+  border-radius: 12px;
+  box-shadow: var(--box-shadow);
+  overflow: hidden;
 }
 
 .coursesTable {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.875rem;
+  font-size: 0.95rem;
 }
 
 .coursesTable th {
-  background-color: rgba(var(--primary-color-rgb), 0.1);
-  color: var(--text-color);
-  font-weight: 600;
-  padding: 1rem;
+  background: var(--gradient-start);
+  padding: 16px 12px;
   text-align: left;
-  border-bottom: 2px solid rgba(var(--primary-color-rgb), 0.2);
+  font-weight: 600;
+  color: var(--primary-color);
+  border-bottom: 2px solid rgba(var(--primary-color-rgb), 0.3);
   white-space: nowrap;
 }
 
@@ -92,259 +372,326 @@
 }
 
 .courseRow:hover {
-  background-color: rgba(var(--primary-color-rgb), 0.05);
+  background: rgba(var(--primary-color-rgb), 0.05);
 }
 
 .coursesTable td {
-  padding: 1rem;
-  vertical-align: top;
+  padding: 16px 12px;
+  vertical-align: middle;
+  color: var(--text-color);
 }
 
-/* Course Details Cell */
+/* Course Image Styles */
+.imageCell {
+  width: 80px;
+  text-align: center;
+}
+
+.courseImageContainer {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  margin: 0 auto;
+}
+
+.courseImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 2px solid rgba(var(--primary-color-rgb), 0.3);
+  transition: var(--transition);
+  cursor: pointer;
+}
+
+.courseImage:hover {
+  transform: scale(1.1);
+  border-color: var(--primary-color);
+  box-shadow: 0 4px 12px rgba(var(--primary-color-rgb), 0.3);
+}
+
+.noImagePlaceholder {
+  width: 100%;
+  height: 100%;
+  background: rgba(var(--primary-color-rgb), 0.1);
+  border: 2px dashed rgba(var(--primary-color-rgb), 0.3);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--light-text);
+  font-size: 0.7rem;
+}
+
+.noImagePlaceholder span {
+  font-size: 1.2rem;
+  margin-bottom: 2px;
+  opacity: 0.6;
+}
+
 .courseDetails {
-  min-width: 300px;
+  max-width: 300px;
 }
 
 .courseInfo {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 8px;
 }
 
 .courseName {
-  color: var(--text-color);
-  font-size: 1rem;
-  font-weight: 600;
   margin: 0;
-  line-height: 1.3;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-color);
 }
 
 .courseDescription {
-  color: rgba(var(--text-color-rgb), 0.8);
-  font-size: 0.8rem;
   margin: 0;
+  color: var(--light-text);
+  opacity: 0.8;
   line-height: 1.4;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  font-size: 0.9rem;
+}
+
+.courseMeta {
+  display: flex;
+  gap: 12px;
+  align-items: center;
 }
 
 .courseCategory {
-  background-color: rgba(var(--info-color-rgb), 0.2);
-  color: var(--info-color);
-  padding: 0.25rem 0.5rem;
-  border-radius: 12px;
-  font-size: 0.7rem;
+  background: rgba(var(--primary-color-rgb), 0.2);
+  color: var(--primary-color);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
   font-weight: 500;
-  align-self: flex-start;
 }
 
-/* Instructor Cell */
+.coursePrice {
+  background: var(--success-color);
+  color: var(--text-color);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
 .instructorCell {
-  min-width: 180px;
+  min-width: 150px;
 }
 
 .instructorInfo {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 12px;
 }
 
 .instructorAvatar {
   width: 40px;
   height: 40px;
-  background: linear-gradient(135deg, var(--primary-color), var(--hover-color));
+  background: var(--primary-color);
   color: var(--secondary-color);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 700;
-  font-size: 0.875rem;
-  flex-shrink: 0;
+  font-weight: 600;
+  font-size: 0.9rem;
 }
 
 .instructorName {
-  color: var(--text-color);
   font-weight: 500;
-  font-size: 0.875rem;
+  color: var(--text-color);
 }
 
-/* Students Cell */
 .studentsCell {
   text-align: center;
-  min-width: 80px;
 }
 
 .studentsCount {
-  background-color: rgba(var(--success-color-rgb), 0.2);
-  color: var(--success-color);
-  padding: 0.5rem 1rem;
+  background: var(--info-color);
+  color: var(--text-color);
+  padding: 6px 12px;
   border-radius: 20px;
   font-weight: 600;
-  font-size: 0.875rem;
+  font-size: 0.9rem;
 }
 
-/* Rating Cell */
 .ratingCell {
   text-align: center;
-  min-width: 80px;
-}
-
-.rating {
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .ratingValue {
-  color: var(--primary-color);
   font-weight: 600;
-  font-size: 0.875rem;
+  color: var(--warning-color);
 }
 
-/* Status Cell */
 .statusCell {
   text-align: center;
-  min-width: 100px;
 }
 
 .statusBadge {
-  padding: 0.5rem 1rem;
+  padding: 6px 12px;
   border-radius: 20px;
-  font-size: 0.75rem;
+  font-size: 0.85rem;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
 }
 
 .statusPending {
-  background-color: rgba(var(--warning-color-rgb), 0.2);
+  background: rgba(var(--warning-color), 0.2);
   color: var(--warning-color);
 }
 
 .statusApproved {
-  background-color: rgba(var(--success-color-rgb), 0.2);
+  background: rgba(var(--success-color), 0.2);
   color: var(--success-color);
 }
 
 .statusRejected {
-  background-color: rgba(var(--error-color-rgb), 0.2);
+  background: rgba(var(--error-color), 0.2);
   color: var(--error-color);
 }
 
-/* Actions Cell */
 .actionsCell {
   min-width: 200px;
 }
 
 .actionButtons {
   display: flex;
-  gap: 0.5rem;
+  gap: 8px;
   flex-wrap: wrap;
 }
 
 .actionBtn {
-  padding: 0.5rem 0.75rem;
+  padding: 6px 10px;
   border: none;
-  border-radius: 6px;
-  font-size: 0.75rem;
-  font-weight: 500;
+  border-radius: 4px;
+  font-size: 0.8rem;
   cursor: pointer;
   transition: var(--transition);
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
   white-space: nowrap;
+  font-weight: 500;
 }
 
 .approveBtn {
-  background-color: rgba(var(--success-color-rgb), 0.2);
-  color: var(--success-color);
+  background: var(--success-color);
+  color: var(--text-color);
 }
 
 .approveBtn:hover {
-  background-color: rgba(var(--success-color-rgb), 0.3);
+  background: rgba(var(--success-color-rgb), 0.8);
+  transform: translateY(-1px);
 }
 
 .rejectBtn {
-  background-color: rgba(var(--error-color-rgb), 0.2);
-  color: var(--error-color);
+  background: var(--error-color);
+  color: var(--text-color);
 }
 
 .rejectBtn:hover {
-  background-color: rgba(var(--error-color-rgb), 0.3);
+  background: rgba(var(--error-color-rgb), 0.8);
+  transform: translateY(-1px);
 }
 
 .viewBtn {
-  background-color: rgba(var(--info-color-rgb), 0.2);
-  color: var(--info-color);
+  background: var(--info-color);
+  color: var(--text-color);
 }
 
 .viewBtn:hover {
-  background-color: rgba(var(--info-color-rgb), 0.3);
+  background: rgba(var(--info-color), 0.8);
+  transform: translateY(-1px);
 }
 
 .deleteBtn {
-  background-color: rgba(var(--error-color-rgb), 0.2);
-  color: var(--error-color);
+  background: var(--gradient-start);
+  color: var(--text-color);
+  border: 1px solid rgba(var(--primary-color-rgb), 0.3);
 }
 
 .deleteBtn:hover {
-  background-color: rgba(var(--error-color-rgb), 0.3);
+  background: rgba(var(--error-color-rgb), 0.2);
+  border-color: var(--error-color);
+  color: var(--error-color);
+  transform: translateY(-1px);
 }
 
-/* Empty State */
 .emptyState {
   text-align: center;
-  padding: 3rem;
-  color: rgba(var(--text-color-rgb), 0.6);
-  background: linear-gradient(135deg, var(--secondary-color), var(--gradient-end));
+  padding: 60px 20px;
+  background: var(--secondary-color);
   border-radius: 12px;
-  border: 1px solid rgba(var(--primary-color-rgb), 0.1);
+  box-shadow: var(--box-shadow);
+  color: var(--light-text);
+  font-size: 1.1rem;
 }
 
 /* Responsive Design */
-@media (max-width: 1024px) {
+@media (max-width: 768px) {
+  .manageCourses {
+    padding: 10px;
+  }
+
   .courseHeader {
+    padding: 16px;
+  }
+
+  .headerTop {
     flex-direction: column;
     align-items: stretch;
+    gap: 16px;
   }
-  
+
   .filtersSection {
-    justify-content: flex-end;
+    flex-direction: column;
   }
-  
-  .tableContainer {
-    padding: 1rem;
+
+  .formRow {
+    grid-template-columns: 1fr;
   }
-  
+
+  .createForm {
+    padding: 20px;
+  }
+
+  .formActions {
+    flex-direction: column;
+  }
+
+  .levelCheckboxes {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .coursesTable {
+    font-size: 0.85rem;
+  }
+
   .coursesTable th,
   .coursesTable td {
-    padding: 0.75rem;
+    padding: 12px 8px;
   }
-}
 
-@media (max-width: 768px) {
-  .filtersSection {
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-  
   .actionButtons {
     flex-direction: column;
+    gap: 4px;
   }
-  
+
   .actionBtn {
-    justify-content: center;
+    font-size: 0.75rem;
+    padding: 4px 8px;
+  }
+
+  .imageCell {
+    width: 60px;
   }
   
-  .courseDetails {
-    min-width: 250px;
-  }
-  
-  .instructorCell {
-    min-width: 150px;
+  .courseImageContainer {
+    width: 50px;
+    height: 50px;
   }
 }

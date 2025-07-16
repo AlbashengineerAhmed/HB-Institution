@@ -2,16 +2,19 @@ import React, { useState } from 'react';
 import styles from './AdminDashboard.module.css';
 import DashboardOverview from '../../components/Admin/DashboardOverview/DashboardOverview';
 import ManageCourses from '../../components/Admin/ManageCourses/ManageCourses';
+import ManageCategories from '../../components/Admin/ManageCategories/ManageCategories';
+import ManageUnits from '../../components/Admin/ManageUnits/ManageUnits';
 import ManageInstructors from '../../components/Admin/ManageInstructors/ManageInstructors';
 import ManageStudents from '../../components/Admin/ManageStudents/ManageStudents';
 import ManageNews from '../../components/Admin/ManageNews/ManageNews';
-
 const AdminDashboard = () => {
   const [activeSection, setActiveSection] = useState('overview');
 
   const sidebarItems = [
     { id: 'overview', label: 'Dashboard Overview', icon: '🏠' },
     { id: 'courses', label: 'Manage Courses', icon: '📚' },
+    { id: 'units', label: 'Manage Units', icon: '📝' },
+    { id: 'categories', label: 'Manage Categories', icon: '📂' },
     { id: 'instructors', label: 'Manage Instructors', icon: '👨‍🏫' },
     { id: 'students', label: 'Manage Students', icon: '👨‍🎓' },
     { id: 'news', label: 'Manage News', icon: '📰' }
@@ -23,6 +26,10 @@ const AdminDashboard = () => {
         return <DashboardOverview />;
       case 'courses':
         return <ManageCourses />;
+      case 'units':
+        return <ManageUnits />;
+      case 'categories':
+        return <ManageCategories />;
       case 'instructors':
         return <ManageInstructors />;
       case 'students':

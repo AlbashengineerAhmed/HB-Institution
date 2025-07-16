@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
 import styles from './InstructorDashboard.module.css';
-import MyCourses from '../../components/Instructor/MyCourses/MyCourses';
-import MyStudents from '../../components/Instructor/MyStudents/MyStudents';
-import CourseForm from '../../components/Instructor/CourseForm/CourseForm';
+import ErrorBoundary from '../../components/ErrorBoundary';
+
+// Lazy load components to identify loading issues
+const MyCourses = React.lazy(() => import('../../components/Instructor/MyCourses/MyCourses'));
+const MyStudents = React.lazy(() => import('../../components/Instructor/MyStudents/MyStudents'));
+const CourseForm = React.lazy(() => import('../../components/Instructor/CourseForm/CourseForm'));
+const RealTimeDashboard = React.lazy(() => import('../../components/Shared/RealTimeDashboard/RealTimeDashboard'));
 
 const InstructorDashboard = () => {
   const [activeSection, setActiveSection] = useState('courses');
@@ -24,6 +28,7 @@ const InstructorDashboard = () => {
   const sidebarItems = [
     { id: 'courses', label: 'My Courses', icon: '📚' },
     { id: 'students', label: 'My Students', icon: '👨‍🎓' },
+    { id: 'live-dashboard', label: 'Live Dashboard', icon: '🔴' },
     { id: 'analytics', label: 'Analytics', icon: '📊' },
     { id: 'messages', label: 'Messages', icon: '💬' }
   ];
@@ -44,40 +49,72 @@ const InstructorDashboard = () => {
   };
 
   const renderActiveSection = () => {
+    const LoadingSpinner = () => (
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        height: '400px',
+        fontSize: '18px',
+        color: 'var(--primary-color)'
+      }}>
+        <div>🔄 Loading...</div>
+      </div>
+    );
+
     if (showCourseForm) {
       return (
-        <CourseForm 
-          course={editingCourse}
-          onClose={handleCloseCourseForm}
-          onSave={(courseData) => {
-            console.log('Course saved:', courseData);
-            handleCloseCourseForm();
-          }}
-        />
+        <React.Suspense fallback={<LoadingSpinner />}>
+          <CourseForm 
+            course={editingCourse}
+            onClose={handleCloseCourseForm}
+            onSave={(courseData) => {
+              console.log('Course saved:', courseData);
+              handleCloseCourseForm();
+            }}
+          />
+        </React.Suspense>
       );
     }
 
     switch (activeSection) {
       case 'courses':
         return (
-          <MyCourses 
-            onNewCourse={handleNewCourse}
-            onEditCourse={handleEditCourse}
-          />
+          <React.Suspense fallback={<LoadingSpinner />}>
+            <MyCourses 
+              onNewCourse={handleNewCourse}
+              onEditCourse={handleEditCourse}
+            />
+          </React.Suspense>
         );
       case 'students':
-        return <MyStudents />;
+        return (
+          <React.Suspense fallback={<LoadingSpinner />}>
+            <MyStudents />
+          </React.Suspense>
+        );
+      case 'live-dashboard':
+        return (
+          <React.Suspense fallback={<LoadingSpinner />}>
+            <RealTimeDashboard userType="instructor" />
+          </React.Suspense>
+        );
       case 'analytics':
         return <div className={styles.comingSoon}>📊 Analytics coming soon...</div>;
       case 'messages':
         return <div className={styles.comingSoon}>💬 Messages coming soon...</div>;
       default:
-        return <MyCourses onNewCourse={handleNewCourse} onEditCourse={handleEditCourse} />;
+        return (
+          <React.Suspense fallback={<LoadingSpinner />}>
+            <MyCourses onNewCourse={handleNewCourse} onEditCourse={handleEditCourse} />
+          </React.Suspense>
+        );
     }
   };
 
   return (
-    <div className={styles.instructorDashboard}>
+    <ErrorBoundary>
+      <div className={styles.instructorDashboard}>
       {/* Sidebar */}
       <aside className={styles.sidebar}>
         <div className={styles.sidebarHeader}>
@@ -150,10 +187,13 @@ const InstructorDashboard = () => {
         </header>
         
         <div className={styles.contentArea}>
-          {renderActiveSection()}
+          <ErrorBoundary>
+            {renderActiveSection()}
+          </ErrorBoundary>
         </div>
       </main>
     </div>
+    </ErrorBoundary>
   );
 };
 

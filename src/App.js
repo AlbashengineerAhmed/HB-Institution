@@ -14,6 +14,7 @@ import CommunityPage from './pages/CommunityPage/CommunityPage';
 import WhyHBIPage from './pages/WhyHBIPage/WhyHBIPage';
 import WhatsAppFloat from './components/WhatsAppFloat/WhatsAppFloat';
 import ScrollToTop from './components/ScrollToTop/ScrollToTop';
+import ScrollToTopOnRouteChange from './components/ScrollToTopOnRouteChange/ScrollToTopOnRouteChange';
 import RouteChangeTracker from './components/LoadingIndicator/RouteChangeTracker';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
@@ -70,6 +71,7 @@ const AppContent = () => {
   return (
     <div className={styles.App}>
       <Header />
+      <ScrollToTopOnRouteChange />
       <main className={styles.mainContent}>
         <Routes>
           <Route path="/" element={<HomePage />} />
