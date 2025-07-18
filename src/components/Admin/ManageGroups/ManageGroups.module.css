@@ -1,0 +1,582 @@
+.manageGroups {
+  padding: 2rem;
+  background: linear-gradient(135deg, var(--gradient-start) 0%, var(--secondary-color) 100%);
+  min-height: 100vh;
+  position: relative;
+}
+
+.manageGroups::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 20%, rgba(254, 218, 106, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(254, 218, 106, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  position: relative;
+  z-index: 1;
+  padding: 1.5rem 0;
+}
+
+.header h2 {
+  color: var(--text-color);
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin: 0;
+  background: linear-gradient(135deg, var(--primary-color) 0%, #fff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  position: relative;
+}
+
+.header h2::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 60px;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary-color) 0%, transparent 100%);
+  border-radius: 2px;
+}
+
+.addButton {
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--hover-color) 100%);
+  color: var(--gradient-start);
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 25px rgba(254, 218, 106, 0.3);
+}
+
+.addButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.addButton:hover::before {
+  left: 100%;
+}
+
+.addButton:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 35px rgba(254, 218, 106, 0.4);
+}
+
+/* Info Message */
+.infoMessage {
+  background: linear-gradient(135deg, rgba(254, 218, 106, 0.1) 0%, rgba(254, 218, 106, 0.05) 100%);
+  border: 1px solid rgba(254, 218, 106, 0.3);
+  border-radius: 15px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  color: var(--text-color);
+  position: relative;
+  z-index: 1;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.infoMessage::before {
+  content: '💡';
+  position: absolute;
+  top: 1.5rem;
+  left: 1.5rem;
+  font-size: 1.2rem;
+}
+
+.infoMessage p {
+  margin: 0;
+  font-size: 0.95rem;
+  padding-left: 2rem;
+  line-height: 1.6;
+}
+
+.infoMessage strong {
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+/* Filters - Currently commented out */
+.filters {
+  background: linear-gradient(135deg, var(--secondary-color) 0%, var(--gradient-start) 100%);
+  padding: 2rem;
+  border-radius: 20px;
+  margin-bottom: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(254, 218, 106, 0.1);
+  position: relative;
+  z-index: 1;
+}
+
+.searchBox {
+  margin-bottom: 1.5rem;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 1rem 1.25rem;
+  border: 2px solid rgba(254, 218, 106, 0.2);
+  border-radius: 15px;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-color);
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  background: rgba(254, 218, 106, 0.1);
+  box-shadow: 0 0 0 4px rgba(254, 218, 106, 0.1);
+  transform: translateY(-2px);
+}
+
+.searchInput::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.filterSelects {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.filterSelect {
+  padding: 0.75rem 1rem;
+  border: 2px solid rgba(254, 218, 106, 0.2);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-color);
+  font-size: 0.9rem;
+  min-width: 180px;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.filterSelect:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  background: rgba(254, 218, 106, 0.1);
+}
+
+.clearFilters {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--primary-color);
+  border: 1px solid rgba(254, 218, 106, 0.3);
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.clearFilters:hover {
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--hover-color) 100%);
+  color: var(--gradient-start);
+  transform: translateY(-2px);
+}
+
+/* Groups List */
+.groupsList {
+  margin-top: 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.loading {
+  text-align: center;
+  padding: 4rem;
+  color: var(--text-color);
+  font-size: 1.2rem;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+.noGroups {
+  text-align: center;
+  padding: 4rem;
+  color: var(--text-color);
+  opacity: 0.7;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(254, 218, 106, 0.05) 100%);
+  border-radius: 20px;
+  border: 1px solid rgba(254, 218, 106, 0.1);
+}
+
+/* No Groups Message */
+.noGroupsMessage {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--text-color);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(254, 218, 106, 0.05) 100%);
+  border-radius: 25px;
+  border: 1px solid rgba(254, 218, 106, 0.1);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.noGroupsMessage::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(254, 218, 106, 0.1) 0%, transparent 70%);
+  animation: rotate 20s linear infinite;
+}
+
+@keyframes rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.noGroupsIcon {
+  font-size: 5rem;
+  margin-bottom: 1.5rem;
+  opacity: 0.8;
+  animation: float 3s ease-in-out infinite;
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+.noGroupsMessage h3 {
+  color: var(--text-color);
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  position: relative;
+  z-index: 1;
+}
+
+.noGroupsMessage p {
+  color: var(--text-color);
+  opacity: 0.8;
+  margin-bottom: 0.75rem;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  position: relative;
+  z-index: 1;
+}
+
+.createFirstButton {
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--hover-color) 100%);
+  color: var(--gradient-start);
+  border: none;
+  padding: 1.25rem 2.5rem;
+  border-radius: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1.1rem;
+  margin-top: 2rem;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(254, 218, 106, 0.3);
+}
+
+.createFirstButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.createFirstButton:hover::before {
+  left: 100%;
+}
+
+.createFirstButton:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 40px rgba(254, 218, 106, 0.4);
+}
+
+/* Groups Grid - For when groups are displayed */
+.groupsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  gap: 2rem;
+}
+
+.groupCard {
+  background: linear-gradient(135deg, var(--secondary-color) 0%, var(--gradient-start) 100%);
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  border: 1px solid rgba(254, 218, 106, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.groupCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary-color) 0%, var(--hover-color) 100%);
+}
+
+.groupCard:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+  border-color: rgba(254, 218, 106, 0.3);
+}
+
+.groupHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(254, 218, 106, 0.2);
+}
+
+.groupCode {
+  color: var(--primary-color);
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.groupActions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.editButton,
+.deleteButton {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.editButton:hover {
+  background: rgba(254, 218, 106, 0.2);
+  border-color: var(--primary-color);
+  transform: scale(1.1);
+}
+
+.deleteButton:hover {
+  background: rgba(255, 107, 107, 0.2);
+  border-color: #ff6b6b;
+  transform: scale(1.1);
+}
+
+.groupInfo {
+  margin-bottom: 1.5rem;
+}
+
+.groupInfo p {
+  margin: 0.75rem 0;
+  color: var(--text-color);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.groupInfo strong {
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+.groupSchedule h4 {
+  color: var(--text-color);
+  font-size: 1.1rem;
+  margin: 0 0 1rem 0;
+  font-weight: 600;
+}
+
+.scheduleSlot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  font-size: 0.9rem;
+  color: var(--text-color);
+  opacity: 0.8;
+  border-bottom: 1px solid rgba(254, 218, 106, 0.1);
+}
+
+.scheduleSlot:last-child {
+  border-bottom: none;
+}
+
+/* Error */
+.error {
+  background: linear-gradient(135deg, rgba(255, 107, 107, 0.1) 0%, rgba(255, 107, 107, 0.05) 100%);
+  border: 1px solid rgba(255, 107, 107, 0.3);
+  border-radius: 15px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  color: #ff6b6b;
+  text-align: center;
+  backdrop-filter: blur(10px);
+}
+
+.error button {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ff5252 100%);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-top: 1rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.error button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .manageGroups {
+    padding: 1.5rem;
+  }
+
+  .header {
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: stretch;
+    text-align: center;
+  }
+
+  .header h2 {
+    font-size: 1.8rem;
+  }
+
+  .filterSelects {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .groupsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .manageGroups {
+    padding: 1rem;
+  }
+
+  .header h2 {
+    font-size: 1.6rem;
+  }
+
+  .addButton {
+    padding: 0.875rem 1.5rem;
+    font-size: 0.9rem;
+  }
+
+  .infoMessage {
+    padding: 1.25rem;
+  }
+
+  .infoMessage p {
+    padding-left: 1.5rem;
+    font-size: 0.9rem;
+  }
+
+  .noGroupsMessage {
+    padding: 3rem 1.5rem;
+  }
+
+  .noGroupsIcon {
+    font-size: 4rem;
+  }
+
+  .noGroupsMessage h3 {
+    font-size: 1.5rem;
+  }
+
+  .noGroupsMessage p {
+    font-size: 1rem;
+  }
+
+  .createFirstButton {
+    padding: 1rem 2rem;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .manageGroups {
+    padding: 0.75rem;
+  }
+
+  .header h2 {
+    font-size: 1.4rem;
+  }
+
+  .groupCard {
+    padding: 1.5rem;
+  }
+
+  .groupHeader {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .groupActions {
+    align-self: flex-end;
+  }
+}
