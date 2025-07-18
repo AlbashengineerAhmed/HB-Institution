@@ -29,7 +29,8 @@ enrollmentApi.interceptors.request.use(
     
     // Only add Bearer token for specific endpoints that require authentication
     const protectedEndpoints = [
-      '/api/v1/courses/enroll'
+      '/api/v1/courses/enroll',
+      '/api/v1/ClassSelection/'
     ];
     
     // Check if URL matches protected endpoint patterns
