@@ -45,6 +45,12 @@ const Header = () => {
     setUserDropdownOpen(false);
   };
 
+  // Close dropdown when a link is clicked
+  const handleLinkClick = () => {
+    setActiveDropdown(null);
+    setMobileMenuOpen(false);
+  };
+
   return (
     <header className={styles.header}>
       <div className={`container ${styles.headerContainer}`}>
@@ -65,16 +71,16 @@ const Header = () => {
                 About <i className={`fas fa-chevron-down ${styles.dropdownIcon}`}></i>
               </div>
               <ul className={`${styles.dropdownMenu} ${activeDropdown === 'about' ? styles.show : ''}`}>
-                <li><Link to="/about" className={styles.dropdownItem}>Who we are</Link></li>
-                <li><Link to="/about/history" className={styles.dropdownItem}>History</Link></li>
-                <li><Link to="/about/mission" className={styles.dropdownItem}>Mission</Link></li>
-                <li><Link to="/about/founder" className={styles.dropdownItem}>Founder</Link></li>
-                <li><Link to="/about/chancellor" className={styles.dropdownItem}>Chancellor's Message</Link></li>
-                <li><Link to="/about/libraries" className={styles.dropdownItem}>Libraries</Link></li>
-                <li><Link to="/about/milestones" className={styles.dropdownItem}>Milestones</Link></li>
-                <li><Link to="/about/career" className={styles.dropdownItem}>Career</Link></li>
-                <li><Link to="/contact" className={styles.dropdownItem}>Contact</Link></li>
-                <li><Link to="/about/disclaimer" className={styles.dropdownItem}>Disclaimer</Link></li>
+                <li><Link to="/about" className={styles.dropdownItem} onClick={handleLinkClick}>Who we are</Link></li>
+                <li><Link to="/about/history" className={styles.dropdownItem} onClick={handleLinkClick}>History</Link></li>
+                <li><Link to="/about/mission" className={styles.dropdownItem} onClick={handleLinkClick}>Mission</Link></li>
+                <li><Link to="/about/founder" className={styles.dropdownItem} onClick={handleLinkClick}>Founder</Link></li>
+                <li><Link to="/about/chancellor" className={styles.dropdownItem} onClick={handleLinkClick}>Chancellor's Message</Link></li>
+                <li><Link to="/about/libraries" className={styles.dropdownItem} onClick={handleLinkClick}>Libraries</Link></li>
+                <li><Link to="/about/milestones" className={styles.dropdownItem} onClick={handleLinkClick}>Milestones</Link></li>
+                <li><Link to="/about/career" className={styles.dropdownItem} onClick={handleLinkClick}>Career</Link></li>
+                <li><Link to="/contact" className={styles.dropdownItem} onClick={handleLinkClick}>Contact</Link></li>
+                <li><Link to="/about/disclaimer" className={styles.dropdownItem} onClick={handleLinkClick}>Disclaimer</Link></li>
               </ul>
             </li>
             <li className={`${styles.navItem} ${styles.dropdown} ${activeDropdown === 'faculty' ? styles.active : ''}`}>
@@ -85,17 +91,17 @@ const Header = () => {
                 Faculty <i className={`fas fa-chevron-down ${styles.dropdownIcon}`}></i>
               </div>
               <ul className={`${styles.dropdownMenu} ${activeDropdown === 'faculty' ? styles.show : ''}`}>
-                <li><Link to="/faculty" className={styles.dropdownItem}>Faculty</Link></li>
-                <li><Link to="/faculty/alumni" className={styles.dropdownItem}>Alumni</Link></li>
-                <li><Link to="/faculty/representatives" className={styles.dropdownItem}>Representatives</Link></li>
-                <li><Link to="/faculty/convocation" className={styles.dropdownItem}>Convocation</Link></li>
-                <li><Link to="/faculty/iou-store" className={styles.dropdownItem}>IOU Store</Link></li>
-                <li><Link to="/faculty/student-counselling" className={styles.dropdownItem}>Student Counselling</Link></li>
-                <li><Link to="/faculty/student-discounts" className={styles.dropdownItem}>Student Discounts</Link></li>
-                <li><Link to="/faculty/student-software" className={styles.dropdownItem}>Student Software</Link></li>
-                <li><Link to="/faculty/statistics" className={styles.dropdownItem}>Statistics Till Spring 2022</Link></li>
-                <li><Link to="/faculty/social-media" className={styles.dropdownItem}>Social Media</Link></li>
-                <li><Link to="/faculty/corporate-relationship" className={styles.dropdownItem}>Corporate Relationship Program</Link></li>
+                <li><Link to="/faculty" className={styles.dropdownItem} onClick={handleLinkClick}>Faculty</Link></li>
+                <li><Link to="/faculty/alumni" className={styles.dropdownItem} onClick={handleLinkClick}>Alumni</Link></li>
+                <li><Link to="/faculty/representatives" className={styles.dropdownItem} onClick={handleLinkClick}>Representatives</Link></li>
+                <li><Link to="/faculty/convocation" className={styles.dropdownItem} onClick={handleLinkClick}>Convocation</Link></li>
+                <li><Link to="/faculty/iou-store" className={styles.dropdownItem} onClick={handleLinkClick}>IOU Store</Link></li>
+                <li><Link to="/faculty/student-counselling" className={styles.dropdownItem} onClick={handleLinkClick}>Student Counselling</Link></li>
+                <li><Link to="/faculty/student-discounts" className={styles.dropdownItem} onClick={handleLinkClick}>Student Discounts</Link></li>
+                <li><Link to="/faculty/student-software" className={styles.dropdownItem} onClick={handleLinkClick}>Student Software</Link></li>
+                <li><Link to="/faculty/statistics" className={styles.dropdownItem} onClick={handleLinkClick}>Statistics Till Spring 2022</Link></li>
+                <li><Link to="/faculty/social-media" className={styles.dropdownItem} onClick={handleLinkClick}>Social Media</Link></li>
+                <li><Link to="/faculty/corporate-relationship" className={styles.dropdownItem} onClick={handleLinkClick}>Corporate Relationship Program</Link></li>
               </ul>
             </li>
             <li className={`${styles.navItem} ${styles.dropdown} ${activeDropdown === 'community' ? styles.active : ''}`}>
@@ -106,13 +112,13 @@ const Header = () => {
                 Community <i className={`fas fa-chevron-down ${styles.dropdownIcon}`}></i>
               </div>
               <ul className={`${styles.dropdownMenu} ${activeDropdown === 'community' ? styles.show : ''}`}>
-                <li><Link to="/community" className={styles.dropdownItem}>Student Life</Link></li>
-                <li><Link to="/community/clubs" className={styles.dropdownItem}>Student Clubs</Link></li>
-                <li><Link to="/community/events" className={styles.dropdownItem}>Events Calendar</Link></li>
-                <li><Link to="/community/alumni" className={styles.dropdownItem}>Alumni Network</Link></li>
-                <li><Link to="/community/outreach" className={styles.dropdownItem}>Community Outreach</Link></li>
-                <li><Link to="/community/gallery" className={styles.dropdownItem}>Photo Gallery</Link></li>
-                <li><Link to="/community/news" className={styles.dropdownItem}>News & Announcements</Link></li>
+                <li><Link to="/community" className={styles.dropdownItem} onClick={handleLinkClick}>Student Life</Link></li>
+                <li><Link to="/community/clubs" className={styles.dropdownItem} onClick={handleLinkClick}>Student Clubs</Link></li>
+                <li><Link to="/community/events" className={styles.dropdownItem} onClick={handleLinkClick}>Events Calendar</Link></li>
+                <li><Link to="/community/alumni" className={styles.dropdownItem} onClick={handleLinkClick}>Alumni Network</Link></li>
+                <li><Link to="/community/outreach" className={styles.dropdownItem} onClick={handleLinkClick}>Community Outreach</Link></li>
+                <li><Link to="/community/gallery" className={styles.dropdownItem} onClick={handleLinkClick}>Photo Gallery</Link></li>
+                <li><Link to="/community/news" className={styles.dropdownItem} onClick={handleLinkClick}>News & Announcements</Link></li>
               </ul>
             </li>
             <li className={`${styles.navItem} ${styles.dropdown} ${activeDropdown === 'why-hbi' ? styles.active : ''}`}>
@@ -123,14 +129,14 @@ const Header = () => {
                 Why HBI <i className={`fas fa-chevron-down ${styles.dropdownIcon}`}></i>
               </div>
               <ul className={`${styles.dropdownMenu} ${activeDropdown === 'why-hbi' ? styles.show : ''}`}>
-                <li><Link to="/why-hbi" className={styles.dropdownItem}>Why Study at HBI</Link></li>
-                <li><Link to="/why-hbi/tuition-fees" className={styles.dropdownItem}>Tuition Fees</Link></li>
-                <li><Link to="/why-hbi/accreditation" className={styles.dropdownItem}>Accreditation</Link></li>
-                <li><Link to="/why-hbi/graduate-acceptance" className={styles.dropdownItem}>Graduate Acceptance</Link></li>
-                <li><Link to="/why-hbi/exam-centers" className={styles.dropdownItem}>Exam Centers</Link></li>
-                <li><Link to="/why-hbi/scholarships" className={styles.dropdownItem}>Scholarships</Link></li>
-                <li><Link to="/why-hbi/testimonials" className={styles.dropdownItem}>Testimonials</Link></li>
-                <li><Link to="/why-hbi/student-affairs" className={styles.dropdownItem}>Student Affairs Office</Link></li>
+                <li><Link to="/why-hbi" className={styles.dropdownItem} onClick={handleLinkClick}>Why Study at HBI</Link></li>
+                <li><Link to="/why-hbi/tuition-fees" className={styles.dropdownItem} onClick={handleLinkClick}>Tuition Fees</Link></li>
+                <li><Link to="/why-hbi/accreditation" className={styles.dropdownItem} onClick={handleLinkClick}>Accreditation</Link></li>
+                <li><Link to="/why-hbi/graduate-acceptance" className={styles.dropdownItem} onClick={handleLinkClick}>Graduate Acceptance</Link></li>
+                <li><Link to="/why-hbi/exam-centers" className={styles.dropdownItem} onClick={handleLinkClick}>Exam Centers</Link></li>
+                <li><Link to="/why-hbi/scholarships" className={styles.dropdownItem} onClick={handleLinkClick}>Scholarships</Link></li>
+                <li><Link to="/why-hbi/testimonials" className={styles.dropdownItem} onClick={handleLinkClick}>Testimonials</Link></li>
+                <li><Link to="/why-hbi/student-affairs" className={styles.dropdownItem} onClick={handleLinkClick}>Student Affairs Office</Link></li>
               </ul>
             </li>
             <li className={`${styles.navItem} ${styles.dropdown} ${activeDropdown === 'programs' ? styles.active : ''}`}>
@@ -141,11 +147,11 @@ const Header = () => {
                 Programs <i className={`fas fa-chevron-down ${styles.dropdownIcon}`}></i>
               </div>
               <ul className={`${styles.dropdownMenu} ${activeDropdown === 'programs' ? styles.show : ''}`}>
-                <li><Link to="/programs/bachelor" className={styles.dropdownItem}>Bachelor Degree</Link></li>
-                <li><Link to="/programs/intensive-arabic" className={styles.dropdownItem}>Intensive Arabic Program</Link></li>
-                <li><Link to="/programs/bridge" className={styles.dropdownItem}>Bridge to Master's</Link></li>
-                <li><Link to="/programs/master" className={styles.dropdownItem}>Master Degree</Link></li>
-                <li><Link to="/programs/master-research" className={styles.dropdownItem}>Master Degree - Research</Link></li>
+                <li><Link to="/programs/bachelor" className={styles.dropdownItem} onClick={handleLinkClick}>Bachelor Degree</Link></li>
+                <li><Link to="/programs/intensive-arabic" className={styles.dropdownItem} onClick={handleLinkClick}>Intensive Arabic Program</Link></li>
+                <li><Link to="/programs/bridge" className={styles.dropdownItem} onClick={handleLinkClick}>Bridge to Master's</Link></li>
+                <li><Link to="/programs/master" className={styles.dropdownItem} onClick={handleLinkClick}>Master Degree</Link></li>
+                <li><Link to="/programs/master-research" className={styles.dropdownItem} onClick={handleLinkClick}>Master Degree - Research</Link></li>
               </ul>
             </li>
             <li className={`${styles.navItem} ${styles.dropdown} ${activeDropdown === 'publications' ? styles.active : ''}`}>
@@ -156,14 +162,14 @@ const Header = () => {
                 Applications <i className={`fas fa-chevron-down ${styles.dropdownIcon}`}></i>
               </div>
               <ul className={`${styles.dropdownMenu} ${activeDropdown === 'publications' ? styles.show : ''}`}>
-                <li><Link to="/publications/about" className={styles.dropdownItem}>About</Link></li>
-                <li><Link to="/publications/iou-book" className={styles.dropdownItem}>IOU Book Publication</Link></li>
-                <li><Link to="/publications/booklets" className={styles.dropdownItem}>Booklets</Link></li>
-                <li><Link to="/publications/prospectus" className={styles.dropdownItem}>Prospectus</Link></li>
-                <li><Link to="/publications/insights" className={styles.dropdownItem}>Insights Magazine</Link></li>
-                <li><Link to="/publications/journals" className={styles.dropdownItem}>Journals</Link></li>
-                <li><Link to="/publications/news" className={styles.dropdownItem}>News Portal</Link></li>
-                <li><Link to="/publications/conferences" className={styles.dropdownItem}>Conferences</Link></li>
+                <li><Link to="/publications/about" className={styles.dropdownItem} onClick={handleLinkClick}>About</Link></li>
+                <li><Link to="/publications/iou-book" className={styles.dropdownItem} onClick={handleLinkClick}>IOU Book Publication</Link></li>
+                <li><Link to="/publications/booklets" className={styles.dropdownItem} onClick={handleLinkClick}>Booklets</Link></li>
+                <li><Link to="/publications/prospectus" className={styles.dropdownItem} onClick={handleLinkClick}>Prospectus</Link></li>
+                <li><Link to="/publications/insights" className={styles.dropdownItem} onClick={handleLinkClick}>Insights Magazine</Link></li>
+                <li><Link to="/publications/journals" className={styles.dropdownItem} onClick={handleLinkClick}>Journals</Link></li>
+                <li><Link to="/publications/news" className={styles.dropdownItem} onClick={handleLinkClick}>News Portal</Link></li>
+                <li><Link to="/publications/conferences" className={styles.dropdownItem} onClick={handleLinkClick}>Conferences</Link></li>
               </ul>
             </li>
             <li className={styles.navItem}><Link to="/contact" className={styles.navLink}>Contact us</Link></li>

@@ -165,7 +165,7 @@ export const submitEnrollment = createAsyncThunk(
     try {
       console.log('Submitting enrollment:', enrollmentData);
       
-      const response = await enrollmentApi.post('/api/v1/courses/enroll', enrollmentData);
+      const response = await enrollmentApi.post('/api/v1/ClassSelection/', enrollmentData);
       console.log('Enrollment response:', response.data);
       
       toast.success('Enrollment submitted successfully!');
