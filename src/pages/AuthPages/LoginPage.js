@@ -28,9 +28,14 @@ const LoginPage = () => {
       if (from && from !== '/login') {
         navigate(from, { replace: true });
       } else {
-        // Otherwise, redirect to their role-specific dashboard
-        const dashboardRoute = getDashboardRoute(user.role);
-        navigate(dashboardRoute, { replace: true });
+        // Redirect based on role: admin to dashboard, others to home
+        if (user.role?.toLowerCase() === 'admin') {
+          const dashboardRoute = getDashboardRoute(user.role);
+          navigate(dashboardRoute, { replace: true });
+        } else {
+          // Students and instructors go to home page
+          navigate('/', { replace: true });
+        }
       }
     }
   }, [isAuthenticated, user, navigate, from]);

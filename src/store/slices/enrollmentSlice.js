@@ -46,7 +46,7 @@ enrollmentApi.interceptors.request.use(
       const token = localStorage.getItem('authToken');
       if (token) {
         const bearerToken = token.startsWith('Bearer ') ? token : `Bearer ${token}`;
-        config.headers.Authorization = bearerToken;
+        config.headers.authorization = bearerToken;
         console.log('✅ Added Bearer token to protected endpoint:', config.url);
       } else {
         console.log('❌ No token found for protected endpoint:', config.url);
@@ -54,6 +54,7 @@ enrollmentApi.interceptors.request.use(
     } else {
       console.log('🔓 Public endpoint - no token needed:', config.url);
       // Explicitly ensure no auth headers are added
+      delete config.headers.authorization;
       delete config.headers.Authorization;
       delete config.headers.BearerKey;
     }

@@ -13,6 +13,7 @@
   height: 100vh;
   overflow-y: auto;
   z-index: 1000;
+  transition: transform 0.3s ease;
 }
 
 .sidebarHeader {
@@ -42,6 +43,12 @@
   box-shadow: 0 4px 16px rgba(var(--primary-color-rgb), 0.3);
 }
 
+.studentDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
 .studentName {
   color: var(--text-color);
   font-size: 1.25rem;
@@ -60,6 +67,7 @@
   color: rgba(var(--text-color-rgb), 0.8);
   font-size: 0.8rem;
   margin: 0;
+  word-break: break-word;
 }
 
 .quickStats {
@@ -89,51 +97,12 @@
   letter-spacing: 0.5px;
 }
 
-.sidebarNav {
-  padding: 1rem 0;
-}
-
-.sidebarItem {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  padding: 1rem 1.5rem;
-  color: var(--text-color);
-  background: none;
-  border: none;
-  cursor: pointer;
-  transition: var(--transition);
-  font-size: 0.95rem;
-  text-align: left;
-}
-
-.sidebarItem:hover {
-  background-color: rgba(var(--primary-color-rgb), 0.1);
-  color: var(--primary-color);
-}
-
-.sidebarItem.active {
-  background-color: rgba(var(--primary-color-rgb), 0.15);
-  color: var(--primary-color);
-  border-right: 3px solid var(--primary-color);
-}
-
-.sidebarIcon {
-  font-size: 1.2rem;
-  margin-right: 0.75rem;
-  width: 24px;
-  text-align: center;
-}
-
-.sidebarLabel {
-  font-weight: 500;
-}
-
 /* Main Content Styles */
 .mainContent {
   flex: 1;
   margin-left: 300px;
   background-color: var(--gradient-start);
+  min-width: 0; /* Prevent overflow */
 }
 
 .mainHeader {
@@ -150,6 +119,26 @@
   display: flex;
   align-items: center;
   gap: 1rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.mobileMenuToggle {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text-color);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 6px;
+  transition: var(--transition);
+  flex-shrink: 0;
+}
+
+.mobileMenuToggle:hover {
+  background-color: rgba(var(--primary-color-rgb), 0.1);
+  color: var(--primary-color);
 }
 
 .backBtn {
@@ -162,6 +151,7 @@
   cursor: pointer;
   transition: var(--transition);
   font-size: 0.875rem;
+  flex-shrink: 0;
 }
 
 .backBtn:hover {
@@ -174,6 +164,9 @@
   font-size: 2rem;
   font-weight: 600;
   margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .contentArea {
@@ -181,17 +174,16 @@
   min-height: calc(100vh - 120px);
 }
 
-.comingSoon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 400px;
-  background: linear-gradient(135deg, var(--secondary-color), var(--gradient-end));
-  border-radius: 12px;
-  color: rgba(var(--text-color-rgb), 0.7);
-  font-size: 1.25rem;
-  font-weight: 500;
-  border: 1px solid rgba(var(--primary-color-rgb), 0.1);
+/* Mobile Overlay */
+.mobileOverlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
 }
 
 /* Loading and Error States */
@@ -284,18 +276,28 @@
     position: fixed;
     transform: translateX(-100%);
     transition: transform 0.3s ease;
+    z-index: 1001;
   }
   
   .sidebar.open {
     transform: translateX(0);
   }
   
+  .mobileOverlay {
+    display: block;
+  }
+  
   .mainContent {
     margin-left: 0;
+    width: 100%;
   }
   
   .mainHeader {
     padding: 1rem 1.5rem;
+  }
+  
+  .mobileMenuToggle {
+    display: block;
   }
   
   .pageTitle {
@@ -309,17 +311,399 @@
   .studentInfo {
     flex-direction: row;
     text-align: left;
+    align-items: center;
+  }
+  
+  .studentDetails {
+    flex: 1;
   }
   
   .studentAvatar {
     width: 60px;
     height: 60px;
     font-size: 1.25rem;
+    margin-right: 1rem;
   }
   
   .headerLeft {
-    flex-direction: column;
-    align-items: flex-start;
+    flex-wrap: wrap;
     gap: 0.5rem;
   }
+  
+  .quickStats {
+    padding: 1rem;
+  }
+  
+  .statItem {
+    gap: 0.125rem;
+  }
+  
+  .statValue {
+    font-size: 1rem;
+  }
+  
+  .statLabel {
+    font-size: 0.7rem;
+  }
+  
+  .sidebarHeader {
+    padding: 1.5rem 1rem;
+  }
+}
+
+/* Additional mobile fixes */
+@media (max-width: 480px) {
+  .mainHeader {
+    padding: 0.75rem 1rem;
+  }
+  
+  .pageTitle {
+    font-size: 1.25rem;
+  }
+  
+  .contentArea {
+    padding: 1rem;
+  }
+  
+  .studentName {
+    font-size: 1rem;
+  }
+  
+  .studentEmail {
+    font-size: 0.75rem;
+  }
+  
+  .quickStats {
+    padding: 0.75rem;
+    gap: 0.5rem;
+  }
+  
+  .statValue {
+    font-size: 0.875rem;
+  }
+  
+  .statLabel {
+    font-size: 0.65rem;
+  }
+  
+  .studentAvatar {
+    width: 50px;
+    height: 50px;
+    font-size: 1rem;
+  }
+  
+  .headerLeft {
+    gap: 0.25rem;
+  }
+  
+  .backBtn {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.8rem;
+  }
+}
+
+/* Sidebar Navigation */
+.sidebarNav {
+  padding: 1rem 0;
+}
+
+.sidebarItem {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 1rem 1.5rem;
+  color: var(--text-color);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: var(--transition);
+  font-size: 0.95rem;
+  text-align: left;
+}
+
+.sidebarItem:hover {
+  background-color: rgba(var(--primary-color-rgb), 0.1);
+  color: var(--primary-color);
+}
+
+.sidebarItem.active {
+  background-color: rgba(var(--primary-color-rgb), 0.15);
+  color: var(--primary-color);
+  border-right: 3px solid var(--primary-color);
+}
+
+.sidebarIcon {
+  font-size: 1.2rem;
+  margin-right: 0.75rem;
+  width: 24px;
+  text-align: center;
+}
+
+.sidebarLabel {
+  font-weight: 500;
+}
+
+/* All Lessons View */
+.allLessonsView {
+  padding: 2rem;
+}
+
+.allLessonsHeader {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.allLessonsHeader h2 {
+  color: var(--text-color);
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+}
+
+.allLessonsHeader p {
+  color: rgba(var(--text-color-rgb), 0.7);
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.allLessonsContent {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.unitSection {
+  background: linear-gradient(135deg, var(--secondary-color), var(--gradient-end));
+  border-radius: 16px;
+  padding: 2rem;
+  border: 1px solid rgba(var(--primary-color-rgb), 0.1);
+  box-shadow: var(--box-shadow);
+}
+
+.unitHeader {
+  margin-bottom: 1.5rem;
+}
+
+.unitHeader h3 {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 0 0 0.5rem 0;
+  color: var(--text-color);
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.unitNumber {
+  background: linear-gradient(135deg, var(--primary-color), var(--hover-color));
+  color: var(--secondary-color);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.unitName {
+  flex: 1;
+}
+
+.unitStatus {
+  font-size: 1.25rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.unitDescription {
+  color: rgba(var(--text-color-rgb), 0.8);
+  font-size: 1rem;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.lessonsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.lessonCard {
+  background: rgba(var(--gradient-start-rgb), 0.3);
+  border: 1px solid rgba(var(--primary-color-rgb), 0.1);
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: var(--transition);
+  display: flex;
+  gap: 1rem;
+}
+
+.lessonCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(var(--primary-color-rgb), 0.2);
+}
+
+.lessonCard.locked {
+  opacity: 0.7;
+  background: rgba(var(--text-color-rgb), 0.05);
+}
+
+.lessonCard.completed {
+  border-color: var(--success-color);
+  background: rgba(var(--success-color-rgb), 0.1);
+}
+
+.lessonNumber {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, var(--primary-color), var(--hover-color));
+  color: var(--secondary-color);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.lessonCard.locked .lessonNumber {
+  background: rgba(var(--text-color-rgb), 0.3);
+  color: rgba(var(--text-color-rgb), 0.7);
+}
+
+.lessonCard.completed .lessonNumber {
+  background: var(--success-color);
+}
+
+.lessonContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.lessonTitle {
+  color: var(--text-color);
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+  line-height: 1.3;
+}
+
+.lessonCard.locked .lessonTitle {
+  color: rgba(var(--text-color-rgb), 0.5);
+}
+
+.lessonDescription {
+  color: rgba(var(--text-color-rgb), 0.8);
+  font-size: 0.9rem;
+  margin: 0 0 1rem 0;
+  line-height: 1.4;
+}
+
+.lessonCard.locked .lessonDescription {
+  color: rgba(var(--text-color-rgb), 0.4);
+}
+
+.lessonStatus {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.8rem;
+}
+
+.lockStatus,
+.completionStatus {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-weight: 500;
+}
+
+.lockStatus {
+  color: var(--warning-color);
+}
+
+.completionStatus {
+  color: var(--success-color);
+}
+
+.lessonCard.locked .lockStatus {
+  color: rgba(var(--text-color-rgb), 0.6);
+}
+
+.lessonCard.completed .completionStatus {
+  color: var(--success-color);
+}
+
+
+/* Mobile Close Button */
+.mobileCloseBtn {
+  display: none;
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  color: var(--text-color);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 6px;
+  transition: var(--transition);
+  z-index: 1002;
+}
+
+.mobileCloseBtn:hover {
+  background-color: rgba(var(--primary-color-rgb), 0.1);
+  color: var(--primary-color);
+}
+
+/* Show close button only on mobile */
+@media (max-width: 768px) {
+  .mobileCloseBtn {
+    display: block;
+  }
+  
+  .sidebarHeader {
+    position: relative;
+    padding-top: 3rem;
+  }
+}
+
+/* Sidebar Navigation */
+.sidebarNav {
+  padding: 1rem 0;
+}
+
+.sidebarItem {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 1rem 1.5rem;
+  color: var(--text-color);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: var(--transition);
+  font-size: 0.95rem;
+  text-align: left;
+}
+
+.sidebarItem:hover {
+  background-color: rgba(var(--primary-color-rgb), 0.1);
+  color: var(--primary-color);
+}
+
+.sidebarItem.active {
+  background-color: rgba(var(--primary-color-rgb), 0.15);
+  color: var(--primary-color);
+  border-right: 3px solid var(--primary-color);
+}
+
+.sidebarIcon {
+  font-size: 1.2rem;
+  margin-right: 0.75rem;
+  width: 24px;
+  text-align: center;
+}
+
+.sidebarLabel {
+  font-weight: 500;
 }

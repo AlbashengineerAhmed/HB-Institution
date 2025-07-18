@@ -9,8 +9,14 @@ const RoleRedirect = () => {
 
   useEffect(() => {
     if (isAuthenticated && user?.role) {
-      const dashboardRoute = getDashboardRoute(user.role);
-      navigate(dashboardRoute, { replace: true });
+      // Redirect based on role: admin to dashboard, others to home
+      if (user.role?.toLowerCase() === 'admin') {
+        const dashboardRoute = getDashboardRoute(user.role);
+        navigate(dashboardRoute, { replace: true });
+      } else {
+        // Students and instructors go to home page
+        navigate('/', { replace: true });
+      }
     } else if (!isAuthenticated) {
       navigate('/login', { replace: true });
     }

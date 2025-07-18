@@ -13,7 +13,9 @@ const StudentDashboard = () => {
   const dispatch = useDispatch();
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [showEvaluation, setShowEvaluation] = useState(false);
+  const [showAllLessons, setShowAllLessons] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('courses');
 
   // Get user data from auth state (same as Header component)
   const { user } = useSelector((state) => state.auth);
@@ -59,20 +61,40 @@ const StudentDashboard = () => {
     setMobileMenuOpen(false);
   };
 
+  // Navigation handlers
+  const handleSectionChange = (section) => {
+    setActiveSection(section);
+    setSelectedCourse(null);
+    setShowEvaluation(false);
+    setShowAllLessons(false);
+    closeMobileMenu();
+  };
+
   const handleViewCourse = (course) => {
     setSelectedCourse(course);
+    setShowAllLessons(false);
     closeMobileMenu(); // Close mobile menu when navigating
+  };
+
+  const handleViewAllLessons = (course) => {
+    setSelectedCourse(course);
+    setShowAllLessons(true);
+    setShowEvaluation(false);
+    closeMobileMenu();
   };
 
   const handleEvaluateCourse = (course) => {
     setSelectedCourse(course);
     setShowEvaluation(true);
+    setShowAllLessons(false);
     closeMobileMenu(); // Close mobile menu when navigating
   };
 
   const handleBackToCourses = () => {
     setSelectedCourse(null);
     setShowEvaluation(false);
+    setShowAllLessons(false);
+    setActiveSection('courses');
   };
 
   const renderActiveSection = () => {
@@ -104,6 +126,52 @@ const StudentDashboard = () => {
       );
     }
 
+    if (showAllLessons && selectedCourse) {
+      return (
+        <div className={styles.allLessonsView}>
+          <div className={styles.allLessonsHeader}>
+            <h2>All Lessons - {selectedCourse.title}</h2>
+            <p>Complete overview of all course lessons with their status</p>
+          </div>
+          <div className={styles.allLessonsContent}>
+            {selectedCourse.units.map((unit, unitIndex) => (
+              <div key={unit.id} className={styles.unitSection}>
+                <div className={styles.unitHeader}>
+                  <h3 className={styles.unitTitle}>
+                    <span className={styles.unitNumber}>Unit {unitIndex + 1}</span>
+                    <span className={styles.unitName}>{unit.title}</span>
+                    <span className={styles.unitStatus}>
+                      {unit.locked ? '🔒' : '🔓'} {unit.completed ? '✅' : '⭕'}
+                    </span>
+                  </h3>
+                  <p className={styles.unitDescription}>{unit.description}</p>
+                </div>
+                <div className={styles.lessonsGrid}>
+                  {unit.lessons.map((lesson, lessonIndex) => (
+                    <div key={lesson.id} className={`${styles.lessonCard} ${lesson.locked ? styles.locked : ''} ${lesson.completed ? styles.completed : ''}`}>
+                      <div className={styles.lessonNumber}>{lesson.order}</div>
+                      <div className={styles.lessonContent}>
+                        <h4 className={styles.lessonTitle}>{lesson.title}</h4>
+                        <p className={styles.lessonDescription}>{lesson.description}</p>
+                        <div className={styles.lessonStatus}>
+                          <span className={styles.lockStatus}>
+                            {lesson.locked ? '🔒 Locked' : '🔓 Unlocked'}
+                          </span>
+                          <span className={styles.completionStatus}>
+                            {lesson.completed ? '✅ Completed' : '⭕ Not Completed'}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
     if (selectedCourse) {
       return (
         <React.Suspense fallback={<LoadingSpinner />}>
@@ -120,6 +188,7 @@ const StudentDashboard = () => {
       <React.Suspense fallback={<LoadingSpinner />}>
         <MyCourses 
           onViewCourse={handleViewCourse}
+          onViewAllLessons={handleViewAllLessons}
           onEvaluateCourse={handleEvaluateCourse}
         />
       </React.Suspense>
@@ -130,18 +199,38 @@ const StudentDashboard = () => {
     if (showEvaluation && selectedCourse) {
       return `Evaluate: ${selectedCourse.title}`;
     }
+    if (showAllLessons && selectedCourse) {
+      return `All Lessons: ${selectedCourse.title}`;
+    }
     if (selectedCourse) {
       return selectedCourse.title;
     }
     return 'My Courses';
   };
 
-  // Show loading state while fetching data or if no user data
-  if (isLoading || !studentData) {
+  // Show loading state only while fetching data, not when no user data
+  if (isLoading) {
     return (
       <div className={styles.loadingContainer}>
         <div className={styles.loadingSpinner}>🔄</div>
         <p>Loading student dashboard...</p>
+      </div>
+    );
+  }
+
+  // Show error state if no user data after loading
+  if (!studentData) {
+    return (
+      <div className={styles.errorContainer}>
+        <div className={styles.errorIcon}>❌</div>
+        <h3>User Data Not Available</h3>
+        <p>Unable to load student information. Please try logging in again.</p>
+        <button 
+          className={styles.retryBtn}
+          onClick={() => window.location.href = '/login'}
+        >
+          🔄 Go to Login
+        </button>
       </div>
     );
   }
@@ -174,6 +263,14 @@ const StudentDashboard = () => {
         {/* Sidebar */}
         <aside className={`${styles.sidebar} ${mobileMenuOpen ? styles.open : ''}`}>
           <div className={styles.sidebarHeader}>
+            {/* Mobile Close Button */}
+            <button 
+              className={styles.mobileCloseBtn}
+              onClick={closeMobileMenu}
+            >
+              <i className="fas fa-times"></i>
+            </button>
+            
             <div className={styles.studentInfo}>
               <div className={styles.studentAvatar}>
                 {studentData.firstName?.charAt(0) || studentData.email?.charAt(0) || 'S'}
@@ -201,6 +298,17 @@ const StudentDashboard = () => {
               <span className={styles.statLabel}>Progress</span>
             </div>
           </div>
+
+          {/* Navigation Menu */}
+          <nav className={styles.sidebarNav}>
+            <button 
+              className={`${styles.sidebarItem} ${activeSection === 'courses' ? styles.active : ''}`}
+              onClick={() => handleSectionChange('courses')}
+            >
+              <span className={styles.sidebarIcon}>📚</span>
+              <span className={styles.sidebarLabel}>My Courses</span>
+            </button>
+          </nav>
         </aside>
 
         {/* Main Content */}
@@ -213,7 +321,7 @@ const StudentDashboard = () => {
               >
                 <i className={`fas ${mobileMenuOpen ? 'fa-times' : 'fa-bars'}`}></i>
               </button>
-              {(selectedCourse || showEvaluation) && (
+              {(selectedCourse || showEvaluation || showAllLessons) && (
                 <button 
                   className={styles.backBtn}
                   onClick={handleBackToCourses}
