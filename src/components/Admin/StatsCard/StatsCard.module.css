@@ -74,6 +74,26 @@
   font-size: 0.875rem;
 }
 
+.changeIndicator.warning {
+  background-color: rgba(var(--warning-color-rgb), 0.2);
+  color: var(--warning-color);
+}
+
+.changeIndicator.warning::before {
+  content: '⚠';
+  font-size: 0.875rem;
+}
+
+.changeIndicator.neutral {
+  background-color: rgba(var(--text-color-rgb), 0.1);
+  color: rgba(var(--text-color-rgb), 0.7);
+}
+
+.changeIndicator.neutral::before {
+  content: '→';
+  font-size: 0.875rem;
+}
+
 .cardContent {
   margin-bottom: 1rem;
 }

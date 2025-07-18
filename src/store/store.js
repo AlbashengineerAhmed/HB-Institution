@@ -9,6 +9,7 @@ import groupReducer from './slices/groupSlice';
 import newsReducer from './slices/newsSlice';
 import instructorDashboardReducer from './slices/instructorDashboardSlice';
 import studentDashboardReducer from './slices/studentDashboardSlice';
+import instructorManagementReducer from './slices/instructorManagementSlice';
 
 export const store = configureStore({
   reducer: {
@@ -22,6 +23,7 @@ export const store = configureStore({
     news: newsReducer,
     instructorDashboard: instructorDashboardReducer,
     studentDashboard: studentDashboardReducer,
+    instructorManagement: instructorManagementReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

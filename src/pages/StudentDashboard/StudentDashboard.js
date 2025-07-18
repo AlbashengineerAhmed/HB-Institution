@@ -8,12 +8,14 @@ import { fetchStudentDashboard } from '../../store/slices/studentDashboardSlice'
 const MyCourses = React.lazy(() => import('../../components/Student/MyCourses/MyCourses'));
 const CourseContent = React.lazy(() => import('../../components/Student/CourseContent/CourseContent'));
 const CourseEvaluation = React.lazy(() => import('../../components/Student/CourseEvaluation/CourseEvaluation'));
+const LessonDetails = React.lazy(() => import('../../components/Student/LessonDetails/LessonDetails'));
 
 const StudentDashboard = () => {
   const dispatch = useDispatch();
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [showEvaluation, setShowEvaluation] = useState(false);
   const [showAllLessons, setShowAllLessons] = useState(false);
+  const [selectedLesson, setSelectedLesson] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('courses');
 
@@ -67,12 +69,14 @@ const StudentDashboard = () => {
     setSelectedCourse(null);
     setShowEvaluation(false);
     setShowAllLessons(false);
+    setSelectedLesson(null);
     closeMobileMenu();
   };
 
   const handleViewCourse = (course) => {
     setSelectedCourse(course);
     setShowAllLessons(false);
+    setSelectedLesson(null);
     closeMobileMenu(); // Close mobile menu when navigating
   };
 
@@ -80,6 +84,7 @@ const StudentDashboard = () => {
     setSelectedCourse(course);
     setShowAllLessons(true);
     setShowEvaluation(false);
+    setSelectedLesson(null);
     closeMobileMenu();
   };
 
@@ -87,14 +92,28 @@ const StudentDashboard = () => {
     setSelectedCourse(course);
     setShowEvaluation(true);
     setShowAllLessons(false);
+    setSelectedLesson(null);
     closeMobileMenu(); // Close mobile menu when navigating
+  };
+
+  const handleLessonClick = (lessonId, courseId, unitId) => {
+    setSelectedLesson({ lessonId, courseId, unitId });
+    setShowAllLessons(false);
+    setShowEvaluation(false);
+    closeMobileMenu();
   };
 
   const handleBackToCourses = () => {
     setSelectedCourse(null);
     setShowEvaluation(false);
     setShowAllLessons(false);
+    setSelectedLesson(null);
     setActiveSection('courses');
+  };
+
+  const handleBackToAllLessons = () => {
+    setSelectedLesson(null);
+    setShowAllLessons(true);
   };
 
   const renderActiveSection = () => {
@@ -110,6 +129,19 @@ const StudentDashboard = () => {
         <div>🔄 Loading...</div>
       </div>
     );
+
+    if (selectedLesson) {
+      return (
+        <React.Suspense fallback={<LoadingSpinner />}>
+          <LessonDetails 
+            lessonId={selectedLesson.lessonId}
+            courseId={selectedLesson.courseId}
+            unitId={selectedLesson.unitId}
+            onBack={handleBackToAllLessons}
+          />
+        </React.Suspense>
+      );
+    }
 
     if (showEvaluation && selectedCourse) {
       return (
@@ -148,7 +180,11 @@ const StudentDashboard = () => {
                 </div>
                 <div className={styles.lessonsGrid}>
                   {unit.lessons.map((lesson, lessonIndex) => (
-                    <div key={lesson.id} className={`${styles.lessonCard} ${lesson.locked ? styles.locked : ''} ${lesson.completed ? styles.completed : ''}`}>
+                    <div 
+                      key={lesson.id} 
+                      className={`${styles.lessonCard} ${lesson.locked ? styles.locked : ''} ${lesson.completed ? styles.completed : ''}`}
+                      onClick={() => handleLessonClick(lesson.id, selectedCourse.id, unit.id)}
+                    >
                       <div className={styles.lessonNumber}>{lesson.order}</div>
                       <div className={styles.lessonContent}>
                         <h4 className={styles.lessonTitle}>{lesson.title}</h4>
@@ -196,6 +232,9 @@ const StudentDashboard = () => {
   };
 
   const getPageTitle = () => {
+    if (selectedLesson) {
+      return 'Lesson Details';
+    }
     if (showEvaluation && selectedCourse) {
       return `Evaluate: ${selectedCourse.title}`;
     }
@@ -321,12 +360,12 @@ const StudentDashboard = () => {
               >
                 <i className={`fas ${mobileMenuOpen ? 'fa-times' : 'fa-bars'}`}></i>
               </button>
-              {(selectedCourse || showEvaluation || showAllLessons) && (
+              {(selectedCourse || showEvaluation || showAllLessons || selectedLesson) && (
                 <button 
                   className={styles.backBtn}
-                  onClick={handleBackToCourses}
+                  onClick={selectedLesson ? handleBackToAllLessons : handleBackToCourses}
                 >
-                  ← Back to Courses
+                  ← {selectedLesson ? 'Back to Lessons' : 'Back to Courses'}
                 </button>
               )}
               <h1 className={styles.pageTitle}>{getPageTitle()}</h1>

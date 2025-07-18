@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import styles from './AdminDashboard.module.css';
 import DashboardOverview from '../../components/Admin/DashboardOverview/DashboardOverview';
@@ -60,6 +60,20 @@ const AdminDashboard = () => {
     setActiveSection(sectionId);
     closeMobileMenu();
   };
+
+  // Listen for navigation events from dashboard overview
+  useEffect(() => {
+    const handleNavigation = (event) => {
+      setActiveSection(event.detail);
+      closeMobileMenu();
+    };
+
+    window.addEventListener('navigateToSection', handleNavigation);
+
+    return () => {
+      window.removeEventListener('navigateToSection', handleNavigation);
+    };
+  }, []);
 
   const renderActiveSection = () => {
     switch (activeSection) {

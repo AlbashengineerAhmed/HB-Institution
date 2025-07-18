@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../../store/slices/authSlice';
@@ -16,8 +16,18 @@ const Header = () => {
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
+  
+  // Refs for timeout management
+  const dropdownTimeoutRef = useRef(null);
+  const userDropdownTimeoutRef = useRef(null);
 
   const handleDropdownToggle = (dropdownName) => {
+    // Clear any existing timeout when clicking
+    if (dropdownTimeoutRef.current) {
+      clearTimeout(dropdownTimeoutRef.current);
+      dropdownTimeoutRef.current = null;
+    }
+    
     if (activeDropdown === dropdownName) {
       setActiveDropdown(null);
     } else {
@@ -36,6 +46,12 @@ const Header = () => {
   };
 
   const toggleUserDropdown = () => {
+    // Clear any existing timeout when clicking
+    if (userDropdownTimeoutRef.current) {
+      clearTimeout(userDropdownTimeoutRef.current);
+      userDropdownTimeoutRef.current = null;
+    }
+    
     setUserDropdownOpen(!userDropdownOpen);
   };
 
@@ -51,6 +67,50 @@ const Header = () => {
     setMobileMenuOpen(false);
   };
 
+  // Handle dropdown mouse leave with delay
+  const handleDropdownMouseLeave = () => {
+    // Clear any existing timeout
+    if (dropdownTimeoutRef.current) {
+      clearTimeout(dropdownTimeoutRef.current);
+    }
+    
+    // Set a new timeout to close the dropdown after 300ms
+    dropdownTimeoutRef.current = setTimeout(() => {
+      setActiveDropdown(null);
+    }, 300);
+  };
+
+  // Handle dropdown mouse enter to cancel closing
+  const handleDropdownMouseEnter = () => {
+    // Clear the timeout if mouse re-enters
+    if (dropdownTimeoutRef.current) {
+      clearTimeout(dropdownTimeoutRef.current);
+      dropdownTimeoutRef.current = null;
+    }
+  };
+
+  // Handle user dropdown mouse leave with delay
+  const handleUserDropdownMouseLeave = () => {
+    // Clear any existing timeout
+    if (userDropdownTimeoutRef.current) {
+      clearTimeout(userDropdownTimeoutRef.current);
+    }
+    
+    // Set a new timeout to close the dropdown after 300ms
+    userDropdownTimeoutRef.current = setTimeout(() => {
+      setUserDropdownOpen(false);
+    }, 300);
+  };
+
+  // Handle user dropdown mouse enter to cancel closing
+  const handleUserDropdownMouseEnter = () => {
+    // Clear the timeout if mouse re-enters
+    if (userDropdownTimeoutRef.current) {
+      clearTimeout(userDropdownTimeoutRef.current);
+      userDropdownTimeoutRef.current = null;
+    }
+  };
+
   return (
     <header className={styles.header}>
       <div className={`container ${styles.headerContainer}`}>
@@ -63,7 +123,11 @@ const Header = () => {
         <nav className={styles.mainNav}>
           <ul className={`${styles.navList} ${mobileMenuOpen ? styles.show : ''}`}>
             <li className={styles.navItem}><Link to="/" className={`${styles.navLink} ${styles.active}`}>Home</Link></li>
-            <li className={`${styles.navItem} ${styles.dropdown} ${activeDropdown === 'about' ? styles.active : ''}`}>
+            <li 
+              className={`${styles.navItem} ${styles.dropdown} ${activeDropdown === 'about' ? styles.active : ''}`}
+              onMouseLeave={handleDropdownMouseLeave}
+              onMouseEnter={handleDropdownMouseEnter}
+            >
               <div 
                 className={`${styles.navLink} ${styles.dropdownToggle}`} 
                 onClick={() => handleDropdownToggle('about')}
@@ -83,7 +147,11 @@ const Header = () => {
                 <li><Link to="/about/disclaimer" className={styles.dropdownItem} onClick={handleLinkClick}>Disclaimer</Link></li>
               </ul>
             </li>
-            <li className={`${styles.navItem} ${styles.dropdown} ${activeDropdown === 'faculty' ? styles.active : ''}`}>
+            <li 
+              className={`${styles.navItem} ${styles.dropdown} ${activeDropdown === 'faculty' ? styles.active : ''}`}
+              onMouseLeave={handleDropdownMouseLeave}
+              onMouseEnter={handleDropdownMouseEnter}
+            >
               <div 
                 className={`${styles.navLink} ${styles.dropdownToggle}`} 
                 onClick={() => handleDropdownToggle('faculty')}
@@ -104,7 +172,11 @@ const Header = () => {
                 <li><Link to="/faculty/corporate-relationship" className={styles.dropdownItem} onClick={handleLinkClick}>Corporate Relationship Program</Link></li>
               </ul>
             </li>
-            <li className={`${styles.navItem} ${styles.dropdown} ${activeDropdown === 'community' ? styles.active : ''}`}>
+            <li 
+              className={`${styles.navItem} ${styles.dropdown} ${activeDropdown === 'community' ? styles.active : ''}`}
+              onMouseLeave={handleDropdownMouseLeave}
+              onMouseEnter={handleDropdownMouseEnter}
+            >
               <div 
                 className={`${styles.navLink} ${styles.dropdownToggle}`} 
                 onClick={() => handleDropdownToggle('community')}
@@ -121,7 +193,11 @@ const Header = () => {
                 <li><Link to="/community/news" className={styles.dropdownItem} onClick={handleLinkClick}>News & Announcements</Link></li>
               </ul>
             </li>
-            <li className={`${styles.navItem} ${styles.dropdown} ${activeDropdown === 'why-hbi' ? styles.active : ''}`}>
+            <li 
+              className={`${styles.navItem} ${styles.dropdown} ${activeDropdown === 'why-hbi' ? styles.active : ''}`}
+              onMouseLeave={handleDropdownMouseLeave}
+              onMouseEnter={handleDropdownMouseEnter}
+            >
               <div 
                 className={`${styles.navLink} ${styles.dropdownToggle}`} 
                 onClick={() => handleDropdownToggle('why-hbi')}
@@ -139,7 +215,11 @@ const Header = () => {
                 <li><Link to="/why-hbi/student-affairs" className={styles.dropdownItem} onClick={handleLinkClick}>Student Affairs Office</Link></li>
               </ul>
             </li>
-            <li className={`${styles.navItem} ${styles.dropdown} ${activeDropdown === 'programs' ? styles.active : ''}`}>
+            <li 
+              className={`${styles.navItem} ${styles.dropdown} ${activeDropdown === 'programs' ? styles.active : ''}`}
+              onMouseLeave={handleDropdownMouseLeave}
+              onMouseEnter={handleDropdownMouseEnter}
+            >
               <div 
                 className={`${styles.navLink} ${styles.dropdownToggle}`} 
                 onClick={() => handleDropdownToggle('programs')}
@@ -154,7 +234,11 @@ const Header = () => {
                 <li><Link to="/programs/master-research" className={styles.dropdownItem} onClick={handleLinkClick}>Master Degree - Research</Link></li>
               </ul>
             </li>
-            <li className={`${styles.navItem} ${styles.dropdown} ${activeDropdown === 'publications' ? styles.active : ''}`}>
+            <li 
+              className={`${styles.navItem} ${styles.dropdown} ${activeDropdown === 'publications' ? styles.active : ''}`}
+              onMouseLeave={handleDropdownMouseLeave}
+              onMouseEnter={handleDropdownMouseEnter}
+            >
               <div 
                 className={`${styles.navLink} ${styles.dropdownToggle}`} 
                 onClick={() => handleDropdownToggle('publications')}
@@ -178,7 +262,11 @@ const Header = () => {
         
         <div className={styles.headerActions}>
           {isAuthenticated ? (
-            <div className={styles.userMenu}>
+            <div 
+              className={styles.userMenu} 
+              onMouseLeave={handleUserDropdownMouseLeave}
+              onMouseEnter={handleUserDropdownMouseEnter}
+            >
               <div className={styles.userProfile} onClick={toggleUserDropdown}>
                 <div className={styles.userAvatar}>
                   {user?.firstName?.charAt(0) || user?.email?.charAt(0) || 'U'}

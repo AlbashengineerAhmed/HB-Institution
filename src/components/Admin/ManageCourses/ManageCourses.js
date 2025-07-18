@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import styles from './ManageCourses.module.css';
@@ -11,9 +11,13 @@ const ManageCourses = () => {
   const { courses, isLoading, error } = useSelector((state) => state.courses);
   const { categories } = useSelector((state) => state.categories);
   
+  // Simplified state management - removed bulk selection
   const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState('all');
   const [categoryFilter, setCategoryFilter] = useState('all');
+  const [sortBy, setSortBy] = useState('title');
+  const [sortOrder, setSortOrder] = useState('asc');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10; // Fixed at 10 items per page
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [imagePreview, setImagePreview] = useState(null);
   const [authError, setAuthError] = useState('');
@@ -31,9 +35,60 @@ const ManageCourses = () => {
     categoryId: ''
   });
 
+  // Simplified filtering and sorting logic
+  const filteredAndSortedCourses = useMemo(() => {
+    let filtered = courses.filter(course => {
+      const matchesSearch = (course.title || course.name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           (course.description || '').toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesCategory = categoryFilter === 'all' || (course.category || course.CategoryId || course.categoryId) === categoryFilter;
+      
+      return matchesSearch && matchesCategory;
+    });
+
+    // Sorting
+    filtered.sort((a, b) => {
+      let aValue, bValue;
+      
+      switch (sortBy) {
+        case 'title':
+          aValue = (a.title || a.name || '').toLowerCase();
+          bValue = (b.title || b.name || '').toLowerCase();
+          break;
+        case 'duration':
+          aValue = a.duration || '';
+          bValue = b.duration || '';
+          break;
+        case 'createdAt':
+          aValue = new Date(a.createdAt || 0);
+          bValue = new Date(b.createdAt || 0);
+          break;
+        default:
+          aValue = a.title || a.name || '';
+          bValue = b.title || b.name || '';
+      }
+      
+      if (aValue < bValue) return sortOrder === 'asc' ? -1 : 1;
+      if (aValue > bValue) return sortOrder === 'asc' ? 1 : -1;
+      return 0;
+    });
+
+    return filtered;
+  }, [courses, searchTerm, categoryFilter, sortBy, sortOrder]);
+
+  // Pagination logic
+  const totalPages = Math.ceil(filteredAndSortedCourses.length / itemsPerPage);
+  const paginatedCourses = filteredAndSortedCourses.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  // Reset page when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, categoryFilter, sortBy, sortOrder]);
+
   // Check authentication on component mount and scroll to top
   useEffect(() => {
-    // Scroll to top when component mounts (page refresh)
     window.scrollTo(0, 0);
     
     const token = localStorage.getItem('authToken');
@@ -42,7 +97,6 @@ const ManageCourses = () => {
       return;
     }
     
-    // Clear any previous auth errors and fetch data
     setAuthError('');
     setNetworkError(false);
     
@@ -61,26 +115,35 @@ const ManageCourses = () => {
     fetchData();
   }, [dispatch]);
 
-  // Monitor error state from Redux
   useEffect(() => {
     if (error) {
       setNetworkError(true);
     }
   }, [error]);
-  
-  const filteredCourses = courses.filter(course => {
-    const matchesSearch = (course.title || course.name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         (course.instructor || '').toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = statusFilter === 'all' || (course.status || 'approved') === statusFilter;
-    const matchesCategory = categoryFilter === 'all' || (course.category || course.CategoryId || course.categoryId) === categoryFilter;
-    
-    return matchesSearch && matchesStatus && matchesCategory;
-  });
+
+  // Enhanced handlers
+  const handleSort = (column) => {
+    if (sortBy === column) {
+      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortBy(column);
+      setSortOrder('asc');
+    }
+  };
+
+  const handleViewCourse = (course) => {
+    // Placeholder for view functionality
+    toast.info(`View functionality for "${course.title || course.name}" will be implemented soon`);
+  };
+
+  const handleEditCourse = (course) => {
+    // Placeholder for edit functionality
+    toast.info(`Edit functionality for "${course.title || course.name}" will be implemented soon`);
+  };
 
   const handleCreateCourse = async (e) => {
     e.preventDefault();
     
-    // Check authentication before submitting
     const token = localStorage.getItem('authToken');
     if (!token) {
       setAuthError('Authentication required. Please login to create courses.');
@@ -109,7 +172,6 @@ const ManageCourses = () => {
 
       await dispatch(createCourse({ categoryId: courseForm.categoryId, courseData })).unwrap();
       
-      // Reset form on success
       setShowCreateForm(false);
       setCourseForm({
         title: '',
@@ -122,7 +184,6 @@ const ManageCourses = () => {
       });
       setImagePreview(null);
       
-      // Refresh courses list
       dispatch(fetchCourses());
     } catch (error) {
       console.error('Failed to create course:', error);
@@ -135,13 +196,11 @@ const ManageCourses = () => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      // Validate file size (max 5MB)
       if (file.size > 5 * 1024 * 1024) {
         toast.error('Image size should be less than 5MB');
         return;
       }
 
-      // Validate file type
       if (!file.type.startsWith('image/')) {
         toast.error('Please select a valid image file');
         return;
@@ -163,21 +222,7 @@ const ManageCourses = () => {
     setCourseForm({ ...courseForm, levels: updatedLevels });
   };
 
-  const handleStatusChange = (courseId, newStatus) => {
-    // Check authentication before changing status
-    const token = localStorage.getItem('authToken');
-    if (!token) {
-      setAuthError('Authentication required. Please login to manage courses.');
-      return;
-    }
-    
-    console.log(`Course ${courseId} status changed to ${newStatus}`);
-    // In a real app, this would update the backend
-    toast.success(`Course status changed to ${newStatus}`);
-  };
-
   const handleDeleteClick = (course) => {
-    // Check authentication before showing delete modal
     const token = localStorage.getItem('authToken');
     if (!token) {
       setAuthError('Authentication required. Please login to delete courses.');
@@ -194,12 +239,8 @@ const ManageCourses = () => {
     try {
       const courseId = courseToDelete.id || courseToDelete._id;
       await dispatch(deleteCourse(courseId)).unwrap();
-      
-      // The success toast is already handled in the deleteCourse action
-      // The course will be automatically removed from the state by the reducer
     } catch (error) {
       console.error('Failed to delete course:', error);
-      // Error toast is already handled in the deleteCourse action
     } finally {
       setShowDeleteModal(false);
       setCourseToDelete(null);
@@ -218,23 +259,6 @@ const ManageCourses = () => {
       dispatch(fetchCourses());
       dispatch(fetchCategories());
     }
-  };
-
-  const getStatusBadge = (status) => {
-    // Default to 'approved' if status is undefined or null
-    const courseStatus = status || 'approved';
-    
-    const statusClasses = {
-      pending: styles.statusPending,
-      approved: styles.statusApproved,
-      rejected: styles.statusRejected
-    };
-    
-    return (
-      <span className={`${styles.statusBadge} ${statusClasses[courseStatus]}`}>
-        {courseStatus.charAt(0).toUpperCase() + courseStatus.slice(1)}
-      </span>
-    );
   };
 
   // Show authentication error if no token
@@ -283,52 +307,67 @@ const ManageCourses = () => {
 
   return (
     <div className={styles.manageCourses}>
-      {/* Header with filters and create button */}
+      {/* Simplified Header - removed bulk selection stats */}
       <div className={styles.courseHeader}>
         <div className={styles.headerTop}>
-          <h2>Manage Courses</h2>
-          <button 
-            className={styles.createBtn}
-            onClick={() => setShowCreateForm(!showCreateForm)}
-          >
-            {showCreateForm ? '✕ Cancel' : '+ Create Course'}
-          </button>
+          <div className={styles.headerLeft}>
+            <h2>Manage Courses</h2>
+            <div className={styles.courseStats}>
+              <span className={styles.statItem}>
+                Total: <strong>{courses.length}</strong>
+              </span>
+              <span className={styles.statItem}>
+                Filtered: <strong>{filteredAndSortedCourses.length}</strong>
+              </span>
+            </div>
+          </div>
+          <div className={styles.headerRight}>
+            <button 
+              className={styles.createBtn}
+              onClick={() => setShowCreateForm(!showCreateForm)}
+            >
+              {showCreateForm ? '✕ Cancel' : '+ Create Course'}
+            </button>
+          </div>
         </div>
         
-        <div className={styles.searchSection}>
-          <input
-            type="text"
-            placeholder="Search courses or instructors..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className={styles.searchInput}
-          />
-        </div>
-        
-        <div className={styles.filtersSection}>
-          <select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className={styles.filterSelect}
-          >
-            <option value="all">All Status</option>
-            <option value="pending">Pending</option>
-            <option value="approved">Approved</option>
-            <option value="rejected">Rejected</option>
-          </select>
+        {/* Simplified Search and Filters */}
+        <div className={styles.filtersContainer}>
+          <div className={styles.searchSection}>
+            <div className={styles.searchInputContainer}>
+              <input
+                type="text"
+                placeholder="Search courses by title or description..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className={styles.searchInput}
+              />
+              {searchTerm && (
+                <button
+                  className={styles.clearSearchBtn}
+                  onClick={() => setSearchTerm('')}
+                  title="Clear search"
+                >
+                  ✕
+                </button>
+              )}
+            </div>
+          </div>
           
-          <select
-            value={categoryFilter}
-            onChange={(e) => setCategoryFilter(e.target.value)}
-            className={styles.filterSelect}
-          >
-            <option value="all">All Categories</option>
-            {categories.map(category => (
-              <option key={category._id} value={category._id}>
-                {category.name}
-              </option>
-            ))}
-          </select>
+          <div className={styles.filtersSection}>
+            <select
+              value={categoryFilter}
+              onChange={(e) => setCategoryFilter(e.target.value)}
+              className={styles.filterSelect}
+            >
+              <option value="all">All Categories</option>
+              {categories.map(category => (
+                <option key={category._id} value={category._id}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
       </div>
 
@@ -466,7 +505,7 @@ const ManageCourses = () => {
         </div>
       )}
 
-      {/* Courses Table */}
+      {/* Simplified Courses Table - removed checkboxes */}
       {courses.length === 0 && !isLoading ? (
         <div className={styles.emptyState}>
           <div className={styles.emptyIcon}>📚</div>
@@ -485,15 +524,33 @@ const ManageCourses = () => {
             <thead>
               <tr>
                 <th>Image</th>
-                <th>Course Details</th>
-                <th>Instructor</th>
-                <th>Students</th>
-                <th>Status</th>
+                <th 
+                  className={styles.sortableHeader}
+                  onClick={() => handleSort('title')}
+                >
+                  Course Details
+                  {sortBy === 'title' && (
+                    <span className={styles.sortIcon}>
+                      {sortOrder === 'asc' ? '↑' : '↓'}
+                    </span>
+                  )}
+                </th>
+                <th 
+                  className={styles.sortableHeader}
+                  onClick={() => handleSort('duration')}
+                >
+                  Duration
+                  {sortBy === 'duration' && (
+                    <span className={styles.sortIcon}>
+                      {sortOrder === 'asc' ? '↑' : '↓'}
+                    </span>
+                  )}
+                </th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
-              {filteredCourses.map((course) => (
+              {paginatedCourses.map((course) => (
                 <tr key={course.id || course._id} className={styles.courseRow}>
                   <td className={styles.imageCell}>
                     <div className={styles.courseImageContainer}>
@@ -522,55 +579,51 @@ const ManageCourses = () => {
                         <span className={styles.courseCategory}>
                           {course.category || categories.find(cat => cat._id === (course.CategoryId || course.categoryId))?.name || 'Unknown'}
                         </span>
-                        {course.price && (
-                          <span className={styles.coursePrice}>${course.price}</span>
+                        <span className={styles.coursePrice}>
+                          {course.price && parseFloat(course.price) > 0 
+                            ? `$${parseFloat(course.price).toFixed(2)}` 
+                            : 'Free'
+                          }
+                        </span>
+                        {course.levels && course.levels.length > 0 && (
+                          <div className={styles.courseLevels}>
+                            {course.levels.map(level => (
+                              <span key={level} className={styles.levelBadge}>
+                                {level}
+                              </span>
+                            ))}
+                          </div>
                         )}
                       </div>
                     </div>
                   </td>
-                  <td className={styles.instructorCell}>
-                    <div className={styles.instructorInfo}>
-                      <div className={styles.instructorAvatar}>
-                        {course.instructor ? course.instructor.split(' ').map(n => n[0]).join('') : 'N/A'}
-                      </div>
-                      <span className={styles.instructorName}>{course.instructor || 'No instructor assigned'}</span>
-                    </div>
-                  </td>
-                  <td className={styles.studentsCell}>
-                    <span className={styles.studentsCount}>{course.students || 0}</span>
-                  </td>
-                  <td className={styles.statusCell}>
-                    {getStatusBadge(course.status)}
+                  <td className={styles.durationCell}>
+                    <span className={styles.courseDuration}>
+                      {course.duration || 'N/A'}
+                    </span>
                   </td>
                   <td className={styles.actionsCell}>
                     <div className={styles.actionButtons}>
-                      {(course.status || 'approved') === 'pending' && (
-                        <>
-                          <button
-                            className={`${styles.actionBtn} ${styles.approveBtn}`}
-                            onClick={() => handleStatusChange(course.id || course._id, 'approved')}
-                          >
-                            ✓ Approve
-                          </button>
-                          <button
-                            className={`${styles.actionBtn} ${styles.rejectBtn}`}
-                            onClick={() => handleStatusChange(course.id || course._id, 'rejected')}
-                          >
-                            ✗ Reject
-                          </button>
-                        </>
-                      )}
+                      <button
+                        className={`${styles.actionBtn} ${styles.editBtn}`}
+                        onClick={() => handleEditCourse(course)}
+                        title="Edit Course"
+                      >
+                        Edit
+                      </button>
                       <button
                         className={`${styles.actionBtn} ${styles.viewBtn}`}
-                        onClick={() => console.log(`View course ${course.id || course._id}`)}
+                        onClick={() => handleViewCourse(course)}
+                        title="View Details"
                       >
-                        👁 View
+                        View
                       </button>
                       <button
                         className={`${styles.actionBtn} ${styles.deleteBtn}`}
                         onClick={() => handleDeleteClick(course)}
+                        title="Delete Course"
                       >
-                        🗑 Delete
+                        Delete
                       </button>
                     </div>
                   </td>
@@ -578,10 +631,74 @@ const ManageCourses = () => {
               ))}
             </tbody>
           </table>
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className={styles.pagination}>
+              <div className={styles.paginationInfo}>
+                Showing {((currentPage - 1) * itemsPerPage) + 1} to {Math.min(currentPage * itemsPerPage, filteredAndSortedCourses.length)} of {filteredAndSortedCourses.length} courses
+              </div>
+              <div className={styles.paginationControls}>
+                <button
+                  onClick={() => setCurrentPage(1)}
+                  disabled={currentPage === 1}
+                  className={styles.paginationBtn}
+                >
+                  First
+                </button>
+                <button
+                  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                  disabled={currentPage === 1}
+                  className={styles.paginationBtn}
+                >
+                  Previous
+                </button>
+                
+                {/* Page numbers */}
+                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                  let pageNum;
+                  if (totalPages <= 5) {
+                    pageNum = i + 1;
+                  } else if (currentPage <= 3) {
+                    pageNum = i + 1;
+                  } else if (currentPage >= totalPages - 2) {
+                    pageNum = totalPages - 4 + i;
+                  } else {
+                    pageNum = currentPage - 2 + i;
+                  }
+                  
+                  return (
+                    <button
+                      key={pageNum}
+                      onClick={() => setCurrentPage(pageNum)}
+                      className={`${styles.paginationBtn} ${currentPage === pageNum ? styles.active : ''}`}
+                    >
+                      {pageNum}
+                    </button>
+                  );
+                })}
+                
+                <button
+                  onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                  disabled={currentPage === totalPages}
+                  className={styles.paginationBtn}
+                >
+                  Next
+                </button>
+                <button
+                  onClick={() => setCurrentPage(totalPages)}
+                  disabled={currentPage === totalPages}
+                  className={styles.paginationBtn}
+                >
+                  Last
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       )}
 
-      {filteredCourses.length === 0 && courses.length > 0 && (
+      {filteredAndSortedCourses.length === 0 && courses.length > 0 && (
         <div className={styles.emptyState}>
           <div className={styles.emptyIcon}>🔍</div>
           <h3>No Courses Match Your Search</h3>
@@ -589,6 +706,7 @@ const ManageCourses = () => {
         </div>
       )}
 
+      {/* Modal - removed bulk delete modal */}
       <ConfirmationModal
         isOpen={showDeleteModal}
         onClose={handleDeleteCancel}

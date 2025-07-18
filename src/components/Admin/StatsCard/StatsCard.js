@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './StatsCard.module.css';
 
-const StatsCard = ({ title, value, change, changeType, icon }) => {
+const StatsCard = ({ title, value, change, changeType, icon, subtitle }) => {
   return (
     <div className={styles.statsCard}>
       <div className={styles.cardHeader}>
@@ -20,7 +20,7 @@ const StatsCard = ({ title, value, change, changeType, icon }) => {
       
       <div className={styles.cardFooter}>
         <span className={styles.footerText}>
-          {changeType === 'positive' ? 'Increased' : 'Decreased'} from last month
+          {subtitle || (changeType === 'positive' ? 'Active' : changeType === 'warning' ? 'Needs attention' : 'Status')}
         </span>
       </div>
     </div>

@@ -4,9 +4,12 @@ import styles from './ManageStudents.module.css';
 const ManageStudents = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
-  const [courseFilter, setCourseFilter] = useState('all');
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [studentToDelete, setStudentToDelete] = useState(null);
+  const [showDetailsModal, setShowDetailsModal] = useState(false);
+  const [selectedStudent, setSelectedStudent] = useState(null);
 
-  // Static student data
+  // Static student data with simplified structure
   const studentsData = [
     {
       id: 1,
@@ -19,7 +22,11 @@ const ManageStudents = () => {
       status: 'active',
       joinDate: '2023-09-15',
       lastActivity: '2024-01-20',
-      progress: 75
+      progress: 75,
+      avatar: null,
+      address: '123 Main St, City, State',
+      dateOfBirth: '1995-03-15',
+      emergencyContact: '+1-555-0301'
     },
     {
       id: 2,
@@ -32,7 +39,11 @@ const ManageStudents = () => {
       status: 'active',
       joinDate: '2023-08-20',
       lastActivity: '2024-01-19',
-      progress: 100
+      progress: 100,
+      avatar: null,
+      address: '456 Oak Ave, City, State',
+      dateOfBirth: '1992-07-22',
+      emergencyContact: '+1-555-0302'
     },
     {
       id: 3,
@@ -45,7 +56,11 @@ const ManageStudents = () => {
       status: 'active',
       joinDate: '2024-01-10',
       lastActivity: '2024-01-18',
-      progress: 25
+      progress: 25,
+      avatar: null,
+      address: '789 Pine St, City, State',
+      dateOfBirth: '1998-11-08',
+      emergencyContact: '+1-555-0303'
     },
     {
       id: 4,
@@ -58,7 +73,11 @@ const ManageStudents = () => {
       status: 'suspended',
       joinDate: '2023-10-05',
       lastActivity: '2024-01-15',
-      progress: 60
+      progress: 60,
+      avatar: null,
+      address: '321 Elm St, City, State',
+      dateOfBirth: '1994-05-12',
+      emergencyContact: '+1-555-0304'
     },
     {
       id: 5,
@@ -71,7 +90,11 @@ const ManageStudents = () => {
       status: 'active',
       joinDate: '2023-07-12',
       lastActivity: '2024-01-21',
-      progress: 85
+      progress: 85,
+      avatar: null,
+      address: '654 Maple Dr, City, State',
+      dateOfBirth: '1996-09-30',
+      emergencyContact: '+1-555-0305'
     },
     {
       id: 6,
@@ -84,36 +107,87 @@ const ManageStudents = () => {
       status: 'banned',
       joinDate: '2023-11-20',
       lastActivity: '2024-01-10',
-      progress: 15
+      progress: 15,
+      avatar: null,
+      address: '987 Cedar Ln, City, State',
+      dateOfBirth: '1997-12-03',
+      emergencyContact: '+1-555-0306'
+    },
+    {
+      id: 7,
+      name: 'Hassan Ibrahim',
+      email: 'hassan.ibrahim@email.com',
+      phone: '+1-555-0207',
+      enrolledCourses: ['Advanced Islamic Studies', 'Islamic History and Civilization'],
+      totalCourses: 2,
+      completedCourses: 1,
+      status: 'active',
+      joinDate: '2023-06-18',
+      lastActivity: '2024-01-22',
+      progress: 90,
+      avatar: null,
+      address: '147 Birch St, City, State',
+      dateOfBirth: '1993-04-25',
+      emergencyContact: '+1-555-0307'
+    },
+    {
+      id: 8,
+      name: 'Khadija Malik',
+      email: 'khadija.malik@email.com',
+      phone: '+1-555-0208',
+      enrolledCourses: ['Quran Recitation Basics'],
+      totalCourses: 1,
+      completedCourses: 1,
+      status: 'active',
+      joinDate: '2023-12-01',
+      lastActivity: '2024-01-23',
+      progress: 100,
+      avatar: null,
+      address: '258 Willow Ave, City, State',
+      dateOfBirth: '1999-01-17',
+      emergencyContact: '+1-555-0308'
     }
-  ];
-
-  // Course enrollment statistics
-  const enrollmentStats = [
-    { course: 'Advanced Islamic Studies', students: 45, completion: 78 },
-    { course: 'Quran Recitation Basics', students: 78, completion: 85 },
-    { course: 'Arabic Language Fundamentals', students: 62, completion: 72 },
-    { course: 'Islamic History and Civilization', students: 34, completion: 65 },
-    { course: 'Hadith Studies', students: 56, completion: 80 },
-    { course: 'Islamic Finance Principles', students: 29, completion: 55 }
   ];
 
   const filteredStudents = studentsData.filter(student => {
     const matchesSearch = student.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          student.email.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === 'all' || student.status === statusFilter;
-    const matchesCourse = courseFilter === 'all' || 
-                         student.enrolledCourses.some(course => course.includes(courseFilter));
     
-    return matchesSearch && matchesStatus && matchesCourse;
+    return matchesSearch && matchesStatus;
   });
 
   const handleStatusChange = (studentId, newStatus) => {
     console.log(`Student ${studentId} status changed to ${newStatus}`);
+    // In a real app, this would update the backend
   };
 
-  const handleDeleteStudent = (studentId) => {
-    console.log(`Student ${studentId} deleted`);
+  const handleDeleteClick = (student) => {
+    setStudentToDelete(student);
+    setShowDeleteModal(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (studentToDelete) {
+      console.log('Deleting student:', studentToDelete.name);
+      setShowDeleteModal(false);
+      setStudentToDelete(null);
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setShowDeleteModal(false);
+    setStudentToDelete(null);
+  };
+
+  const handleViewDetails = (student) => {
+    setSelectedStudent(student);
+    setShowDetailsModal(true);
+  };
+
+  const handleCloseDetails = () => {
+    setShowDetailsModal(false);
+    setSelectedStudent(null);
   };
 
   const getStatusBadge = (status) => {
@@ -123,53 +197,48 @@ const ManageStudents = () => {
       banned: styles.statusBanned
     };
     
+    const statusIcons = {
+      active: '✅',
+      suspended: '⏸️',
+      banned: '🚫'
+    };
+    
     return (
       <span className={`${styles.statusBadge} ${statusClasses[status]}`}>
-        {status.charAt(0).toUpperCase() + status.slice(1)}
+        {statusIcons[status]} {status.charAt(0).toUpperCase() + status.slice(1)}
       </span>
     );
   };
 
-  const getProgressColor = (progress) => {
-    if (progress >= 80) return '#4da6ff';
-    if (progress >= 60) return '#fdc62c';
-    if (progress >= 40) return '#feda6a';
-    return '#ff4c4c';
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
+  };
+
+  const getLastActivityText = (lastActivity) => {
+    const date = new Date(lastActivity);
+    const now = new Date();
+    const diffInHours = Math.floor((now - date) / (1000 * 60 * 60));
+    
+    if (diffInHours < 1) return 'Just now';
+    if (diffInHours < 24) return `${diffInHours}h ago`;
+    if (diffInHours < 168) return `${Math.floor(diffInHours / 24)}d ago`;
+    return formatDate(lastActivity);
   };
 
   return (
     <div className={styles.manageStudents}>
-      {/* Enrollment Statistics */}
-      <div className={styles.statsSection}>
-        <h3 className={styles.statsTitle}>Course Enrollment Statistics</h3>
-        <div className={styles.statsGrid}>
-          {enrollmentStats.map((stat, index) => (
-            <div key={index} className={styles.statCard}>
-              <h4 className={styles.statCourse}>{stat.course}</h4>
-              <div className={styles.statNumbers}>
-                <div className={styles.statItem}>
-                  <span className={styles.statValue}>{stat.students}</span>
-                  <span className={styles.statLabel}>Students</span>
-                </div>
-                <div className={styles.statItem}>
-                  <span className={styles.statValue}>{stat.completion}%</span>
-                  <span className={styles.statLabel}>Completion</span>
-                </div>
-              </div>
-              <div className={styles.progressBar}>
-                <div 
-                  className={styles.progressFill}
-                  style={{ width: `${stat.completion}%` }}
-                ></div>
-              </div>
-            </div>
-          ))}
+      {/* Header */}
+      <div className={styles.header}>
+        <div className={styles.headerContent}>
+          <h1 className={styles.title}>Manage Students</h1>
+          <p className={styles.subtitle}>Total: {studentsData.length} students</p>
         </div>
-      </div>
-
-      {/* Header with filters */}
-      <div className={styles.studentHeader}>
-        <div className={styles.searchSection}>
+        
+        <div className={styles.headerActions}>
           <input
             type="text"
             placeholder="Search students..."
@@ -177,9 +246,7 @@ const ManageStudents = () => {
             onChange={(e) => setSearchTerm(e.target.value)}
             className={styles.searchInput}
           />
-        </div>
-        
-        <div className={styles.filtersSection}>
+          
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
@@ -190,150 +257,220 @@ const ManageStudents = () => {
             <option value="suspended">Suspended</option>
             <option value="banned">Banned</option>
           </select>
-          
-          <select
-            value={courseFilter}
-            onChange={(e) => setCourseFilter(e.target.value)}
-            className={styles.filterSelect}
-          >
-            <option value="all">All Courses</option>
-            <option value="Advanced Islamic Studies">Advanced Islamic Studies</option>
-            <option value="Quran Recitation">Quran Recitation</option>
-            <option value="Arabic Language">Arabic Language</option>
-            <option value="Islamic History">Islamic History</option>
-            <option value="Hadith Studies">Hadith Studies</option>
-            <option value="Islamic Finance">Islamic Finance</option>
-          </select>
         </div>
       </div>
 
-      {/* Students Table */}
-      <div className={styles.tableContainer}>
-        <table className={styles.studentsTable}>
-          <thead>
-            <tr>
-              <th>Student Info</th>
-              <th>Enrolled Courses</th>
-              <th>Progress</th>
-              <th>Status</th>
-              <th>Last Activity</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredStudents.map((student) => (
-              <tr key={student.id} className={styles.studentRow}>
-                <td className={styles.studentInfo}>
-                  <div className={styles.studentDetails}>
-                    <div className={styles.studentAvatar}>
-                      {student.name.split(' ').map(n => n[0]).join('')}
-                    </div>
-                    <div className={styles.studentData}>
-                      <h4 className={styles.studentName}>{student.name}</h4>
-                      <p className={styles.studentEmail}>{student.email}</p>
-                      <p className={styles.studentPhone}>{student.phone}</p>
-                      <p className={styles.joinDate}>Joined: {new Date(student.joinDate).toLocaleDateString()}</p>
-                    </div>
+      {/* Status Summary */}
+      <div className={styles.summary}>
+        <div className={styles.summaryCard}>
+          <div className={styles.summaryNumber}>
+            {studentsData.filter(s => s.status === 'active').length}
+          </div>
+          <div className={styles.summaryLabel}>Active</div>
+        </div>
+        <div className={styles.summaryCard}>
+          <div className={styles.summaryNumber}>
+            {studentsData.filter(s => s.status === 'suspended').length}
+          </div>
+          <div className={styles.summaryLabel}>Suspended</div>
+        </div>
+        <div className={styles.summaryCard}>
+          <div className={styles.summaryNumber}>
+            {studentsData.filter(s => s.status === 'banned').length}
+          </div>
+          <div className={styles.summaryLabel}>Banned</div>
+        </div>
+        <div className={styles.summaryCard}>
+          <div className={styles.summaryNumber}>{studentsData.length}</div>
+          <div className={styles.summaryLabel}>Total</div>
+        </div>
+      </div>
+
+      {/* Students Grid */}
+      <div className={styles.grid}>
+        {filteredStudents.map((student) => (
+          <div key={student.id} className={`${styles.card} ${student.status === 'banned' ? styles.bannedCard : student.status === 'suspended' ? styles.suspendedCard : ''}`}>
+            {/* Card Header */}
+            <div className={styles.cardHeader}>
+              <div className={styles.avatar}>
+                {student.avatar ? (
+                  <img src={student.avatar} alt={student.name} />
+                ) : (
+                  <div className={styles.avatarText}>
+                    {student.name.split(' ').map(n => n[0]).join('')}
                   </div>
-                </td>
-                <td className={styles.coursesCell}>
-                  <div className={styles.coursesList}>
-                    {student.enrolledCourses.map((course, index) => (
-                      <span key={index} className={styles.courseTag}>
-                        {course}
-                      </span>
-                    ))}
-                  </div>
-                  <div className={styles.coursesStats}>
-                    <span className={styles.coursesCount}>
-                      {student.completedCourses}/{student.totalCourses} completed
-                    </span>
-                  </div>
-                </td>
-                <td className={styles.progressCell}>
-                  <div className={styles.progressContainer}>
-                    <div className={styles.progressCircle}>
-                      <svg className={styles.progressSvg} viewBox="0 0 36 36">
-                        <path
-                          className={styles.progressBg}
-                          d="M18 2.0845
-                            a 15.9155 15.9155 0 0 1 0 31.831
-                            a 15.9155 15.9155 0 0 1 0 -31.831"
-                        />
-                        <path
-                          className={styles.progressBar}
-                          strokeDasharray={`${student.progress}, 100`}
-                          style={{ stroke: getProgressColor(student.progress) }}
-                          d="M18 2.0845
-                            a 15.9155 15.9155 0 0 1 0 31.831
-                            a 15.9155 15.9155 0 0 1 0 -31.831"
-                        />
-                      </svg>
-                      <div className={styles.progressText}>{student.progress}%</div>
-                    </div>
-                  </div>
-                </td>
-                <td className={styles.statusCell}>
-                  {getStatusBadge(student.status)}
-                </td>
-                <td className={styles.activityCell}>
-                  <span className={styles.lastActivity}>
-                    {new Date(student.lastActivity).toLocaleDateString()}
-                  </span>
-                </td>
-                <td className={styles.actionsCell}>
-                  <div className={styles.actionButtons}>
-                    {student.status === 'active' && (
-                      <button
-                        className={`${styles.actionBtn} ${styles.suspendBtn}`}
-                        onClick={() => handleStatusChange(student.id, 'suspended')}
-                      >
-                        ⏸ Suspend
-                      </button>
-                    )}
-                    
-                    {student.status === 'suspended' && (
-                      <button
-                        className={`${styles.actionBtn} ${styles.activateBtn}`}
-                        onClick={() => handleStatusChange(student.id, 'active')}
-                      >
-                        ▶ Activate
-                      </button>
-                    )}
-                    
-                    {student.status !== 'banned' && (
-                      <button
-                        className={`${styles.actionBtn} ${styles.banBtn}`}
-                        onClick={() => handleStatusChange(student.id, 'banned')}
-                      >
-                        🚫 Ban
-                      </button>
-                    )}
-                    
-                    <button
-                      className={`${styles.actionBtn} ${styles.viewBtn}`}
-                      onClick={() => console.log(`View student ${student.id}`)}
-                    >
-                      👁 View
-                    </button>
-                    
-                    <button
-                      className={`${styles.actionBtn} ${styles.deleteBtn}`}
-                      onClick={() => handleDeleteStudent(student.id)}
-                    >
-                      🗑 Delete
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                )}
+              </div>
+              <div className={styles.info}>
+                <h3 className={styles.name}>{student.name}</h3>
+                <p className={styles.email}>{student.email}</p>
+                <p className={styles.phone}>{student.phone}</p>
+              </div>
+              <div className={styles.badges}>
+                {getStatusBadge(student.status)}
+              </div>
+            </div>
+
+            {/* Card Details */}
+            <div className={styles.details}>
+              <div className={styles.detail}>
+                <span className={styles.detailLabel}>Joined:</span>
+                <span className={styles.detailValue}>{formatDate(student.joinDate)}</span>
+              </div>
+              <div className={styles.detail}>
+                <span className={styles.detailLabel}>Last Activity:</span>
+                <span className={styles.detailValue}>{getLastActivityText(student.lastActivity)}</span>
+              </div>
+            </div>
+
+            {/* Card Actions - Simplified */}
+            <div className={styles.actions}>
+              {student.status !== 'banned' && (
+                <button
+                  className={`${styles.btn} ${styles.banBtn}`}
+                  onClick={() => handleStatusChange(student.id, 'banned')}
+                >
+                  🚫 Ban
+                </button>
+              )}
+              
+              <button
+                className={`${styles.btn} ${styles.viewBtn}`}
+                onClick={() => handleViewDetails(student)}
+              >
+                👁️ View Details
+              </button>
+              
+              <button
+                className={`${styles.btn} ${styles.deleteBtn}`}
+                onClick={() => handleDeleteClick(student)}
+              >
+                🗑️ Delete
+              </button>
+            </div>
+          </div>
+        ))}
       </div>
 
       {filteredStudents.length === 0 && (
         <div className={styles.emptyState}>
-          <p>No students found matching your criteria.</p>
+          <div className={styles.emptyIcon}>👨‍🎓</div>
+          <h3>No Students Found</h3>
+          <p>
+            {searchTerm || statusFilter !== 'all' 
+              ? 'No students match your current filters.'
+              : 'No students have been registered yet.'
+            }
+          </p>
+        </div>
+      )}
+
+      {/* View Details Modal */}
+      {showDetailsModal && selectedStudent && (
+        <div className={styles.modalOverlay} onClick={handleCloseDetails}>
+          <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+            <div className={styles.modalHeader}>
+              <h3>Student Details</h3>
+              <button className={styles.closeBtn} onClick={handleCloseDetails}>✕</button>
+            </div>
+            <div className={styles.modalBody}>
+              <div className={styles.modalGrid}>
+                <div className={styles.modalSection}>
+                  <h4>Personal Information</h4>
+                  <div className={styles.modalRow}>
+                    <span>Full Name:</span>
+                    <span>{selectedStudent.name}</span>
+                  </div>
+                  <div className={styles.modalRow}>
+                    <span>Email:</span>
+                    <span>{selectedStudent.email}</span>
+                  </div>
+                  <div className={styles.modalRow}>
+                    <span>Phone:</span>
+                    <span>{selectedStudent.phone}</span>
+                  </div>
+                  <div className={styles.modalRow}>
+                    <span>Date of Birth:</span>
+                    <span>{formatDate(selectedStudent.dateOfBirth)}</span>
+                  </div>
+                  <div className={styles.modalRow}>
+                    <span>Address:</span>
+                    <span>{selectedStudent.address}</span>
+                  </div>
+                  <div className={styles.modalRow}>
+                    <span>Emergency Contact:</span>
+                    <span>{selectedStudent.emergencyContact}</span>
+                  </div>
+                </div>
+
+                <div className={styles.modalSection}>
+                  <h4>Academic Information</h4>
+                  <div className={styles.modalRow}>
+                    <span>Enrolled Courses:</span>
+                    <span>{selectedStudent.enrolledCourses.join(', ')}</span>
+                  </div>
+                  <div className={styles.modalRow}>
+                    <span>Total Courses:</span>
+                    <span>{selectedStudent.totalCourses}</span>
+                  </div>
+                  <div className={styles.modalRow}>
+                    <span>Completed Courses:</span>
+                    <span>{selectedStudent.completedCourses}</span>
+                  </div>
+                  <div className={styles.modalRow}>
+                    <span>Overall Progress:</span>
+                    <span>{selectedStudent.progress}%</span>
+                  </div>
+                </div>
+
+                <div className={styles.modalSection}>
+                  <h4>Account Information</h4>
+                  <div className={styles.modalRow}>
+                    <span>Status:</span>
+                    <span>{getStatusBadge(selectedStudent.status)}</span>
+                  </div>
+                  <div className={styles.modalRow}>
+                    <span>Join Date:</span>
+                    <span>{formatDate(selectedStudent.joinDate)}</span>
+                  </div>
+                  <div className={styles.modalRow}>
+                    <span>Last Activity:</span>
+                    <span>{getLastActivityText(selectedStudent.lastActivity)}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteModal && (
+        <div className={styles.modalOverlay} onClick={handleCancelDelete}>
+          <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+            <div className={styles.modalHeader}>
+              <h3>Confirm Delete</h3>
+              <button className={styles.closeBtn} onClick={handleCancelDelete}>✕</button>
+            </div>
+            <div className={styles.modalBody}>
+              <p>Are you sure you want to delete student <strong>{studentToDelete?.name}</strong>?</p>
+              <p className={styles.warning}>This action cannot be undone and will remove all student progress and enrollment data.</p>
+            </div>
+            <div className={styles.modalActions}>
+              <button
+                className={`${styles.btn} ${styles.cancelBtn}`}
+                onClick={handleCancelDelete}
+              >
+                Cancel
+              </button>
+              <button
+                className={`${styles.btn} ${styles.deleteBtn}`}
+                onClick={handleConfirmDelete}
+              >
+                🗑️ Delete
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

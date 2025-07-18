@@ -84,11 +84,6 @@ const MyCourses = ({ onViewCourse, onViewAllLessons, onEvaluateCourse }) => {
     return isCompleted ? '✅' : '⭕';
   };
 
-  // Handle navigation to course details page
-  const handleViewCourseDetails = (course) => {
-    navigate(`/course/${course.id}`);
-  };
-
   return (
     <div className={styles.myCourses}>
       {/* Header with search */}
@@ -107,7 +102,11 @@ const MyCourses = ({ onViewCourse, onViewAllLessons, onEvaluateCourse }) => {
       {/* Courses Grid */}
       <div className={styles.coursesGrid}>
         {filteredCourses.map((course) => (
-          <div key={course.id} className={styles.courseCard}>
+          <div 
+            key={course.id} 
+            className={styles.courseCard}
+            onClick={() => onViewAllLessons(course)}
+          >
             <div className={styles.courseImage}>
               <img 
                 src={course.thumbnail} 
@@ -136,7 +135,7 @@ const MyCourses = ({ onViewCourse, onViewAllLessons, onEvaluateCourse }) => {
                   <span className={styles.statText}>{course.duration}</span>
                 </div>
                 <div className={styles.statItem}>
-                  <span className={styles.statIcon}>��</span>
+                  <span className={styles.statIcon}>📚</span>
                   <span className={styles.statText}>{course.totalUnits} units</span>
                 </div>
                 <div className={styles.statItem}>
@@ -159,7 +158,10 @@ const MyCourses = ({ onViewCourse, onViewAllLessons, onEvaluateCourse }) => {
                   <div key={unit.id} className={styles.unitItem}>
                     <div 
                       className={styles.unitHeader}
-                      onClick={() => toggleUnitDetails(course.id, unit.id)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleUnitDetails(course.id, unit.id);
+                      }}
                     >
                       <div className={styles.unitInfo}>
                         <span className={styles.unitStatus}>
@@ -200,22 +202,6 @@ const MyCourses = ({ onViewCourse, onViewAllLessons, onEvaluateCourse }) => {
                   </div>
                 )}
               </div>
-            </div>
-            
-            <div className={styles.courseActions}>
-              <button
-                className={`${styles.actionBtn} ${styles.viewBtn}`}
-                onClick={() => handleViewCourseDetails(course)}
-              >
-                📖 View Course
-              </button>
-              
-              <button
-                className={`${styles.actionBtn} ${styles.viewAllBtn}`}
-                onClick={() => onViewAllLessons(course)}
-              >
-                📋 View All Lessons
-              </button>
             </div>
           </div>
         ))}

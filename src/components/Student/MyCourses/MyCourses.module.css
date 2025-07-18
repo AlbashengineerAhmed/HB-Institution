@@ -76,12 +76,18 @@
   transition: var(--transition);
   display: flex;
   flex-direction: column;
+  cursor: pointer;
 }
 
 .courseCard:hover {
   transform: translateY(-4px);
   box-shadow: 0 8px 25px rgba(var(--gradient-start-rgb), 0.3);
   border-color: rgba(var(--primary-color-rgb), 0.2);
+}
+
+.courseCard:active {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(var(--gradient-start-rgb), 0.2);
 }
 
 .courseImage {
@@ -355,62 +361,6 @@
   color: var(--error-color);
 }
 
-/* Course Actions */
-.courseActions {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  padding: 1rem 1.5rem;
-  border-top: 1px solid rgba(var(--primary-color-rgb), 0.1);
-  background-color: rgba(var(--gradient-start-rgb), 0.3);
-}
-
-.actionBtn {
-  padding: 0.75rem 1rem;
-  border: none;
-  border-radius: 8px;
-  font-size: 0.875rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: var(--transition);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-}
-
-.viewBtn {
-  background: linear-gradient(135deg, var(--primary-color), var(--hover-color));
-  color: var(--secondary-color);
-}
-
-.viewBtn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(var(--primary-color-rgb), 0.3);
-}
-
-.evaluateBtn {
-  background-color: rgba(var(--warning-color-rgb), 0.2);
-  color: var(--warning-color);
-  border: 1px solid rgba(var(--warning-color-rgb), 0.3);
-}
-
-.evaluateBtn:hover {
-  background-color: rgba(var(--warning-color-rgb), 0.3);
-  border-color: var(--warning-color);
-}
-
-.certificateBtn {
-  background-color: rgba(var(--success-color-rgb), 0.2);
-  color: var(--success-color);
-  border: 1px solid rgba(var(--success-color-rgb), 0.3);
-}
-
-.certificateBtn:hover {
-  background-color: rgba(var(--success-color-rgb), 0.3);
-  border-color: var(--success-color);
-}
-
 /* Empty State */
 .emptyState {
   display: flex;
@@ -489,10 +439,6 @@
   
   .courseStats {
     gap: 0.25rem;
-  }
-  
-  .courseActions {
-    gap: 0.75rem;
   }
 }
 
@@ -638,9 +584,8 @@
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
-/* Additional Mobile Responsive Styles for MyCourses */
 
-/* Responsive Design Updates */
+/* Additional Mobile Responsive Styles for MyCourses */
 @media (max-width: 1024px) {
   .coursesHeader {
     flex-direction: column;
@@ -670,16 +615,6 @@
   
   .courseStats {
     gap: 0.25rem;
-  }
-  
-  .courseActions {
-    gap: 0.5rem;
-    padding: 1rem;
-  }
-  
-  .actionBtn {
-    padding: 0.625rem 0.875rem;
-    font-size: 0.8rem;
   }
   
   .emptyState {
@@ -774,161 +709,4 @@
     padding: 0.75rem 1.25rem;
     font-size: 0.85rem;
   }
-}
-
-/* View All Lessons Button */
-.viewAllBtn {
-  background-color: rgba(var(--info-color-rgb), 0.2);
-  color: var(--info-color);
-  border: 1px solid rgba(var(--info-color-rgb), 0.3);
-}
-
-.viewAllBtn:hover {
-  background-color: rgba(var(--info-color-rgb), 0.3);
-  border-color: var(--info-color);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(var(--info-color-rgb), 0.3);
-}
-
-/* Price Badge */
-.priceBadge {
-  background-color: rgba(var(--success-color-rgb), 0.9);
-  color: var(--secondary-color);
-  padding: 0.25rem 0.75rem;
-  border-radius: 12px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-/* Units Section */
-.unitsSection {
-  margin-top: 1rem;
-  padding-top: 1rem;
-  border-top: 1px solid rgba(var(--primary-color-rgb), 0.1);
-}
-
-.unitsTitle {
-  color: var(--text-color);
-  font-size: 0.875rem;
-  font-weight: 600;
-  margin: 0 0 0.75rem 0;
-}
-
-.unitItem {
-  margin-bottom: 0.75rem;
-  border: 1px solid rgba(var(--primary-color-rgb), 0.1);
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.unitHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.75rem;
-  background-color: rgba(var(--gradient-start-rgb), 0.3);
-  cursor: pointer;
-  transition: var(--transition);
-}
-
-.unitHeader:hover {
-  background-color: rgba(var(--gradient-start-rgb), 0.5);
-}
-
-.unitInfo {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  flex: 1;
-}
-
-.unitStatus {
-  font-size: 0.875rem;
-  display: flex;
-  gap: 0.25rem;
-}
-
-.unitTitle {
-  color: var(--text-color);
-  font-size: 0.875rem;
-  font-weight: 500;
-}
-
-.unitStats {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.unitLessons {
-  color: rgba(var(--text-color-rgb), 0.7);
-  font-size: 0.8rem;
-}
-
-.expandIcon {
-  color: var(--primary-color);
-  font-size: 0.8rem;
-  font-weight: 600;
-}
-
-.lessonsContainer {
-  padding: 0.5rem 0;
-  background-color: rgba(var(--secondary-color), 0.5);
-}
-
-.lessonItem {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.5rem 1rem;
-  font-size: 0.8rem;
-  border-bottom: 1px solid rgba(var(--primary-color-rgb), 0.05);
-}
-
-.lessonItem:last-child {
-  border-bottom: none;
-}
-
-.lessonOrder {
-  width: 20px;
-  height: 20px;
-  background-color: rgba(var(--primary-color-rgb), 0.2);
-  color: var(--primary-color);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.7rem;
-  font-weight: 600;
-  flex-shrink: 0;
-}
-
-.lessonStatus {
-  font-size: 0.8rem;
-  display: flex;
-  gap: 0.25rem;
-}
-
-.lessonTitle {
-  color: var(--text-color);
-  flex: 1;
-  font-weight: 500;
-}
-
-.lessonTitle.locked {
-  color: rgba(var(--text-color-rgb), 0.5);
-  font-style: italic;
-}
-
-.moreUnits {
-  color: rgba(var(--text-color-rgb), 0.6);
-  font-size: 0.8rem;
-  font-style: italic;
-  text-align: center;
-  margin-top: 0.5rem;
-  padding: 0.5rem;
-  background-color: rgba(var(--gradient-start-rgb), 0.2);
-  border-radius: 6px;
 }

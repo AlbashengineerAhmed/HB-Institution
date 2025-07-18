@@ -125,10 +125,33 @@ export const markUnitCompleted = createAsyncThunk(
   }
 );
 
+// Get lesson details
+export const getLessonDetails = createAsyncThunk(
+  'studentDashboard/getLessonDetails',
+  async ({ lessonId }, { rejectWithValue }) => {
+    try {
+      console.log(`🔍 Fetching lesson details for: ${lessonId}`);
+      const response = await api.get(`/lesson/${lessonId}`);
+      console.log('✅ Lesson details fetched:', response.data);
+      return { lessonId, data: response.data };
+    } catch (error) {
+      const errorMessage = getErrorMessage(error, 'Failed to fetch lesson details');
+      console.error('❌ Failed to fetch lesson details:', error);
+      toast.error(errorMessage);
+      return rejectWithValue(errorMessage);
+    }
+  }
+);
+
 // Initial state
 const initialState = {
   // Dashboard data
   courses: [],
+  
+  // Lesson details
+  selectedLessonDetails: null,
+  isLoadingLessonDetails: false,
+  lessonDetailsError: null,
   
   // Loading states
   isLoading: false,
@@ -154,6 +177,12 @@ const studentDashboardSlice = createSlice({
     clearError: (state) => {
       state.error = null;
       state.completeError = null;
+      state.lessonDetailsError = null;
+    },
+    
+    clearLessonDetails: (state) => {
+      state.selectedLessonDetails = null;
+      state.lessonDetailsError = null;
     },
     
     toggleCourseExpansion: (state, action) => {
@@ -257,12 +286,29 @@ const studentDashboardSlice = createSlice({
         state.isMarkingComplete = false;
         state.completeError = action.payload;
         // Revert optimistic update on error would go here if needed
+      })
+      
+      // Get Lesson Details
+      .addCase(getLessonDetails.pending, (state) => {
+        state.isLoadingLessonDetails = true;
+        state.lessonDetailsError = null;
+      })
+      .addCase(getLessonDetails.fulfilled, (state, action) => {
+        state.isLoadingLessonDetails = false;
+        state.selectedLessonDetails = action.payload.data;
+        state.lessonDetailsError = null;
+      })
+      .addCase(getLessonDetails.rejected, (state, action) => {
+        state.isLoadingLessonDetails = false;
+        state.lessonDetailsError = action.payload;
+        state.selectedLessonDetails = null;
       });
   },
 });
 
 export const { 
   clearError, 
+  clearLessonDetails,
   toggleCourseExpansion,
   toggleUnitExpansion,
   setSelectedCourse,

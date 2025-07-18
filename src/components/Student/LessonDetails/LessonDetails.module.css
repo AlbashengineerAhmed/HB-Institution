@@ -1,0 +1,466 @@
+.lessonDetails {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: var(--secondary-color);
+}
+
+/* Header */
+.header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, var(--primary-color), var(--hover-color));
+  color: var(--secondary-color);
+  border-radius: 12px 12px 0 0;
+  margin-bottom: 1rem;
+}
+
+.backBtn {
+  background: rgba(var(--secondary-color-rgb), 0.2);
+  color: var(--secondary-color);
+  border: 1px solid rgba(var(--secondary-color-rgb), 0.3);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: var(--transition);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.backBtn:hover {
+  background: rgba(var(--secondary-color-rgb), 0.3);
+  border-color: var(--secondary-color);
+}
+
+.headerContent {
+  flex: 1;
+}
+
+.lessonTitle {
+  color: var(--secondary-color);
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+  line-height: 1.3;
+}
+
+.lessonMeta {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.lessonOrder,
+.lessonStatus,
+.completionStatus {
+  background: rgba(var(--secondary-color-rgb), 0.2);
+  color: var(--secondary-color);
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.completeBtn {
+  background: var(--success-color);
+  color: var(--secondary-color);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: var(--transition);
+  font-size: 0.875rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.completeBtn:hover:not(:disabled) {
+  background: var(--success-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(var(--success-color-rgb), 0.3);
+}
+
+.completeBtn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Content */
+.content {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 2rem;
+  padding: 0 1.5rem 1.5rem;
+  flex: 1;
+  overflow: hidden;
+}
+
+.lessonInfo {
+  overflow-y: auto;
+  padding-right: 1rem;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  overflow-y: auto;
+}
+
+/* Sections */
+.section {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+  border-radius: 12px;
+  border: 1px solid rgba(var(--primary-color-rgb), 0.1);
+}
+
+.sectionTitle {
+  color: var(--text-color);
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0 0 1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.description {
+  color: rgba(var(--text-color-rgb), 0.8);
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.duration {
+  color: var(--primary-color);
+  font-size: 1rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+.objectives {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.objective {
+  color: rgba(var(--text-color-rgb), 0.8);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  margin-bottom: 0.5rem;
+  padding: 0.5rem;
+  background: rgba(var(--primary-color-rgb), 0.1);
+  border-radius: 6px;
+}
+
+.lessonContent {
+  color: rgba(var(--text-color-rgb), 0.8);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.contentText {
+  background: rgba(var(--text-color-rgb), 0.1);
+  padding: 1rem;
+  border-radius: 6px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.875rem;
+  overflow-x: auto;
+  white-space: pre-wrap;
+}
+
+.resources,
+.attachments {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.resource,
+.attachment {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background: rgba(var(--primary-color-rgb), 0.1);
+  border-radius: 8px;
+  transition: var(--transition);
+}
+
+.resource:hover,
+.attachment:hover {
+  background: rgba(var(--primary-color-rgb), 0.2);
+}
+
+.resourceIcon,
+.attachmentIcon {
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.resourceLink,
+.attachmentLink {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 500;
+  flex: 1;
+}
+
+.resourceLink:hover,
+.attachmentLink:hover {
+  text-decoration: underline;
+}
+
+.attachmentSize {
+  color: rgba(var(--text-color-rgb), 0.6);
+  font-size: 0.75rem;
+}
+
+.videoContainer {
+  border-radius: 8px;
+  overflow: hidden;
+  background: rgba(var(--text-color-rgb), 0.1);
+}
+
+.video {
+  width: 100%;
+  height: auto;
+  max-height: 400px;
+}
+
+/* Sidebar Cards */
+.progressCard,
+.prerequisitesCard,
+.tagsCard {
+  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 1px solid rgba(var(--primary-color-rgb), 0.1);
+}
+
+.progressTitle,
+.cardTitle {
+  color: var(--text-color);
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 1rem 0;
+}
+
+.progressInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.progressItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.progressLabel {
+  color: rgba(var(--text-color-rgb), 0.7);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.progressValue {
+  font-size: 0.875rem;
+  font-weight: 600;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}
+
+.progressValue.completed {
+  background: rgba(var(--success-color-rgb), 0.2);
+  color: var(--success-color);
+}
+
+.progressValue.pending {
+  background: rgba(var(--warning-color-rgb), 0.2);
+  color: var(--warning-color);
+}
+
+.progressValue.locked {
+  background: rgba(var(--error-color-rgb), 0.2);
+  color: var(--error-color);
+}
+
+.progressValue.unlocked {
+  background: rgba(var(--success-color-rgb), 0.2);
+  color: var(--success-color);
+}
+
+.prerequisites {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.prerequisite {
+  color: rgba(var(--text-color-rgb), 0.8);
+  font-size: 0.875rem;
+  line-height: 1.4;
+  margin-bottom: 0.5rem;
+  padding: 0.5rem;
+  background: rgba(var(--primary-color-rgb), 0.1);
+  border-radius: 6px;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.tag {
+  background: rgba(var(--primary-color-rgb), 0.2);
+  color: var(--primary-color);
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+/* Loading and Error States */
+.loadingContainer,
+.errorContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.loadingSpinner {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.errorIcon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  opacity: 0.7;
+}
+
+.errorContainer h3 {
+  color: var(--text-color);
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0 0 1rem 0;
+}
+
+.errorContainer p {
+  color: rgba(var(--text-color-rgb), 0.7);
+  font-size: 1rem;
+  margin: 0 0 2rem 0;
+  max-width: 400px;
+}
+
+.retryBtn {
+  background: linear-gradient(135deg, var(--primary-color), var(--hover-color));
+  color: var(--secondary-color);
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-size: 1rem;
+}
+
+.retryBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(var(--primary-color-rgb), 0.3);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .content {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .sidebar {
+    order: -1;
+  }
+  
+  .lessonInfo {
+    padding-right: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+  
+  .headerContent {
+    text-align: center;
+  }
+  
+  .lessonMeta {
+    justify-content: center;
+  }
+  
+  .content {
+    padding: 0 1rem 1rem;
+  }
+  
+  .section,
+  .progressCard,
+  .prerequisitesCard,
+  .tagsCard {
+    padding: 1rem;
+  }
+  
+  .lessonTitle {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    padding: 1rem;
+  }
+  
+  .content {
+    padding: 0 0.5rem 0.5rem;
+  }
+  
+  .section,
+  .progressCard,
+  .prerequisitesCard,
+  .tagsCard {
+    padding: 0.75rem;
+  }
+  
+  .lessonTitle {
+    font-size: 1.125rem;
+  }
+  
+  .lessonMeta {
+    gap: 0.5rem;
+  }
+  
+  .lessonOrder,
+  .lessonStatus,
+  .completionStatus {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.5rem;
+  }
+}
