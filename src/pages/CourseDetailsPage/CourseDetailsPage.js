@@ -1,21 +1,79 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCourseById } from '../../store/slices/courseSlice';
+import { fetchUnits, fetchUnitById } from '../../store/slices/unitSlice';
+import { formatPrice } from '../../utils/priceUtils';
+import AuthGuard, { useAuthGuard } from '../../components/AuthGuard/AuthGuard';
 import styles from './CourseDetailsPage.module.css';
 
 const CourseDetailsPage = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const { requireAuth } = useAuthGuard();
   const { selectedCourse, isLoading, error } = useSelector((state) => state.courses);
+  const { units, unitLessons, loading: unitsLoading } = useSelector((state) => state.units);
+  const [expandedUnits, setExpandedUnits] = useState({});
+  const [loadingUnits, setLoadingUnits] = useState({}); // Track loading state for individual units
 
   useEffect(() => {
     if (id) {
       dispatch(fetchCourseById(id));
+      dispatch(fetchUnits(id));
     }
   }, [dispatch, id]);
 
-  if (isLoading) {
+  const handleEnrollClick = (e) => {
+    e.preventDefault();
+    requireAuth(() => {
+      window.location.href = `/enrollment/${id}`;
+    }, "Please login to enroll in this course");
+  };
+
+  const toggleUnit = async (unitId) => {
+    const isExpanding = !expandedUnits[unitId];
+    
+    setExpandedUnits(prev => ({
+      ...prev,
+      [unitId]: isExpanding
+    }));
+
+    // Fetch unit details with lessons if expanding and not already loaded
+    if (isExpanding && !unitLessons[unitId]) {
+      // Set loading state for this specific unit
+      setLoadingUnits(prev => ({
+        ...prev,
+        [unitId]: true
+      }));
+
+      try {
+        await dispatch(fetchUnitById(unitId));
+      } finally {
+        // Remove loading state for this unit
+        setLoadingUnits(prev => ({
+          ...prev,
+          [unitId]: false
+        }));
+      }
+    }
+  };
+
+  const getUnitLessons = (unitId) => {
+    return unitLessons[unitId] || [];
+  };
+
+  const getTotalLessons = () => {
+    return Object.values(unitLessons).reduce((total, lessons) => total + lessons.length, 0);
+  };
+
+  const getCompletedLessons = () => {
+    return Object.values(unitLessons).reduce((total, lessons) => {
+      return total + lessons.filter(lesson => lesson.completed).length;
+    }, 0);
+  };
+
+  // Only show page loading for initial course and units load
+  if (isLoading || (unitsLoading && !units.length)) {
     return (
       <div className={styles.courseDetailsPage}>
         <div className={styles.loading}>
@@ -96,12 +154,6 @@ const CourseDetailsPage = () => {
               <div className={styles.courseStats}>
                 <div className={styles.statItem}>
                   <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                  </svg>
-                  <span>{course.rating || 'New'} Rating</span>
-                </div>
-                <div className={styles.statItem}>
-                  <svg viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
                   </svg>
                   <span>{course.duration || 'Self-paced'}</span>
@@ -110,7 +162,13 @@ const CourseDetailsPage = () => {
                   <svg viewBox="0 0 24 24" fill="currentColor">
                     <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-1 16H9V7h9v14z"/>
                   </svg>
-                  <span>{course.units?.length || 0} Units</span>
+                  <span>{units?.length || 0} Units</span>
+                </div>
+                <div className={styles.statItem}>
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+                  </svg>
+                  <span>{getTotalLessons()} Lessons</span>
                 </div>
               </div>
               
@@ -159,22 +217,116 @@ const CourseDetailsPage = () => {
               </div>
 
               <div className={styles.section}>
-                <h2>Course Curriculum</h2>
-                {course.units && course.units.length > 0 ? (
+                <h2>Course Content</h2>
+                <div className={styles.curriculumHeader}>
+                  <p className={styles.curriculumStats}>
+                    {units?.length || 0} sections • {getTotalLessons()} lectures
+                  </p>
+                </div>
+                
+                {units && units.length > 0 ? (
                   <div className={styles.curriculum}>
-                    {course.units.map((unit, index) => (
-                      <div key={index} className={styles.curriculumItem}>
-                        <div className={styles.unitNumber}>{index + 1}</div>
-                        <div className={styles.unitContent}>
-                          <h4>{unit.title}</h4>
-                          <p>{unit.description}</p>
+                    {units.map((unit, index) => (
+                      <div key={unit._id} className={styles.curriculumItem}>
+                        <div 
+                          className={styles.unitHeader} 
+                          onClick={() => toggleUnit(unit._id)}
+                        >
+                          <div className={styles.unitHeaderLeft}>
+                            <span className={styles.expandIcon}>
+                              {expandedUnits[unit._id] ? '▼' : '▶'}
+                            </span>
+                            <div className={styles.unitInfo}>
+                              <h4 className={styles.unitTitle}>
+                                Section {index + 1}: {unit.title}
+                              </h4>
+                              <p className={styles.unitMeta}>
+                                {getUnitLessons(unit._id).length} lectures
+                                {unit.lock && (
+                                  <span className={styles.lockBadge}>
+                                    🔒 Locked
+                                  </span>
+                                )}
+                              </p>
+                            </div>
+                          </div>
+                          <div className={styles.unitHeaderRight}>
+                            {loadingUnits[unit._id] ? (
+                              <div className={styles.unitLoadingSpinner}></div>
+                            ) : unit.lock ? (
+                              <span className={styles.lockIcon} title="This section is locked">🔒</span>
+                            ) : (
+                              <span className={styles.unlockIcon} title="This section is available">🔓</span>
+                            )}
+                          </div>
                         </div>
+                        
+                        {expandedUnits[unit._id] && (
+                          <div className={styles.unitContent}>
+                            <div className={styles.unitDescription}>
+                              <p>{unit.description}</p>
+                              {unit.topic && unit.topic.length > 0 && (
+                                <div className={styles.unitTopics}>
+                                  <strong>Topics covered: </strong>
+                                  {unit.topic.join(', ')}
+                                </div>
+                              )}
+                            </div>
+                            
+                            {loadingUnits[unit._id] ? (
+                              <div className={styles.unitLoading}>
+                                <div className={styles.unitLoadingContent}>
+                                  <div className={styles.unitLoadingSpinner}></div>
+                                  <p>Loading lessons...</p>
+                                </div>
+                              </div>
+                            ) : getUnitLessons(unit._id).length > 0 ? (
+                              <div className={styles.lessonsList}>
+                                {[...getUnitLessons(unit._id)]
+                                  .sort((a, b) => (a.order || 0) - (b.order || 0))
+                                  .map((lesson, lessonIndex) => (
+                                    <div key={lesson._id} className={styles.lessonItem}>
+                                      <div className={styles.lessonLeft}>
+                                        <span className={styles.lessonIcon}>
+                                          {lesson.islocked ? '🔒' : '▶️'}
+                                        </span>
+                                        <div className={styles.lessonInfo}>
+                                          <h6 className={styles.lessonTitle}>
+                                            {lesson.order || lessonIndex + 1}. {lesson.title}
+                                          </h6>
+                                          {lesson.description && (
+                                            <p className={styles.lessonDescription}>
+                                              {lesson.description}
+                                            </p>
+                                          )}
+                                        </div>
+                                      </div>
+                                      <div className={styles.lessonRight}>
+                                        {lesson.duration && (
+                                          <span className={styles.lessonDuration}>
+                                            {lesson.duration}
+                                          </span>
+                                        )}
+                                        {lesson.islocked && (
+                                          <span className={styles.lockedBadge}>Locked</span>
+                                        )}
+                                      </div>
+                                    </div>
+                                  ))}
+                              </div>
+                            ) : (
+                              <div className={styles.noLessons}>
+                                <p>No lessons available for this section yet.</p>
+                              </div>
+                            )}
+                          </div>
+                        )}
                       </div>
                     ))}
                   </div>
                 ) : (
                   <div className={styles.noCurriculum}>
-                    <p>Curriculum details will be available soon.</p>
+                    <p>Course content will be available soon.</p>
                   </div>
                 )}
               </div>
@@ -193,21 +345,27 @@ const CourseDetailsPage = () => {
               <div className={styles.enrollmentCard}>
                 <div className={styles.priceSection}>
                   <div className={styles.price}>
-                    ${course.price || 'Free'}
+                    {formatPrice(course.price)}
                   </div>
-                  {course.price && (
-                    <div className={styles.originalPrice}>
-                      ${Math.round(course.price * 1.3)}
-                    </div>
-                  )}
                 </div>
 
-                <Link 
-                  to={`/enrollment/${course._id}`}
-                  className={styles.enrollButton}
+                <AuthGuard
+                  fallback={
+                    <button 
+                      className={`${styles.enrollButton} ${styles.loginRequired}`}
+                      onClick={handleEnrollClick}
+                    >
+                      Login to Enroll
+                    </button>
+                  }
                 >
-                  Enroll Now
-                </Link>
+                  <Link 
+                    to={`/enrollment/${course._id}`}
+                    className={styles.enrollButton}
+                  >
+                    Enroll Now
+                  </Link>
+                </AuthGuard>
 
                 <div className={styles.courseFeatures}>
                   <div className={styles.feature}>

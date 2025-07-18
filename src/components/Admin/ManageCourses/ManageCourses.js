@@ -488,7 +488,6 @@ const ManageCourses = () => {
                 <th>Course Details</th>
                 <th>Instructor</th>
                 <th>Students</th>
-                <th>Rating</th>
                 <th>Status</th>
                 <th>Actions</th>
               </tr>
@@ -539,11 +538,6 @@ const ManageCourses = () => {
                   </td>
                   <td className={styles.studentsCell}>
                     <span className={styles.studentsCount}>{course.students || 0}</span>
-                  </td>
-                  <td className={styles.ratingCell}>
-                    <div className={styles.rating}>
-                      <span className={styles.ratingValue}>⭐ {course.rating || 'N/A'}</span>
-                    </div>
                   </td>
                   <td className={styles.statusCell}>
                     {getStatusBadge(course.status)}

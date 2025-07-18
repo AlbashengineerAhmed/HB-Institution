@@ -1,80 +1,39 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import styles from './ProfilePage.module.css';
-import RoleSwitcher from '../../components/RoleSwitcher/RoleSwitcher';
 
 const ProfilePage = () => {
   const navigate = useNavigate();
-  const [currentRole, setCurrentRole] = useState('student');
+  const { user } = useSelector((state) => state.auth);
   
-  // Mock user data based on role
-  const getUserData = (role) => {
-    const baseData = {
-      id: 1,
-      role: role,
-      profilePicture: '/images/default-avatar.jpg',
-      fullName: role === 'student' ? 'Ahmed Mohammed' : role === 'instructor' ? 'Dr. Sarah Ahmed' : 'Admin User',
-      email: role === 'student' ? 'ahmed.mohammed@email.com' : role === 'instructor' ? 'sarah.ahmed@hbi.edu' : 'admin@hbi.edu',
-      phone: '+1-555-0123',
-      gender: role === 'instructor' ? 'female' : 'male',
-      country: 'Saudi Arabia',
-      bio: role === 'student' ? 'Passionate about Islamic studies and seeking knowledge.' : 
-           role === 'instructor' ? 'Experienced educator in Islamic Finance with 8 years of teaching experience.' :
-           'System administrator managing the HB Institution platform.'
-    };
-
-    if (role === 'student') {
-      return {
-        ...baseData,
-        enrolledCourses: [
-          { id: 1, name: 'Advanced Islamic Studies', progress: 75, instructor: 'Dr. Ahmed Hassan' },
-          { id: 2, name: 'Arabic Language Fundamentals', progress: 60, instructor: 'Prof. Fatima Al-Zahra' },
-          { id: 3, name: 'Islamic Finance Principles', progress: 30, instructor: 'Dr. Sarah Ahmed' }
-        ]
-      };
-    }
-
-    if (role === 'instructor') {
-      return {
-        ...baseData,
-        specialty: 'Islamic Finance',
-        certifications: [
-          { name: 'PhD in Islamic Finance', file: 'phd-certificate.pdf' },
-          { name: 'Teaching Certificate', file: 'teaching-cert.pdf' },
-          { name: 'Sharia Compliance Certification', file: 'sharia-cert.pdf' }
-        ],
-        experience: '8 years',
-        socialLinks: {
-          linkedin: 'https://linkedin.com/in/sarah-ahmed',
-          youtube: 'https://youtube.com/c/islamic-finance-studies'
-        },
-        teachingSubjects: ['Islamic Finance', 'Sharia Compliance', 'Islamic Banking'],
-        ownCourses: [
-          { id: 1, name: 'Islamic Finance Principles', students: 45, status: 'active' },
-          { id: 2, name: 'Advanced Islamic Banking', students: 32, status: 'active' },
-          { id: 3, name: 'Sharia Compliance in Business', students: 28, status: 'pending' }
-        ]
-      };
-    }
-
-    if (role === 'admin') {
-      return {
-        ...baseData,
-        adminLevel: 'Super Admin',
-        permissions: ['User Management', 'Course Management', 'System Settings', 'Reports'],
-        lastLogin: '2024-01-21 10:30 AM'
-      };
-    }
-
-    return baseData;
+  // Use real user data from Redux store
+  const currentUser = {
+    id: user?.id || user?._id,
+    role: user?.role || 'student',
+    profilePicture: user?.profilePicture || '/images/default-avatar.jpg',
+    fullName: user?.firstName && user?.lastName ? `${user.firstName} ${user.lastName}` : user?.fullName || 'User',
+    email: user?.email || '',
+    phone: user?.phone || '',
+    gender: user?.gender || 'male',
+    country: user?.country || '',
+    bio: user?.bio || '',
+    // Instructor specific fields
+    specialty: user?.specialty || '',
+    experience: user?.experience || '',
+    socialLinks: user?.socialLinks || {},
+    teachingSubjects: user?.teachingSubjects || [],
+    certifications: user?.certifications || [],
+    // Admin specific fields
+    adminLevel: user?.adminLevel || 'Administrator',
+    permissions: user?.permissions || [],
+    lastLogin: user?.lastLogin || new Date().toLocaleString()
   };
-
-  const [currentUser, setCurrentUser] = useState(getUserData('student'));
 
   const [formData, setFormData] = useState({
     fullName: currentUser.fullName,
     email: currentUser.email,
-    phone: currentUser.phone || '',
+    phone: currentUser.phone,
     gender: currentUser.gender,
     country: currentUser.country,
     bio: currentUser.bio,
@@ -82,45 +41,37 @@ const ProfilePage = () => {
     newPassword: '',
     confirmPassword: '',
     // Instructor specific
-    specialty: currentUser.specialty || '',
-    experience: currentUser.experience || '',
+    specialty: currentUser.specialty,
+    experience: currentUser.experience,
     linkedin: currentUser.socialLinks?.linkedin || '',
     youtube: currentUser.socialLinks?.youtube || '',
-    teachingSubjects: currentUser.teachingSubjects?.join(', ') || ''
+    teachingSubjects: Array.isArray(currentUser.teachingSubjects) ? currentUser.teachingSubjects.join(', ') : ''
   });
 
   const [activeTab, setActiveTab] = useState('basic');
   const [isEditing, setIsEditing] = useState(false);
   const [profileImage, setProfileImage] = useState(currentUser.profilePicture);
 
-  // Update user data when role changes
+  // Update form data when user data changes
   useEffect(() => {
-    const newUserData = getUserData(currentRole);
-    setCurrentUser(newUserData);
     setFormData({
-      fullName: newUserData.fullName,
-      email: newUserData.email,
-      phone: newUserData.phone || '',
-      gender: newUserData.gender,
-      country: newUserData.country,
-      bio: newUserData.bio,
+      fullName: currentUser.fullName,
+      email: currentUser.email,
+      phone: currentUser.phone,
+      gender: currentUser.gender,
+      country: currentUser.country,
+      bio: currentUser.bio,
       currentPassword: '',
       newPassword: '',
       confirmPassword: '',
-      specialty: newUserData.specialty || '',
-      experience: newUserData.experience || '',
-      linkedin: newUserData.socialLinks?.linkedin || '',
-      youtube: newUserData.socialLinks?.youtube || '',
-      teachingSubjects: newUserData.teachingSubjects?.join(', ') || ''
+      specialty: currentUser.specialty,
+      experience: currentUser.experience,
+      linkedin: currentUser.socialLinks?.linkedin || '',
+      youtube: currentUser.socialLinks?.youtube || '',
+      teachingSubjects: Array.isArray(currentUser.teachingSubjects) ? currentUser.teachingSubjects.join(', ') : ''
     });
-    setProfileImage(newUserData.profilePicture);
-    setActiveTab('basic');
-    setIsEditing(false);
-  }, [currentRole]);
-
-  const handleRoleChange = (newRole) => {
-    setCurrentRole(newRole);
-  };
+    setProfileImage(currentUser.profilePicture);
+  }, [user]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -145,25 +96,26 @@ const ProfilePage = () => {
     e.preventDefault();
     console.log('Saving profile data:', formData);
     setIsEditing(false);
-    // In real app, this would make API call to update profile
+    // TODO: Implement API call to update profile
+    // dispatch(updateProfile(formData));
   };
 
   const handleCancel = () => {
     setFormData({
       fullName: currentUser.fullName,
       email: currentUser.email,
-      phone: currentUser.phone || '',
+      phone: currentUser.phone,
       gender: currentUser.gender,
       country: currentUser.country,
       bio: currentUser.bio,
       currentPassword: '',
       newPassword: '',
       confirmPassword: '',
-      specialty: currentUser.specialty || '',
-      experience: currentUser.experience || '',
+      specialty: currentUser.specialty,
+      experience: currentUser.experience,
       linkedin: currentUser.socialLinks?.linkedin || '',
       youtube: currentUser.socialLinks?.youtube || '',
-      teachingSubjects: currentUser.teachingSubjects?.join(', ') || ''
+      teachingSubjects: Array.isArray(currentUser.teachingSubjects) ? currentUser.teachingSubjects.join(', ') : ''
     });
     setIsEditing(false);
     setProfileImage(currentUser.profilePicture);
@@ -194,9 +146,6 @@ const ProfilePage = () => {
 
   return (
     <div className={styles.profilePage}>
-      {/* Role Switcher for Demo */}
-      <RoleSwitcher currentRole={currentRole} onRoleChange={handleRoleChange} />
-      
       <div className={styles.container}>
         {/* Profile Header */}
         <div className={styles.profileHeader}>
@@ -503,45 +452,12 @@ const ProfilePage = () => {
                 {currentUser.role === 'student' ? 'Enrolled Courses' : 'My Courses'}
               </h3>
               
-              {currentUser.role === 'student' && (
-                <div className={styles.coursesList}>
-                  {currentUser.enrolledCourses?.map((course) => (
-                    <div key={course.id} className={styles.courseCard}>
-                      <div className={styles.courseInfo}>
-                        <h4 className={styles.courseName}>{course.name}</h4>
-                        <p className={styles.courseInstructor}>Instructor: {course.instructor}</p>
-                      </div>
-                      <div className={styles.courseProgress}>
-                        <div className={styles.progressBar}>
-                          <div 
-                            className={styles.progressFill}
-                            style={{ width: `${course.progress}%` }}
-                          ></div>
-                        </div>
-                        <span className={styles.progressText}>{course.progress}% Complete</span>
-                      </div>
-                    </div>
-                  ))}
+              <div className={styles.coursesList}>
+                <div className={styles.noCoursesMessage}>
+                  <p>No courses available at the moment.</p>
+                  <p>Course data will be loaded from your dashboard.</p>
                 </div>
-              )}
-              
-              {currentUser.role === 'instructor' && (
-                <div className={styles.coursesList}>
-                  {currentUser.ownCourses?.map((course) => (
-                    <div key={course.id} className={styles.courseCard}>
-                      <div className={styles.courseInfo}>
-                        <h4 className={styles.courseName}>{course.name}</h4>
-                        <p className={styles.courseStudents}>{course.students} Students Enrolled</p>
-                      </div>
-                      <div className={styles.courseStatus}>
-                        <span className={`${styles.statusBadge} ${styles[course.status]}`}>
-                          {course.status.charAt(0).toUpperCase() + course.status.slice(1)}
-                        </span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
+              </div>
             </div>
           )}
 
@@ -552,13 +468,13 @@ const ProfilePage = () => {
                 <div className={styles.infoCard}>
                   <h4 className={styles.infoTitle}>Role & Permissions</h4>
                   <p className={styles.infoText}>
-                    <strong>Role:</strong> {currentUser.adminLevel || 'Administrator'}
+                    <strong>Role:</strong> {currentUser.adminLevel}
                   </p>
                   <p className={styles.infoText}>
                     <strong>Permissions:</strong> {currentUser.permissions?.join(', ') || 'Full system access'}
                   </p>
                   <p className={styles.infoText}>
-                    <strong>Last Login:</strong> {currentUser.lastLogin || 'Today'}
+                    <strong>Last Login:</strong> {currentUser.lastLogin}
                   </p>
                   <p className={styles.infoNote}>
                     Role and permissions are managed by system administrators and cannot be modified here.

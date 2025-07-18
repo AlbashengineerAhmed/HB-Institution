@@ -124,10 +124,12 @@
   justify-content: center;
   background-color: rgba(var(--primary-color-rgb), 0.1);
   border-radius: 50%;
+  flex-shrink: 0;
 }
 
 .activityContent {
   flex: 1;
+  min-width: 0;
 }
 
 .activityMessage {
@@ -148,6 +150,7 @@
   font-size: 0.75rem;
   font-weight: 500;
   text-transform: capitalize;
+  white-space: nowrap;
 }
 
 .activityStatus.pending {
@@ -204,6 +207,7 @@
   font-weight: 500;
   cursor: pointer;
   transition: var(--transition);
+  text-align: left;
 }
 
 .quickActionBtn:hover {
@@ -217,9 +221,10 @@
 }
 
 /* Responsive Design */
-@media (max-width: 1024px) {
-  .chartsSection {
-    grid-template-columns: 1fr;
+@media (max-width: 1200px) {
+  .statsGrid {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.25rem;
   }
   
   .quickActionsGrid {
@@ -227,10 +232,46 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
+  .dashboardOverview {
+    gap: 1.5rem;
+  }
+
+  .chartsSection {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
   .statsGrid {
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 1rem;
+  }
+  
+  .quickActionsGrid {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  }
+
+  .chartContainer,
+  .activitiesContainer,
+  .quickActions {
+    padding: 1.25rem;
+  }
+
+  .chartTitle,
+  .activitiesTitle,
+  .quickActionsTitle {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboardOverview {
+    gap: 1rem;
+  }
+
+  .statsGrid {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.75rem;
   }
   
   .chartContainer,
@@ -239,11 +280,133 @@
     padding: 1rem;
   }
   
+  .chartHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .activitiesHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
   .quickActionsGrid {
     grid-template-columns: 1fr;
+    gap: 0.75rem;
   }
   
   .activityItem {
     padding: 0.75rem;
+    gap: 0.75rem;
+  }
+
+  .activityIcon {
+    width: 35px;
+    height: 35px;
+    font-size: 1.25rem;
+  }
+
+  .activityMessage {
+    font-size: 0.8rem;
+  }
+
+  .activityTime {
+    font-size: 0.7rem;
+  }
+
+  .activityStatus {
+    padding: 0.2rem 0.6rem;
+    font-size: 0.7rem;
+  }
+
+  .quickActionBtn {
+    padding: 0.875rem;
+    gap: 0.5rem;
+  }
+
+  .quickActionIcon {
+    font-size: 1.1rem;
+  }
+
+  .chartFilter {
+    width: 100%;
+    padding: 0.75rem 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .statsGrid {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+  
+  .chartContainer,
+  .activitiesContainer,
+  .quickActions {
+    padding: 0.75rem;
+  }
+
+  .chartTitle,
+  .activitiesTitle,
+  .quickActionsTitle {
+    font-size: 1rem;
+  }
+
+  .activityItem {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0.5rem;
+    gap: 0.5rem;
+  }
+
+  .activityIcon {
+    width: 30px;
+    height: 30px;
+    font-size: 1rem;
+  }
+
+  .activityContent {
+    width: 100%;
+  }
+
+  .activityMessage {
+    font-size: 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .activityStatus {
+    align-self: flex-end;
+  }
+
+  .quickActionBtn {
+    padding: 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  .quickActionIcon {
+    font-size: 1rem;
+  }
+
+  .viewAllBtn {
+    font-size: 0.8rem;
+  }
+}
+
+/* Touch-friendly improvements for mobile */
+@media (max-width: 768px) and (pointer: coarse) {
+  .quickActionBtn {
+    min-height: 48px;
+    padding: 1rem;
+  }
+
+  .viewAllBtn {
+    min-height: 44px;
+    padding: 0.5rem 1rem;
+  }
+
+  .chartFilter {
+    min-height: 44px;
   }
 }

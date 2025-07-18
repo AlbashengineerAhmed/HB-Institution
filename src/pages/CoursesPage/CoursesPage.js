@@ -3,11 +3,14 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCourses, setSearchTerm, setSelectedCategory, filterCourses } from '../../store/slices/courseSlice';
 import { fetchCategories } from '../../store/slices/categorySlice';
+import { formatPrice } from '../../utils/priceUtils';
+import AuthGuard, { useAuthGuard } from '../../components/AuthGuard/AuthGuard';
 import styles from './CoursesPage.module.css';
 
 const CoursesPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const dispatch = useDispatch();
+  const { requireAuth } = useAuthGuard();
   
   const { 
     courses, 
@@ -47,6 +50,13 @@ const CoursesPage = () => {
 
   const handleSearchChange = (e) => {
     dispatch(setSearchTerm(e.target.value));
+  };
+
+  const handleEnrollClick = (e, courseId) => {
+    e.preventDefault();
+    requireAuth(() => {
+      window.location.href = `/course/${courseId}`;
+    }, "Please login to enroll in courses");
   };
 
   if (isLoading) {
@@ -154,11 +164,7 @@ const CoursesPage = () => {
           ) : (
             <div className={styles.coursesGrid}>
               {filteredCourses.map(course => (
-                <Link 
-                  key={course._id} 
-                  to={`/course/${course._id}`} 
-                  className={styles.courseCard}
-                >
+                <div key={course._id} className={styles.courseCard}>
                   <div className={styles.courseImageContainer}>
                     <img 
                       src={course.image || '/images/course-placeholder.jpg'} 
@@ -191,23 +197,31 @@ const CoursesPage = () => {
                         </svg>
                         {course.duration || 'Self-paced'}
                       </div>
-                      <div className={styles.courseRating}>
-                        <svg viewBox="0 0 24 24" fill="currentColor">
-                          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                        </svg>
-                        {course.rating || 'New'}
-                      </div>
                     </div>
                     <div className={styles.courseFooter}>
                       <div className={styles.coursePrice}>
-                        ${course.price || 'Free'}
+                        {formatPrice(course.price)}
                       </div>
-                      <div className={styles.enrollButton}>
-                        Enroll Now
-                      </div>
+                      <AuthGuard
+                        fallback={
+                          <button 
+                            className={`${styles.enrollButton} ${styles.loginRequired}`}
+                            onClick={(e) => handleEnrollClick(e, course._id)}
+                          >
+                            Login to Enroll
+                          </button>
+                        }
+                      >
+                        <Link 
+                          to={`/course/${course._id}`} 
+                          className={styles.enrollButton}
+                        >
+                          Enroll Now
+                        </Link>
+                      </AuthGuard>
                     </div>
                   </div>
-                </Link>
+                </div>
               ))}
             </div>
           )}

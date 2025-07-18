@@ -8,6 +8,8 @@ import './styles/global.css';
 import 'react-toastify/dist/ReactToastify.css';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
+import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
+import { ROLES } from './utils/roleUtils';
 import HomePage from './pages/HomePage/HomePage';
 import AboutPage from './pages/AboutPage/AboutPage';
 import CommunityPage from './pages/CommunityPage/CommunityPage';
@@ -34,8 +36,9 @@ import EnrollmentSuccessPage from './pages/EnrollmentSuccessPage/EnrollmentSucce
 // Admin Pages
 import AdminDashboard from './pages/AdminDashboard/AdminDashboard';
 
-// Profile Page
+// Profile & Settings Pages
 import ProfilePage from './pages/ProfilePage/ProfilePage';
+import SettingsPage from './pages/SettingsPage/SettingsPage';
 
 // Dashboard Pages
 import InstructorDashboard from './pages/InstructorDashboard/InstructorDashboard';
@@ -60,7 +63,8 @@ const AppContent = () => {
     '/admin',
     '/instructor-dashboard',
     '/student-dashboard',
-    '/profile'
+    '/profile',
+    '/settings'
   ];
 
   // Check if current route is a dashboard
@@ -85,8 +89,22 @@ const AppContent = () => {
           {/* Course Routes */}
           <Route path="/courses" element={<CoursesPage />} />
           <Route path="/course/:id" element={<CourseDetailsPage />} />
-          <Route path="/enrollment/:courseId" element={<EnrollmentPage />} />
-          <Route path="/enrollment-success/:courseId" element={<EnrollmentSuccessPage />} />
+          <Route 
+            path="/enrollment/:courseId" 
+            element={
+              <ProtectedRoute>
+                <EnrollmentPage />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/enrollment-success/:courseId" 
+            element={
+              <ProtectedRoute>
+                <EnrollmentSuccessPage />
+              </ProtectedRoute>
+            } 
+          />
           
           {/* Auth Routes */}
           <Route path="/login" element={<LoginPage />} />
@@ -95,15 +113,53 @@ const AppContent = () => {
           <Route path="/verify-code" element={<VerifyCodePage />} />
           <Route path="/reset-password" element={<ResetPasswordPage />} />
           
-          {/* Profile Route */}
-          <Route path="/profile" element={<ProfilePage />} />
+          {/* Profile Route - Protected */}
+          <Route 
+            path="/profile" 
+            element={
+              <ProtectedRoute>
+                <ProfilePage />
+              </ProtectedRoute>
+            } 
+          />
           
-          {/* Dashboard Routes */}
-          <Route path="/instructor-dashboard" element={<InstructorDashboard />} />
-          <Route path="/student-dashboard" element={<StudentDashboard />} />
+          {/* Settings Route - Protected */}
+          <Route 
+            path="/settings" 
+            element={
+              <ProtectedRoute>
+                <SettingsPage />
+              </ProtectedRoute>
+            } 
+          />
           
-          {/* Admin Routes */}
-          <Route path="/admin" element={<AdminDashboard />} />
+          {/* Dashboard Routes - Role Protected */}
+          <Route 
+            path="/student-dashboard" 
+            element={
+              <ProtectedRoute allowedRoles={[ROLES.STUDENT]}>
+                <StudentDashboard />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/instructor-dashboard" 
+            element={
+              <ProtectedRoute allowedRoles={[ROLES.INSTRUCTOR]}>
+                <InstructorDashboard />
+              </ProtectedRoute>
+            } 
+          />
+          
+          {/* Admin Routes - Admin Only */}
+          <Route 
+            path="/admin" 
+            element={
+              <ProtectedRoute allowedRoles={[ROLES.ADMIN]}>
+                <AdminDashboard />
+              </ProtectedRoute>
+            } 
+          />
         </Routes>
       </main>
       

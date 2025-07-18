@@ -7,7 +7,6 @@ const API_BASE_URL = 'https://hb-institution.vercel.app/api/v1';
 // Create axios instance
 const api = axios.create({
   baseURL: API_BASE_URL,
-  timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -28,7 +27,8 @@ api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('authToken');
     if (token) {
-      config.headers.authorization = `Bearer ${token}`;
+      const bearerToken = token.startsWith('Bearer ') ? token : `Bearer ${token}`;
+      config.headers.authorization = bearerToken;
     }
     return config;
   },
@@ -50,6 +50,20 @@ export const fetchUnits = createAsyncThunk(
       return response.data;
     } catch (error) {
       const errorMessage = getErrorMessage(error, 'Failed to fetch units');
+      toast.error(errorMessage);
+      return rejectWithValue(errorMessage);
+    }
+  }
+);
+
+export const fetchUnitById = createAsyncThunk(
+  'units/fetchUnitById',
+  async (unitId, { rejectWithValue }) => {
+    try {
+      const response = await api.get(`/unit/${unitId}`);
+      return { unitId, ...response.data };
+    } catch (error) {
+      const errorMessage = getErrorMessage(error, 'Failed to fetch unit details');
       toast.error(errorMessage);
       return rejectWithValue(errorMessage);
     }
@@ -104,6 +118,8 @@ export const deleteUnit = createAsyncThunk(
 // Initial state
 const initialState = {
   units: [],
+  selectedUnit: null,
+  unitLessons: {}, // Store lessons for each unit by unitId
   loading: false,
   error: null,
   selectedCourse: null,
@@ -115,9 +131,13 @@ const unitSlice = createSlice({
   reducers: {
     clearUnits: (state) => {
       state.units = [];
+      state.unitLessons = {};
     },
     setSelectedCourse: (state, action) => {
       state.selectedCourse = action.payload;
+    },
+    setSelectedUnit: (state, action) => {
+      state.selectedUnit = action.payload;
     },
     clearError: (state) => {
       state.error = null;
@@ -139,6 +159,28 @@ const unitSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
         state.units = [];
+      })
+      
+      // Fetch unit by ID with lessons
+      .addCase(fetchUnitById.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchUnitById.fulfilled, (state, action) => {
+        state.loading = false;
+        const { unitId, data } = action.payload;
+        
+        if (data && data.unit) {
+          state.selectedUnit = data.unit;
+          // Store lessons for this unit
+          state.unitLessons[unitId] = data.lessons || [];
+        }
+        state.error = null;
+      })
+      .addCase(fetchUnitById.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+        state.selectedUnit = null;
       })
       
       // Create unit
@@ -184,7 +226,10 @@ const unitSlice = createSlice({
       })
       .addCase(deleteUnit.fulfilled, (state, action) => {
         state.loading = false;
-        state.units = state.units.filter(unit => unit._id !== action.payload);
+        const deletedUnitId = action.payload;
+        state.units = state.units.filter(unit => unit._id !== deletedUnitId);
+        // Remove lessons for deleted unit
+        delete state.unitLessons[deletedUnitId];
         state.error = null;
       })
       .addCase(deleteUnit.rejected, (state, action) => {
@@ -194,5 +239,5 @@ const unitSlice = createSlice({
   },
 });
 
-export const { clearUnits, setSelectedCourse, clearError } = unitSlice.actions;
+export const { clearUnits, setSelectedCourse, setSelectedUnit, clearError } = unitSlice.actions;
 export default unitSlice.reducer;

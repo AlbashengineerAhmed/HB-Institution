@@ -7,7 +7,6 @@ const API_BASE_URL = 'https://hb-institution.vercel.app/api/v1';
 // Create axios instance
 const api = axios.create({
   baseURL: API_BASE_URL,
-  timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -28,7 +27,8 @@ api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('authToken');
     if (token) {
-      config.headers.authorization = `Bearer ${token}`;
+      const bearerToken = token.startsWith('Bearer ') ? token : `Bearer ${token}`;
+      config.headers.authorization = bearerToken;
     }
     return config;
   },

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser, clearError } from '../../store/slices/authSlice';
+import { getDashboardRoute } from '../../utils/roleUtils';
 import styles from './AuthPages.module.css';
 import logo from '../../assets/images/logo-black.webp';
 // Using register.png for the auth page image
@@ -10,18 +11,29 @@ const authImage = process.env.PUBLIC_URL + '/images/register.png';
 const LoginPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isLoading, error, isAuthenticated } = useSelector((state) => state.auth);
+  const location = useLocation();
+  const { isLoading, error, isAuthenticated, user } = useSelector((state) => state.auth);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [validationErrors, setValidationErrors] = useState({});
 
+  // Get the intended destination from location state or default to role-based dashboard
+  const from = location.state?.from?.pathname;
+
   useEffect(() => {
-    if (isAuthenticated) {
-      navigate('/');
+    if (isAuthenticated && user) {
+      // If there's a specific page they were trying to access, go there
+      if (from && from !== '/login') {
+        navigate(from, { replace: true });
+      } else {
+        // Otherwise, redirect to their role-specific dashboard
+        const dashboardRoute = getDashboardRoute(user.role);
+        navigate(dashboardRoute, { replace: true });
+      }
     }
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, user, navigate, from]);
 
   useEffect(() => {
     // Clear errors when component mounts
@@ -56,7 +68,7 @@ const LoginPage = () => {
         email: email.trim(), 
         password 
       })).unwrap();
-      navigate('/');
+      // Navigation is handled in useEffect after successful login
     } catch (error) {
       // Error is handled by Redux and displayed in the UI
       console.error('Login failed:', error);

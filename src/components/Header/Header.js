@@ -2,12 +2,16 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../../store/slices/authSlice';
+import { getDashboardLink, getRoleDisplayName } from '../../utils/roleUtils';
 import styles from './Header.module.css';
 
 const Header = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { isAuthenticated, user } = useSelector((state) => state.auth);
+  
+  // Get dashboard link based on user role
+  const dashboardLink = getDashboardLink(user?.role);
   
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -184,17 +188,25 @@ const Header = () => {
                   <div className={styles.userDetails}>
                     <h4>{user?.firstName} {user?.lastName}</h4>
                     <p>{user?.email}</p>
-                    <span className={styles.userRole}>{user?.role || 'Student'}</span>
+                    <span className={styles.userRole}>{getRoleDisplayName(user?.role)}</span>
                   </div>
                 </div>
                 <div className={styles.userActions}>
+                  {/* Dashboard Link - Role Based */}
+                  {dashboardLink && (
+                    <Link 
+                      to={dashboardLink.path} 
+                      className={styles.userAction} 
+                      onClick={() => setUserDropdownOpen(false)}
+                    >
+                      <i className={dashboardLink.icon}></i>
+                      {dashboardLink.label}
+                    </Link>
+                  )}
+                  
                   <Link to="/profile" className={styles.userAction} onClick={() => setUserDropdownOpen(false)}>
                     <i className="fas fa-user"></i>
                     Profile
-                  </Link>
-                  <Link to="/courses" className={styles.userAction} onClick={() => setUserDropdownOpen(false)}>
-                    <i className="fas fa-book"></i>
-                    My Courses
                   </Link>
                   <Link to="/settings" className={styles.userAction} onClick={() => setUserDropdownOpen(false)}>
                     <i className="fas fa-cog"></i>

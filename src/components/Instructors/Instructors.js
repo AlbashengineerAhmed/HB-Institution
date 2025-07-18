@@ -1,11 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Slider from 'react-slick';
+import AuthGuard, { useAuthGuard } from '../AuthGuard/AuthGuard';
 import styles from './Instructors.module.css';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
 const Instructors = () => {
+  const { requireAuth } = useAuthGuard();
+
   // Sample instructor data
   const instructors = [
     {
@@ -15,7 +18,6 @@ const Instructors = () => {
       image: '/images/team-2-thumb-1.png',
       courses: 12,
       students: 3500,
-      rating: 4.9,
       bio: 'Experienced educator with over 10 years in teaching advanced programming concepts and software development.',
       socialLinks: {
         twitter: '#',
@@ -32,7 +34,6 @@ const Instructors = () => {
       image: '/images/team-2-thumb-2.png',
       courses: 8,
       students: 2800,
-      rating: 4.8,
       bio: 'Full-stack developer specializing in modern web technologies and responsive design principles.',
       socialLinks: {
         twitter: '#',
@@ -49,7 +50,6 @@ const Instructors = () => {
       image: '/images/team-2-thumb-3.png',
       courses: 10,
       students: 3200,
-      rating: 4.7,
       bio: 'Creative designer with a passion for user experience and interface design across multiple platforms.',
       socialLinks: {
         twitter: '#',
@@ -66,7 +66,6 @@ const Instructors = () => {
       image: '/images/team-2-thumb-4.png',
       courses: 6,
       students: 1800,
-      rating: 4.9,
       bio: 'Data scientist with expertise in machine learning algorithms and statistical analysis for business applications.',
       socialLinks: {
         twitter: '#',
@@ -112,6 +111,12 @@ const Instructors = () => {
         }
       }
     ]
+  };
+
+  const handleViewProfile = (instructorId) => {
+    requireAuth(() => {
+      window.location.href = `/instructor/${instructorId}`;
+    }, "Please login to view instructor profiles");
   };
 
   return (
@@ -166,17 +171,26 @@ const Instructors = () => {
                         <span className={styles.metaIcon}>👥</span>
                         <span className={styles.metaText}>{instructor.students} Students</span>
                       </div>
-                      <div className={styles.instructorRating}>
-                        <span className={styles.metaIcon}>⭐</span>
-                        <span className={styles.metaText}>{instructor.rating}</span>
-                      </div>
                     </div>
                     <div className={styles.instructorExpertise}>
                       {instructor.expertise.map(skill => (
                         <span key={skill} className={styles.expertiseTag}>{skill}</span>
                       ))}
                     </div>
-                    <Link to={`/instructor/${instructor.id}`} className={styles.viewProfileButton}>View Profile</Link>
+                    <AuthGuard
+                      fallback={
+                        <button 
+                          className={`${styles.viewProfileButton} ${styles.loginRequired}`}
+                          onClick={() => handleViewProfile(instructor.id)}
+                        >
+                          Login to View Profile
+                        </button>
+                      }
+                    >
+                      <Link to={`/instructor/${instructor.id}`} className={styles.viewProfileButton}>
+                        View Profile
+                      </Link>
+                    </AuthGuard>
                   </div>
                 </div>
               </div>

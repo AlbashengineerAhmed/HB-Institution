@@ -1,110 +1,105 @@
 import React, { useState } from 'react';
+import { formatPrice } from '../../../utils/priceUtils';
 import styles from './MyCourses.module.css';
 
-const MyCourses = ({ onNewCourse, onEditCourse }) => {
+const MyCourses = ({ onNewCourse, onEditCourse, onManageCourse }) => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState('all');
+  const [levelFilter, setLevelFilter] = useState('all');
 
-  // Mock courses data
-  const coursesData = [
+  // Mock instructor groups data (matches the API structure)
+  const mockGroups = [
     {
-      id: 1,
-      title: 'Islamic Finance Principles',
-      description: 'Comprehensive course covering the fundamentals of Islamic finance, including Sharia-compliant banking, investment principles, and ethical financial practices.',
-      category: 'Finance',
-      level: 'Beginner',
-      duration: '8 weeks',
-      price: 299,
-      status: 'active',
-      studentsEnrolled: 45,
-      rating: 4.8,
-      reviews: 23,
-      createdDate: '2023-09-15',
-      lastUpdated: '2024-01-10',
-      thumbnail: '/images/islamic-finance.jpg',
-      modules: [
-        { id: 1, title: 'Introduction to Islamic Finance', duration: '45 min', completed: true },
-        { id: 2, title: 'Sharia Principles in Banking', duration: '60 min', completed: true },
-        { id: 3, title: 'Islamic Investment Instruments', duration: '55 min', completed: false },
-        { id: 4, title: 'Risk Management in Islamic Finance', duration: '50 min', completed: false }
-      ]
+      _id: "6878f563c737c6b7c5828a55",
+      code: "ENG101-G",
+      level: "Beginner",
+      maxStudents: 30,
+      currentStudents: 15,
+      schedule: [
+        {
+          dayOfWeek: "Monday",
+          startTime: "10:00",
+          endTime: "12:00",
+          timezone: "Africa/Cairo",
+          _id: "6878f563c737c6b7c5828a56"
+        },
+        {
+          dayOfWeek: "Wednesday",
+          startTime: "10:00",
+          endTime: "12:00",
+          timezone: "Africa/Cairo",
+          _id: "6878f563c737c6b7c5828a57"
+        }
+      ],
+      course: {
+        _id: "686a9cb325eb80d09a137780",
+        title: "The Pillars of Iman",
+        duration: "6 weeks",
+        price: 0,
+        image: "https://res.cloudinary.com/dic1zpt8v/image/upload/v1751817395/HB-Institution/Course/The%20Pillars%20of%20Iman/s3u75hjobjxhy3ilt8sy.jpg"
+      }
     },
     {
-      id: 2,
-      title: 'Advanced Islamic Banking',
-      description: 'Deep dive into advanced concepts of Islamic banking including complex financial instruments, regulatory frameworks, and modern applications.',
-      category: 'Finance',
-      level: 'Advanced',
-      duration: '12 weeks',
-      price: 499,
-      status: 'active',
-      studentsEnrolled: 32,
-      rating: 4.9,
-      reviews: 18,
-      createdDate: '2023-10-20',
-      lastUpdated: '2024-01-15',
-      thumbnail: '/images/islamic-banking.jpg',
-      modules: [
-        { id: 1, title: 'Advanced Sharia Compliance', duration: '70 min', completed: true },
-        { id: 2, title: 'Complex Financial Instruments', duration: '80 min', completed: false },
-        { id: 3, title: 'Regulatory Frameworks', duration: '65 min', completed: false }
-      ]
+      _id: "6878f570c737c6b7c5828a5b",
+      code: "JS101-A",
+      level: "Intermediate",
+      maxStudents: 25,
+      currentStudents: 20,
+      schedule: [
+        {
+          dayOfWeek: "Tuesday",
+          startTime: "14:00",
+          endTime: "16:00",
+          timezone: "Africa/Cairo",
+          _id: "6878f570c737c6b7c5828a5c"
+        },
+        {
+          dayOfWeek: "Thursday",
+          startTime: "14:00",
+          endTime: "16:00",
+          timezone: "Africa/Cairo",
+          _id: "6878f570c737c6b7c5828a5d"
+        }
+      ],
+      course: {
+        _id: "686aa649d6a57f9089ba423f",
+        title: "JavaScript Basics",
+        duration: "8 weeks",
+        price: 150,
+        image: "https://res.cloudinary.com/dic1zpt8v/image/upload/v1751819849/HB-Institution/Course/JavaScript%20Basics/lnwigobpsvmihhfx1oa8.jpg"
+      }
     },
     {
-      id: 3,
-      title: 'Sharia Compliance in Business',
-      description: 'Learn how to implement Sharia-compliant practices in modern business operations, covering ethics, contracts, and operational guidelines.',
-      category: 'Business',
-      level: 'Intermediate',
-      duration: '6 weeks',
-      price: 199,
-      status: 'pending',
-      studentsEnrolled: 0,
-      rating: 0,
-      reviews: 0,
-      createdDate: '2024-01-18',
-      lastUpdated: '2024-01-18',
-      thumbnail: '/images/sharia-business.jpg',
-      modules: [
-        { id: 1, title: 'Sharia Business Principles', duration: '40 min', completed: false },
-        { id: 2, title: 'Contract Law in Islam', duration: '50 min', completed: false },
-        { id: 3, title: 'Ethical Business Practices', duration: '45 min', completed: false }
-      ]
+      _id: "6878f580c737c6b7c5828a6c",
+      code: "ADV101-B",
+      level: "Advanced",
+      maxStudents: 20,
+      currentStudents: 8,
+      schedule: [
+        {
+          dayOfWeek: "Saturday",
+          startTime: "09:00",
+          endTime: "11:00",
+          timezone: "Africa/Cairo",
+          _id: "6878f580c737c6b7c5828a6d"
+        }
+      ],
+      course: {
+        _id: "686aa650d6a57f9089ba424a",
+        title: "Advanced Islamic Studies",
+        duration: "12 weeks",
+        price: 200,
+        image: "/images/islamic-studies.jpg"
+      }
     }
   ];
 
-  const filteredCourses = coursesData.filter(course => {
-    const matchesSearch = course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         course.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = statusFilter === 'all' || course.status === statusFilter;
+  const filteredGroups = mockGroups.filter(group => {
+    const course = group.course;
+    const matchesSearch = course.title.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesLevel = levelFilter === 'all' || group.level.toLowerCase() === levelFilter.toLowerCase();
     
-    return matchesSearch && matchesStatus;
+    return matchesSearch && matchesLevel;
   });
-
-  const handleDeleteCourse = (courseId) => {
-    const course = coursesData.find(c => c.id === courseId);
-    if (course && course.status !== 'active') {
-      console.log(`Deleting course ${courseId}`);
-      // In real app, this would delete the course
-    } else {
-      alert('Cannot delete an active course with enrolled students.');
-    }
-  };
-
-  const getStatusBadge = (status) => {
-    const statusClasses = {
-      active: styles.statusActive,
-      pending: styles.statusPending,
-      rejected: styles.statusRejected,
-      draft: styles.statusDraft
-    };
-    
-    return (
-      <span className={`${styles.statusBadge} ${statusClasses[status]}`}>
-        {status.charAt(0).toUpperCase() + status.slice(1)}
-      </span>
-    );
-  };
 
   const getLevelBadge = (level) => {
     const levelClasses = {
@@ -118,6 +113,22 @@ const MyCourses = ({ onNewCourse, onEditCourse }) => {
         {level}
       </span>
     );
+  };
+
+  const formatSchedule = (schedule) => {
+    if (!schedule || schedule.length === 0) return 'No schedule';
+    
+    return schedule.map(s => 
+      `${s.dayOfWeek} ${s.startTime}-${s.endTime}`
+    ).join(', ');
+  };
+
+  const getProgressColor = (currentStudents, maxStudents) => {
+    const percentage = (currentStudents / maxStudents) * 100;
+    if (percentage >= 80) return '#4da6ff';
+    if (percentage >= 60) return '#fdc62c';
+    if (percentage >= 40) return '#feda6a';
+    return '#ff4c4c';
   };
 
   return (
@@ -136,140 +147,128 @@ const MyCourses = ({ onNewCourse, onEditCourse }) => {
         
         <div className={styles.filtersSection}>
           <select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
+            value={levelFilter}
+            onChange={(e) => setLevelFilter(e.target.value)}
             className={styles.filterSelect}
           >
-            <option value="all">All Status</option>
-            <option value="active">Active</option>
-            <option value="pending">Pending Review</option>
-            <option value="draft">Draft</option>
-            <option value="rejected">Rejected</option>
+            <option value="all">All Levels</option>
+            <option value="beginner">Beginner</option>
+            <option value="intermediate">Intermediate</option>
+            <option value="advanced">Advanced</option>
           </select>
         </div>
       </div>
 
       {/* Courses Grid */}
       <div className={styles.coursesGrid}>
-        {filteredCourses.map((course) => (
-          <div key={course.id} className={styles.courseCard}>
+        {filteredGroups.map((group) => (
+          <div key={group._id} className={styles.courseCard}>
             <div className={styles.courseImage}>
               <img 
-                src={course.thumbnail} 
-                alt={course.title}
+                src={group.course.image} 
+                alt={group.course.title}
                 onError={(e) => {
                   e.target.src = '/images/default-course.jpg';
                 }}
               />
               <div className={styles.courseOverlay}>
-                {getStatusBadge(course.status)}
-                {getLevelBadge(course.level)}
+                {getLevelBadge(group.level)}
+                <span className={styles.groupCode}>Code: {group.code}</span>
               </div>
             </div>
             
             <div className={styles.courseContent}>
               <div className={styles.courseHeader}>
-                <h3 className={styles.courseTitle}>{course.title}</h3>
-                <span className={styles.courseCategory}>{course.category}</span>
+                <h3 className={styles.courseTitle}>{group.course.title}</h3>
+                <span className={styles.courseCategory}>Group: {group.code}</span>
               </div>
-              
-              <p className={styles.courseDescription}>{course.description}</p>
               
               <div className={styles.courseStats}>
                 <div className={styles.statItem}>
                   <span className={styles.statIcon}>👥</span>
-                  <span className={styles.statText}>{course.studentsEnrolled} Students</span>
+                  <span className={styles.statText}>{group.currentStudents}/{group.maxStudents} Students</span>
                 </div>
                 <div className={styles.statItem}>
                   <span className={styles.statIcon}>⏱️</span>
-                  <span className={styles.statText}>{course.duration}</span>
+                  <span className={styles.statText}>{group.course.duration}</span>
                 </div>
                 <div className={styles.statItem}>
                   <span className={styles.statIcon}>💰</span>
-                  <span className={styles.statText}>${course.price}</span>
+                  <span className={styles.statText}>{formatPrice(group.course.price)}</span>
                 </div>
-                {course.rating > 0 && (
-                  <div className={styles.statItem}>
-                    <span className={styles.statIcon}>⭐</span>
-                    <span className={styles.statText}>{course.rating} ({course.reviews})</span>
-                  </div>
-                )}
               </div>
-              
-              <div className={styles.courseProgress}>
-                <h4 className={styles.progressTitle}>Course Modules ({course.modules.length})</h4>
-                <div className={styles.modulesList}>
-                  {course.modules.slice(0, 3).map((module) => (
-                    <div key={module.id} className={styles.moduleItem}>
-                      <span className={`${styles.moduleStatus} ${module.completed ? styles.completed : styles.pending}`}>
-                        {module.completed ? '✓' : '○'}
-                      </span>
-                      <span className={styles.moduleTitle}>{module.title}</span>
-                      <span className={styles.moduleDuration}>{module.duration}</span>
-                    </div>
-                  ))}
-                  {course.modules.length > 3 && (
-                    <div className={styles.moreModules}>
-                      +{course.modules.length - 3} more modules
-                    </div>
-                  )}
+
+              <div className={styles.scheduleSection}>
+                <h4 className={styles.scheduleTitle}>Schedule</h4>
+                <div className={styles.scheduleText}>
+                  📅 {formatSchedule(group.schedule)}
+                </div>
+              </div>
+
+              <div className={styles.enrollmentProgress}>
+                <div className={styles.progressHeader}>
+                  <h4 className={styles.progressTitle}>Enrollment</h4>
+                  <span className={styles.progressPercentage}>
+                    {Math.round((group.currentStudents / group.maxStudents) * 100)}%
+                  </span>
+                </div>
+                <div className={styles.progressBar}>
+                  <div 
+                    className={styles.progressFill}
+                    style={{ 
+                      width: `${(group.currentStudents / group.maxStudents) * 100}%`,
+                      backgroundColor: getProgressColor(group.currentStudents, group.maxStudents)
+                    }}
+                  ></div>
+                </div>
+                <div className={styles.enrollmentText}>
+                  {group.currentStudents} of {group.maxStudents} students enrolled
                 </div>
               </div>
             </div>
             
             <div className={styles.courseActions}>
               <button
-                className={`${styles.actionBtn} ${styles.editBtn}`}
-                onClick={() => onEditCourse(course)}
+                className={`${styles.actionBtn} ${styles.manageBtn}`}
+                onClick={() => onManageCourse(group)}
               >
-                ✏️ Edit
+                ⚙️ Manage Course
               </button>
               
               <button
-                className={`${styles.actionBtn} ${styles.viewBtn}`}
-                onClick={() => console.log(`View course ${course.id}`)}
+                className={`${styles.actionBtn} ${styles.editBtn}`}
+                onClick={() => onEditCourse(group)}
               >
-                👁️ View
+                ✏️ Edit Group
               </button>
               
-              {course.status !== 'active' && (
-                <button
-                  className={`${styles.actionBtn} ${styles.deleteBtn}`}
-                  onClick={() => handleDeleteCourse(course.id)}
-                >
-                  🗑️ Delete
-                </button>
-              )}
-              
-              {course.status === 'active' && (
-                <button
-                  className={`${styles.actionBtn} ${styles.studentsBtn}`}
-                  onClick={() => console.log(`View students for course ${course.id}`)}
-                >
-                  👥 Students
-                </button>
-              )}
+              <button
+                className={`${styles.actionBtn} ${styles.studentsBtn}`}
+                onClick={() => console.log(`View students for group ${group._id}`)}
+              >
+                👥 View Students
+              </button>
             </div>
           </div>
         ))}
       </div>
 
-      {filteredCourses.length === 0 && (
+      {filteredGroups.length === 0 && (
         <div className={styles.emptyState}>
           <div className={styles.emptyIcon}>📚</div>
           <h3 className={styles.emptyTitle}>No courses found</h3>
           <p className={styles.emptyText}>
-            {searchTerm || statusFilter !== 'all' 
+            {searchTerm || levelFilter !== 'all' 
               ? 'Try adjusting your search or filters.'
-              : 'Start by creating your first course!'
+              : 'You have no assigned courses yet.'
             }
           </p>
-          {!searchTerm && statusFilter === 'all' && (
+          {!searchTerm && levelFilter === 'all' && (
             <button 
               className={styles.createFirstCourseBtn}
               onClick={onNewCourse}
             >
-              ➕ Create Your First Course
+              ➕ Create New Course
             </button>
           )}
         </div>

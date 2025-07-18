@@ -1,50 +1,77 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import styles from './StudentDashboard.module.css';
 import ErrorBoundary from '../../components/ErrorBoundary';
+import { fetchStudentDashboard } from '../../store/slices/studentDashboardSlice';
 
 // Lazy load components to identify loading issues
 const MyCourses = React.lazy(() => import('../../components/Student/MyCourses/MyCourses'));
 const CourseContent = React.lazy(() => import('../../components/Student/CourseContent/CourseContent'));
 const CourseEvaluation = React.lazy(() => import('../../components/Student/CourseEvaluation/CourseEvaluation'));
-const RealTimeDashboard = React.lazy(() => import('../../components/Shared/RealTimeDashboard/RealTimeDashboard'));
 
 const StudentDashboard = () => {
-  const [activeSection, setActiveSection] = useState('courses');
+  const dispatch = useDispatch();
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [showEvaluation, setShowEvaluation] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Mock student data
-  const studentData = {
-    id: 1,
-    name: 'Ahmed Mohammed',
-    email: 'ahmed.mohammed@email.com',
-    enrolledCourses: 3,
-    completedCourses: 1,
-    totalProgress: 68,
-    joinDate: '2023-09-15'
+  // Get user data from auth state (same as Header component)
+  const { user } = useSelector((state) => state.auth);
+  const { courses, isLoading, error } = useSelector((state) => state.studentDashboard);
+
+  // Calculate student stats from real data
+  const studentStats = {
+    enrolledCourses: courses.length,
+    completedCourses: courses.filter(course => 
+      course.units.every(unit => unit.completed)
+    ).length,
+    totalProgress: courses.length > 0 ? Math.round(
+      courses.reduce((acc, course) => {
+        const totalUnits = course.units.length;
+        const completedUnits = course.units.filter(unit => unit.completed).length;
+        return acc + (totalUnits > 0 ? (completedUnits / totalUnits) * 100 : 0);
+      }, 0) / courses.length
+    ) : 0
   };
 
-  const sidebarItems = [
-    { id: 'courses', label: 'My Courses', icon: '📚' },
-    { id: 'realtime', label: 'Live Dashboard', icon: '🔴' },
-    { id: 'progress', label: 'Progress', icon: '📈' },
-    { id: 'certificates', label: 'Certificates', icon: '🏆' },
-    { id: 'messages', label: 'Messages', icon: '💬' }
-  ];
+  // Combine user data with stats (same approach as Header)
+  const studentData = user ? {
+    name: `${user.firstName || ''} ${user.lastName || ''}`.trim() || 'Student',
+    email: user.email || 'student@hbi.edu',
+    firstName: user.firstName || 'Student',
+    lastName: user.lastName || '',
+    userId: user._id || user.id,
+    role: user.role,
+    ...studentStats,
+  } : null;
+
+  useEffect(() => {
+    dispatch(fetchStudentDashboard());
+  }, [dispatch]);
+
+  // Toggle mobile menu
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
+  };
+
+  // Close mobile menu when clicking outside
+  const closeMobileMenu = () => {
+    setMobileMenuOpen(false);
+  };
 
   const handleViewCourse = (course) => {
     setSelectedCourse(course);
-    setActiveSection('content');
+    closeMobileMenu(); // Close mobile menu when navigating
   };
 
   const handleEvaluateCourse = (course) => {
     setSelectedCourse(course);
     setShowEvaluation(true);
+    closeMobileMenu(); // Close mobile menu when navigating
   };
 
   const handleBackToCourses = () => {
     setSelectedCourse(null);
-    setActiveSection('courses');
     setShowEvaluation(false);
   };
 
@@ -77,7 +104,7 @@ const StudentDashboard = () => {
       );
     }
 
-    if (selectedCourse && activeSection === 'content') {
+    if (selectedCourse) {
       return (
         <React.Suspense fallback={<LoadingSpinner />}>
           <CourseContent 
@@ -89,59 +116,67 @@ const StudentDashboard = () => {
       );
     }
 
-    switch (activeSection) {
-      case 'courses':
-        return (
-          <React.Suspense fallback={<LoadingSpinner />}>
-            <MyCourses 
-              onViewCourse={handleViewCourse}
-              onEvaluateCourse={handleEvaluateCourse}
-            />
-          </React.Suspense>
-        );
-      case 'realtime':
-        return (
-          <React.Suspense fallback={<LoadingSpinner />}>
-            <RealTimeDashboard userType="student" />
-          </React.Suspense>
-        );
-      case 'progress':
-        return <div className={styles.comingSoon}>📈 Progress tracking coming soon...</div>;
-      case 'certificates':
-        return <div className={styles.comingSoon}>🏆 Certificates coming soon...</div>;
-      case 'messages':
-        return <div className={styles.comingSoon}>💬 Messages coming soon...</div>;
-      default:
-        return (
-          <React.Suspense fallback={<LoadingSpinner />}>
-            <MyCourses 
-              onViewCourse={handleViewCourse}
-              onEvaluateCourse={handleEvaluateCourse}
-            />
-          </React.Suspense>
-        );
-    }
+    return (
+      <React.Suspense fallback={<LoadingSpinner />}>
+        <MyCourses 
+          onViewCourse={handleViewCourse}
+          onEvaluateCourse={handleEvaluateCourse}
+        />
+      </React.Suspense>
+    );
   };
 
   const getPageTitle = () => {
     if (showEvaluation && selectedCourse) {
       return `Evaluate: ${selectedCourse.title}`;
     }
-    if (selectedCourse && activeSection === 'content') {
+    if (selectedCourse) {
       return selectedCourse.title;
     }
-    return sidebarItems.find(item => item.id === activeSection)?.label || 'My Courses';
+    return 'My Courses';
   };
+
+  // Show loading state while fetching data or if no user data
+  if (isLoading || !studentData) {
+    return (
+      <div className={styles.loadingContainer}>
+        <div className={styles.loadingSpinner}>🔄</div>
+        <p>Loading student dashboard...</p>
+      </div>
+    );
+  }
+
+  // Show error state
+  if (error) {
+    return (
+      <div className={styles.errorContainer}>
+        <div className={styles.errorIcon}>❌</div>
+        <h3>Error Loading Dashboard</h3>
+        <p>{error}</p>
+        <button 
+          className={styles.retryBtn}
+          onClick={() => dispatch(fetchStudentDashboard())}
+        >
+          🔄 Retry
+        </button>
+      </div>
+    );
+  }
 
   return (
     <ErrorBoundary>
       <div className={styles.studentDashboard}>
+        {/* Mobile Overlay */}
+        {mobileMenuOpen && (
+          <div className={styles.mobileOverlay} onClick={closeMobileMenu}></div>
+        )}
+
         {/* Sidebar */}
-        <aside className={styles.sidebar}>
+        <aside className={`${styles.sidebar} ${mobileMenuOpen ? styles.open : ''}`}>
           <div className={styles.sidebarHeader}>
             <div className={styles.studentInfo}>
               <div className={styles.studentAvatar}>
-                {studentData.name.split(' ').map(n => n[0]).join('')}
+                {studentData.firstName?.charAt(0) || studentData.email?.charAt(0) || 'S'}
               </div>
               <div className={styles.studentDetails}>
                 <h3 className={styles.studentName}>{studentData.name}</h3>
@@ -166,31 +201,18 @@ const StudentDashboard = () => {
               <span className={styles.statLabel}>Progress</span>
             </div>
           </div>
-
-          <nav className={styles.sidebarNav}>
-            {sidebarItems.map((item) => (
-              <button
-                key={item.id}
-                className={`${styles.sidebarItem} ${
-                  activeSection === item.id && !selectedCourse ? styles.active : ''
-                }`}
-                onClick={() => {
-                  setActiveSection(item.id);
-                  setSelectedCourse(null);
-                  setShowEvaluation(false);
-                }}
-              >
-                <span className={styles.sidebarIcon}>{item.icon}</span>
-                <span className={styles.sidebarLabel}>{item.label}</span>
-              </button>
-            ))}
-          </nav>
         </aside>
 
         {/* Main Content */}
         <main className={styles.mainContent}>
           <header className={styles.mainHeader}>
             <div className={styles.headerLeft}>
+              <button 
+                className={styles.mobileMenuToggle}
+                onClick={toggleMobileMenu}
+              >
+                <i className={`fas ${mobileMenuOpen ? 'fa-times' : 'fa-bars'}`}></i>
+              </button>
               {(selectedCourse || showEvaluation) && (
                 <button 
                   className={styles.backBtn}

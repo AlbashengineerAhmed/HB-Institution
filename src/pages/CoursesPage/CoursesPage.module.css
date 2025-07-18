@@ -211,7 +211,6 @@
   transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
   position: relative;
   border: 1px solid rgba(254, 218, 106, 0.1);
-  text-decoration: none;
   color: inherit;
   display: block;
 }
@@ -300,7 +299,7 @@
 
 .courseMeta {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   margin-bottom: 1.5rem;
   font-size: 0.85rem;
@@ -308,15 +307,13 @@
   opacity: 0.7;
 }
 
-.courseDuration,
-.courseRating {
+.courseDuration {
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
-.courseDuration svg,
-.courseRating svg {
+.courseDuration svg {
   width: 16px;
   height: 16px;
   color: var(--primary-color);
@@ -344,11 +341,26 @@
   text-transform: uppercase;
   letter-spacing: 0.5px;
   transition: all 0.3s ease;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
 }
 
 .courseCard:hover .enrollButton {
   transform: translateY(-2px);
   box-shadow: 0 4px 10px rgba(254, 218, 106, 0.3);
+}
+
+/* Login Required Button */
+.loginRequired {
+  background: linear-gradient(135deg, rgba(254, 218, 106, 0.7) 0%, rgba(254, 218, 106, 0.7) 100%) !important;
+  cursor: pointer !important;
+  opacity: 0.8;
+}
+
+.loginRequired:hover {
+  background: linear-gradient(135deg, rgba(254, 218, 106, 0.9) 0%, rgba(254, 218, 106, 0.9) 100%) !important;
+  opacity: 1;
 }
 
 /* No Courses */

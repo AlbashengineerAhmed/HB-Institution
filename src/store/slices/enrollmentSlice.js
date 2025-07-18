@@ -7,7 +7,6 @@ const API_BASE_URL = 'https://hb-institution.vercel.app';
 // Create dedicated axios instance for enrollment (isolated from other slices)
 const enrollmentApi = axios.create({
   baseURL: API_BASE_URL,
-  timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -45,7 +44,8 @@ enrollmentApi.interceptors.request.use(
     if (needsToken) {
       const token = localStorage.getItem('authToken');
       if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
+        const bearerToken = token.startsWith('Bearer ') ? token : `Bearer ${token}`;
+        config.headers.Authorization = bearerToken;
         console.log('✅ Added Bearer token to protected endpoint:', config.url);
       } else {
         console.log('❌ No token found for protected endpoint:', config.url);

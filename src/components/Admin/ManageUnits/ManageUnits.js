@@ -537,60 +537,125 @@ const ManageUnits = () => {
           )}
           
           {!loading && filteredUnits.length > 0 && (
-            <div className={styles.unitsGrid}>
-              {filteredUnits.map((unit) => (
-                <div key={unit._id} className={styles.unitCard}>
-                  <div className={styles.unitHeader}>
-                    <h4 className={styles.unitTitle}>{unit.title}</h4>
-                    <div className={styles.unitActions}>
-                      <button
-                        className={styles.editBtn}
-                        onClick={() => handleEditUnit(unit)}
-                        title="Edit Unit"
-                      >
-                        ✏️
-                      </button>
-                      <button
-                        className={styles.deleteBtn}
-                        onClick={() => handleDeleteClick(unit)}
-                        title="Delete Unit"
-                      >
-                        🗑️
-                      </button>
-                    </div>
-                  </div>
-                  
-                  <p className={styles.unitDescription}>{unit.description}</p>
-                  
-                  {unit.topic && unit.topic.length > 0 && (
-                    <div className={styles.unitTopics}>
-                      <strong>Topics:</strong>
-                      <div className={styles.topicTags}>
-                        {unit.topic.map((topic, index) => (
-                          <span key={index} className={styles.topicTag}>
-                            {topic}
-                          </span>
-                        ))}
+            <>
+              {/* Desktop Grid View */}
+              <div className={styles.unitsGrid}>
+                {filteredUnits.map((unit) => (
+                  <div key={unit._id} className={styles.unitCard}>
+                    <div className={styles.unitHeader}>
+                      <h4 className={styles.unitTitle}>{unit.title}</h4>
+                      <div className={styles.unitActions}>
+                        <button
+                          className={styles.editBtn}
+                          onClick={() => handleEditUnit(unit)}
+                          title="Edit Unit"
+                        >
+                          ✏️
+                        </button>
+                        <button
+                          className={styles.deleteBtn}
+                          onClick={() => handleDeleteClick(unit)}
+                          title="Delete Unit"
+                        >
+                          🗑️
+                        </button>
                       </div>
                     </div>
-                  )}
-                  
-                  <div className={styles.unitContent}>
-                    <strong>Content Preview:</strong>
-                    <p className={styles.contentPreview}>
-                      {unit.content?.substring(0, 150)}
-                      {unit.content?.length > 150 ? '...' : ''}
-                    </p>
+                    
+                    <p className={styles.unitDescription}>{unit.description}</p>
+                    
+                    {unit.topic && unit.topic.length > 0 && (
+                      <div className={styles.unitTopics}>
+                        <strong>Topics:</strong>
+                        <div className={styles.topicTags}>
+                          {unit.topic.map((topic, index) => (
+                            <span key={index} className={styles.topicTag}>
+                              {topic}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                    
+                    <div className={styles.unitContent}>
+                      <strong>Content Preview:</strong>
+                      <p className={styles.contentPreview}>
+                        {unit.content?.substring(0, 150)}
+                        {unit.content?.length > 150 ? '...' : ''}
+                      </p>
+                    </div>
+                    
+                    <div className={styles.unitFooter}>
+                      <small className={styles.unitDate}>
+                        Created: {unit.createdAt ? new Date(unit.createdAt).toLocaleDateString() : 'N/A'}
+                      </small>
+                    </div>
                   </div>
-                  
-                  <div className={styles.unitFooter}>
-                    <small className={styles.unitDate}>
-                      Created: {unit.createdAt ? new Date(unit.createdAt).toLocaleDateString() : 'N/A'}
-                    </small>
+                ))}
+              </div>
+
+              {/* Mobile Card View */}
+              <div className={styles.mobileCardContainer}>
+                {filteredUnits.map((unit) => (
+                  <div key={unit._id} className={styles.mobileUnitCard}>
+                    <div className={styles.mobileUnitHeader}>
+                      <h4 className={styles.mobileUnitTitle}>{unit.title}</h4>
+                      <div className={styles.mobileUnitMeta}>
+                        <span className={styles.unitDate}>
+                          {unit.createdAt ? new Date(unit.createdAt).toLocaleDateString() : 'N/A'}
+                        </span>
+                      </div>
+                      <p className={styles.mobileUnitDescription}>{unit.description}</p>
+                    </div>
+                    
+                    <div className={styles.mobileUnitBody}>
+                      {unit.topic && unit.topic.length > 0 && (
+                        <div className={styles.mobileUnitTopics}>
+                          <strong>Topics:</strong>
+                          <div className={styles.topicTags}>
+                            {unit.topic.map((topic, index) => (
+                              <span key={index} className={styles.topicTag}>
+                                {topic}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                      
+                      <div className={styles.mobileUnitContent}>
+                        <strong>Content Preview:</strong>
+                        <p className={styles.contentPreview}>
+                          {unit.content?.substring(0, 120)}
+                          {unit.content?.length > 120 ? '...' : ''}
+                        </p>
+                      </div>
+                    </div>
+                    
+                    <div className={styles.mobileUnitFooter}>
+                      <span className={styles.unitDate}>
+                        Created: {unit.createdAt ? new Date(unit.createdAt).toLocaleDateString() : 'N/A'}
+                      </span>
+                      <div className={styles.mobileUnitActions}>
+                        <button
+                          className={styles.editBtn}
+                          onClick={() => handleEditUnit(unit)}
+                          title="Edit Unit"
+                        >
+                          ✏️ Edit
+                        </button>
+                        <button
+                          className={styles.deleteBtn}
+                          onClick={() => handleDeleteClick(unit)}
+                          title="Delete Unit"
+                        >
+                          🗑️ Delete
+                        </button>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            </>
           )}
         </div>
       )}

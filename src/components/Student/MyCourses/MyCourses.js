@@ -1,12 +1,70 @@
 import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { 
+  toggleCourseExpansion, 
+  toggleUnitExpansion,
+  markLessonCompletedOptimistic,
+  markLessonCompleted
+} from '../../../store/slices/studentDashboardSlice';
 import styles from './MyCourses.module.css';
 
 const MyCourses = ({ onViewCourse, onEvaluateCourse }) => {
+  const dispatch = useDispatch();
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
 
-  // Mock enrolled courses data
-  const enrolledCourses = [
+  const { 
+    courses, 
+    isLoading, 
+    error, 
+    expandedCourses, 
+    expandedUnits,
+    isMarkingComplete 
+  } = useSelector((state) => state.studentDashboard);
+
+  // Transform API data to match component expectations
+  const enrolledCourses = courses.map(course => {
+    const totalUnits = course.units.length;
+    const completedUnits = course.units.filter(unit => unit.completed).length;
+    const totalLessons = course.units.reduce((sum, unit) => sum + unit.lessons.length, 0);
+    const completedLessons = course.units.reduce((sum, unit) => 
+      sum + unit.lessons.filter(lesson => lesson.completed).length, 0
+    );
+    
+    const progress = totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : 0;
+    const status = completedUnits === totalUnits && totalUnits > 0 ? 'completed' : 
+                  completedLessons > 0 ? 'in-progress' : 'not-started';
+
+    return {
+      id: course._id,
+      title: course.courseTitle,
+      instructor: 'Instructor', // Not provided in API
+      description: `Course with ${totalUnits} units and ${totalLessons} lessons`,
+      category: 'Islamic Studies', // Not provided in API
+      level: 'Beginner', // Not provided in API
+      duration: course.duration,
+      enrollmentDate: new Date().toISOString().split('T')[0], // Not provided in API
+      progress: progress,
+      status: status,
+      completedModules: completedUnits,
+      totalModules: totalUnits,
+      nextModule: course.units.find(unit => !unit.completed)?.title || null,
+      grade: progress >= 80 ? 'A' : progress >= 60 ? 'B' : progress >= 40 ? 'C' : 'F',
+      thumbnail: course.courseImage,
+      canEvaluate: status === 'completed',
+      price: course.price,
+      units: course.units,
+      modules: course.units.map((unit, index) => ({
+        id: unit._id,
+        title: unit.title,
+        completed: unit.completed,
+        duration: `${unit.lessons.length} lessons`
+      }))
+    };
+  });
+
+  // Keep original mock data structure for comparison
+  const originalMockCourses = [
     {
       id: 1,
       title: 'Islamic Finance Principles',
