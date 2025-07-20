@@ -1,0 +1,222 @@
+/* Calendar Container */
+.calendarContainer {
+  padding: 20px;
+  background: var(--secondary-color);
+  border-radius: 12px;
+  box-shadow: var(--box-shadow);
+  margin: 20px 0;
+  border: 1px solid rgba(253, 198, 44, 0.2);
+}
+
+/* Calendar Header */
+.calendarHeader {
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.calendarHeader h2 {
+  color: var(--text-color);
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.calendarHeader p {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+}
+
+/* Calendar Stats */
+.calendarStats {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-top: 20px;
+}
+
+.statItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 15px 25px;
+  background: var(--gradient-start);
+  border-radius: 8px;
+  border: 1px solid rgba(253, 198, 44, 0.3);
+}
+
+.statValue {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin-bottom: 4px;
+}
+
+.statLabel {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 500;
+}
+
+/* Calendar Wrapper */
+.calendarWrapper {
+  background: var(--secondary-color);
+  border-radius: 8px;
+  padding: 20px;
+  border: 1px solid rgba(253, 198, 44, 0.2);
+}
+
+/* Custom Calendar Styles */
+.calendar {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* Loading State */
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+  background: var(--secondary-color);
+  border-radius: 12px;
+  border: 1px solid rgba(253, 198, 44, 0.2);
+}
+
+.loadingSpinner {
+  font-size: 3rem;
+  margin-bottom: 20px;
+  animation: spin 2s linear infinite;
+  color: var(--primary-color);
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loadingContainer p {
+  color: var(--text-color);
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+/* Error State */
+.errorContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+  background: var(--secondary-color);
+  border: 1px solid rgba(255, 76, 76, 0.3);
+  border-radius: 12px;
+  margin: 20px 0;
+}
+
+.errorIcon {
+  font-size: 3rem;
+  margin-bottom: 20px;
+  color: var(--error-color);
+}
+
+.errorContainer h3 {
+  color: var(--error-color);
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.errorContainer p {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1rem;
+  margin-bottom: 20px;
+  max-width: 400px;
+}
+
+.retryBtn {
+  background: var(--error-color);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.retryBtn:hover {
+  background: #b91c1c;
+  transform: translateY(-1px);
+}
+
+/* No Events State */
+.noEventsContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+  background: var(--gradient-start);
+  border: 1px solid rgba(253, 198, 44, 0.2);
+  border-radius: 12px;
+  margin-top: 20px;
+}
+
+.noEventsIcon {
+  font-size: 3rem;
+  margin-bottom: 20px;
+  opacity: 0.6;
+  color: var(--primary-color);
+}
+
+.noEventsContainer h3 {
+  color: var(--text-color);
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.noEventsContainer p {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1rem;
+  max-width: 400px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .calendarContainer {
+    padding: 15px;
+    margin: 10px 0;
+  }
+
+  .calendarHeader h2 {
+    font-size: 1.5rem;
+  }
+
+  .calendarStats {
+    gap: 20px;
+  }
+
+  .statItem {
+    padding: 10px 15px;
+  }
+
+  .statValue {
+    font-size: 1.4rem;
+  }
+
+  .calendarWrapper {
+    padding: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .calendarStats {
+    flex-direction: column;
+    gap: 15px;
+  }
+}

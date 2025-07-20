@@ -9,6 +9,7 @@ const MyCourses = React.lazy(() => import('../../components/Student/MyCourses/My
 const CourseContent = React.lazy(() => import('../../components/Student/CourseContent/CourseContent'));
 const CourseEvaluation = React.lazy(() => import('../../components/Student/CourseEvaluation/CourseEvaluation'));
 const LessonDetails = React.lazy(() => import('../../components/Student/LessonDetails/LessonDetails'));
+const StudentCalendar = React.lazy(() => import('../../components/Student/StudentCalendar/StudentCalendar'));
 
 const StudentDashboard = () => {
   const dispatch = useDispatch();
@@ -130,6 +131,15 @@ const StudentDashboard = () => {
       </div>
     );
 
+    // Show calendar when calendar section is active
+    if (activeSection === 'calendar') {
+      return (
+        <React.Suspense fallback={<LoadingSpinner />}>
+          <StudentCalendar />
+        </React.Suspense>
+      );
+    }
+
     if (selectedLesson) {
       return (
         <React.Suspense fallback={<LoadingSpinner />}>
@@ -232,6 +242,9 @@ const StudentDashboard = () => {
   };
 
   const getPageTitle = () => {
+    if (activeSection === 'calendar') {
+      return 'Calendar';
+    }
     if (selectedLesson) {
       return 'Lesson Details';
     }
@@ -346,6 +359,13 @@ const StudentDashboard = () => {
             >
               <span className={styles.sidebarIcon}>📚</span>
               <span className={styles.sidebarLabel}>My Courses</span>
+            </button>
+            <button
+              className={`${styles.sidebarItem} ${activeSection === 'calendar' ? styles.active : ''}`}
+              onClick={() => handleSectionChange('calendar')}
+            >
+              <span className={styles.sidebarIcon}>📅</span>
+              <span className={styles.sidebarLabel}>Calendar</span>
             </button>
           </nav>
         </aside>
