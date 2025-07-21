@@ -1,18 +1,21 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { API_CONFIG } from '../../config/api';
 
-const API_BASE_URL = 'https://hb-institution.vercel.app/api/v1';
+/**
+ * Creates axios instance with base configuration for category-related API calls
+ * Sets default headers and base URL for all category requests
+ */
+const api = axios.create(API_CONFIG);
 
-// Create axios instance
-const api = axios.create({
-  baseURL: API_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
-
-// Helper function to extract error message from backend response
+/**
+ * Helper function to extract error message from backend response
+ * Handles special cases like object error messages and provides fallbacks
+ * @param {Object} error - The error object from axios
+ * @param {string} defaultMessage - Default message if no specific error found
+ * @returns {string} - Formatted error message
+ */
 const getErrorMessage = (error, defaultMessage = 'An error occurred') => {
   const errorData = error.response?.data;
   
@@ -41,7 +44,10 @@ const getErrorMessage = (error, defaultMessage = 'An error occurred') => {
   return error.message || defaultMessage;
 };
 
-// Request interceptor to add auth token
+/**
+ * Request interceptor to add authentication token to requests
+ * Automatically adds Bearer token to authorization header if available
+ */
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('authToken');
@@ -54,13 +60,20 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Response interceptor for better error handling
+/**
+ * Response interceptor for error handling
+ * Passes through successful responses and rejects errors
+ */
 api.interceptors.response.use(
   (response) => response,
   (error) => Promise.reject(error)
 );
 
-// Async thunks for API calls
+/**
+ * Async thunk to fetch all categories
+ * Retrieves the complete list of categories from the server
+ * @returns {Promise} - Categories data with pagination information
+ */
 export const fetchCategories = createAsyncThunk(
   'categories/fetchCategories',
   async (_, { rejectWithValue }) => {
@@ -75,6 +88,15 @@ export const fetchCategories = createAsyncThunk(
   }
 );
 
+/**
+ * Async thunk to create a new category
+ * Creates a category with validation and file upload support
+ * @param {Object} categoryData - Category data including name, description, and optional image
+ * @param {string} categoryData.name - The name of the category
+ * @param {string} categoryData.description - The description of the category
+ * @param {File} [categoryData.image] - Optional image file for the category
+ * @returns {Promise} - Created category data
+ */
 export const createCategory = createAsyncThunk(
   'categories/createCategory',
   async (categoryData, { rejectWithValue }) => {
@@ -132,6 +154,12 @@ export const createCategory = createAsyncThunk(
   }
 );
 
+/**
+ * Async thunk to delete a category
+ * Removes a category from the system permanently
+ * @param {string} categoryId - The unique identifier of the category to delete
+ * @returns {Promise} - The deleted category ID
+ */
 export const deleteCategory = createAsyncThunk(
   'categories/deleteCategory',
   async (categoryId, { rejectWithValue }) => {
@@ -147,6 +175,12 @@ export const deleteCategory = createAsyncThunk(
   }
 );
 
+/**
+ * Async thunk to fetch a specific category by its ID
+ * Retrieves detailed information about a single category
+ * @param {string} categoryId - The unique identifier of the category
+ * @returns {Promise} - Detailed category data
+ */
 export const fetchCategoryById = createAsyncThunk(
   'categories/fetchCategoryById',
   async (categoryId, { rejectWithValue }) => {

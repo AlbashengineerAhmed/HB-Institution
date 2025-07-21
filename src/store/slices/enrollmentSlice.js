@@ -1,18 +1,26 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { ENROLLMENT_API_BASE_URL } from '../../config/api';
 
-const API_BASE_URL = 'https://hb-institution.vercel.app';
-
-// Create dedicated axios instance for enrollment (isolated from other slices)
+/**
+ * Create dedicated axios instance for enrollment API
+ * Uses separate base URL for enrollment endpoints
+ */
 const enrollmentApi = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: ENROLLMENT_API_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-// Helper function to extract error message from backend response
+/**
+ * Helper function to extract error message from backend response
+ * Checks multiple possible error message fields and returns appropriate message
+ * @param {Object} error - The error object from axios
+ * @param {string} defaultMessage - Default message if no specific error found
+ * @returns {string} - Formatted error message
+ */
 const getErrorMessage = (error, defaultMessage = 'An error occurred') => {
   return error.response?.data?.errMas || 
          error.response?.data?.message || 
@@ -22,7 +30,10 @@ const getErrorMessage = (error, defaultMessage = 'An error occurred') => {
          defaultMessage;
 };
 
-// Request interceptor ONLY for enrollment API - very specific token handling
+/**
+ * Request interceptor for enrollment API with specific token handling
+ * Only adds authentication token to protected endpoints
+ */
 enrollmentApi.interceptors.request.use(
   (config) => {
     console.log('🔍 Enrollment API Request:', config.method?.toUpperCase(), config.url);
@@ -64,9 +75,12 @@ enrollmentApi.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Async thunks for enrollment API calls
-
-// Step 2: Get levels by course (GET - NO TOKEN REQUIRED)
+/**
+ * Async thunk to fetch available levels for a specific course
+ * Step 2 of enrollment process - no authentication required
+ * @param {string} courseId - The ID of the course to fetch levels for
+ * @returns {Promise} - Course levels data
+ */
 export const getLevelsByCourse = createAsyncThunk(
   'enrollment/getLevelsByCourse',
   async (courseId, { rejectWithValue }) => {
@@ -88,8 +102,14 @@ export const getLevelsByCourse = createAsyncThunk(
   }
 );
 
-// Step 3: Get instructors by course and level (GET - REQUIRES TOKEN)
-// Updated URL format: /api/v1/courses/CourseLevel/{level}/{courseId}
+/**
+ * Async thunk to fetch instructors for a specific course and level
+ * Step 3 of enrollment process - requires authentication
+ * @param {Object} params - Object containing courseId and level
+ * @param {string} params.courseId - The ID of the course
+ * @param {string} params.level - The level of the course
+ * @returns {Promise} - Instructors data
+ */
 export const getInstructorsByCourseAndLevel = createAsyncThunk(
   'enrollment/getInstructorsByCourseAndLevel',
   async ({ courseId, level }, { rejectWithValue }) => {
@@ -112,8 +132,15 @@ export const getInstructorsByCourseAndLevel = createAsyncThunk(
   }
 );
 
-// Step 4: Get groups by course and instructor (GET - REQUIRES TOKEN)
-// Updated URL format: /api/v1/courses/{level}/{courseId}/{instructorId}
+/**
+ * Async thunk to fetch groups for a specific course and instructor
+ * Step 4 of enrollment process - requires authentication
+ * @param {Object} params - Object containing courseId, level, and instructorId
+ * @param {string} params.courseId - The ID of the course
+ * @param {string} params.level - The level of the course
+ * @param {string} params.instructorId - The ID of the instructor
+ * @returns {Promise} - Groups data
+ */
 export const getGroupsByCourseAndInstructor = createAsyncThunk(
   'enrollment/getGroupsByCourseAndInstructor',
   async ({ courseId, level, instructorId }, { rejectWithValue }) => {
@@ -136,8 +163,15 @@ export const getGroupsByCourseAndInstructor = createAsyncThunk(
   }
 );
 
-// Step 5a: Get enrollment review data (GET - REQUIRES TOKEN)
-// URL format: /api/v1/courses/{level}/{courseId}/{instructorId}
+/**
+ * Async thunk to fetch enrollment review data
+ * Step 5a of enrollment process - requires authentication
+ * @param {Object} params - Object containing courseId, level, and instructorId
+ * @param {string} params.courseId - The ID of the course
+ * @param {string} params.level - The level of the course
+ * @param {string} params.instructorId - The ID of the instructor
+ * @returns {Promise} - Enrollment review data
+ */
 export const getEnrollmentReview = createAsyncThunk(
   'enrollment/getEnrollmentReview',
   async ({ courseId, level, instructorId }, { rejectWithValue }) => {
@@ -160,7 +194,12 @@ export const getEnrollmentReview = createAsyncThunk(
   }
 );
 
-// Step 5b: Submit enrollment (POST - REQUIRES TOKEN)
+/**
+ * Async thunk to submit enrollment data
+ * Step 5b of enrollment process - requires authentication
+ * @param {Object} enrollmentData - The enrollment data to submit
+ * @returns {Promise} - Enrollment submission response
+ */
 export const submitEnrollment = createAsyncThunk(
   'enrollment/submitEnrollment',
   async (enrollmentData, { rejectWithValue }) => {

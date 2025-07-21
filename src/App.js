@@ -48,13 +48,19 @@ import StudentDashboard from './pages/StudentDashboard/StudentDashboard';
 // 404 Page
 import NotFoundPage from './pages/NotFoundPage/NotFoundPage';
 
-// Route change tracker wrapper component
+/**
+ * Main application content component that handles routing and layout
+ * Manages initial loading state and determines when to show/hide footer
+ */
 const AppContent = () => {
   const [isInitialLoad, setIsInitialLoad] = useState(true);
   const location = useLocation();
   
+  /**
+   * Effect to handle initial loading state
+   * Sets loading to false after 1 second delay to allow components to initialize
+   */
   useEffect(() => {
-    // Mark initial load as complete after a short delay
     const timer = setTimeout(() => {
       setIsInitialLoad(false);
     }, 1000);
@@ -62,7 +68,10 @@ const AppContent = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  // Define dashboard routes where footer should be hidden
+  /**
+   * Array of routes where footer should be hidden
+   * Includes dashboard and profile pages for cleaner UI
+   */
   const dashboardRoutes = [
     '/admin',
     '/instructor-dashboard',
@@ -71,7 +80,10 @@ const AppContent = () => {
     '/settings'
   ];
 
-  // Check if current route is a dashboard
+  /**
+   * Determines if current route is a dashboard route
+   * Used to conditionally hide footer on dashboard pages
+   */
   const isDashboardRoute = dashboardRoutes.some(route => 
     location.pathname.startsWith(route)
   );
@@ -198,6 +210,10 @@ const AppContent = () => {
   );
 };
 
+/**
+ * Root App component that provides Redux store and routing context
+ * Wraps the entire application with necessary providers
+ */
 function App() {
   return (
     <Provider store={store}>

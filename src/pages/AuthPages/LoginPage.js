@@ -6,9 +6,13 @@ import { loginUser, clearError } from '../../store/slices/authSlice';
 import { getDashboardRoute } from '../../utils/roleUtils';
 import styles from './AuthPages.module.css';
 import logo from '../../assets/images/logo-black.webp';
-// Using register.png for the auth page image
+
 const authImage = process.env.PUBLIC_URL + '/images/register.png';
 
+/**
+ * Login page component that handles user authentication
+ * Provides form validation, URL parameter handling, and role-based navigation
+ */
 const LoginPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -20,16 +24,21 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [validationErrors, setValidationErrors] = useState({});
 
-  // Get the intended destination from location state or default to role-based dashboard
   const from = location.state?.from?.pathname;
 
-  // Check for URL parameters and show toast notifications
+  /**
+   * Effect to handle URL parameters and display appropriate toast notifications
+   * Processes various message types from email confirmations and redirects
+   */
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
     const message = urlParams.get('message');
     
     if (message) {
-      // Handle different message types from backend redirects
+      /**
+       * Handles different message types from backend redirects
+       * Displays appropriate toast notifications based on message type
+       */
       switch (message) {
         case 'confirmed':
           toast.success('Email confirmed successfully! You can now log in.');
@@ -56,48 +65,58 @@ const LoginPage = () => {
           toast.success('Email verified successfully! You can now log in.');
           break;
         default:
-          // For any other message, show it as info
           toast.info(decodeURIComponent(message));
           break;
       }
       
-      // Clean up the URL by removing the message parameter
+      /**
+       * Cleans up the URL by removing the message parameter
+       * Prevents message from showing again on page refresh
+       */
       const newUrl = new URL(window.location);
       newUrl.searchParams.delete('message');
       window.history.replaceState({}, '', newUrl.pathname + newUrl.search);
     }
   }, [location.search]);
 
+  /**
+   * Effect to handle post-login navigation
+   * Redirects users based on their role and intended destination
+   */
   useEffect(() => {
     if (isAuthenticated && user) {
-      // If there's a specific page they were trying to access, go there
       if (from && from !== '/login') {
         navigate(from, { replace: true });
       } else {
-        // Redirect based on role: admin to dashboard, others to home
         if (user.role?.toLowerCase() === 'admin') {
           const dashboardRoute = getDashboardRoute(user.role);
           navigate(dashboardRoute, { replace: true });
         } else {
-          // Students and instructors go to home page
           navigate('/', { replace: true });
         }
       }
     }
   }, [isAuthenticated, user, navigate, from]);
 
+  /**
+   * Effect to clear any existing errors when component mounts
+   * Ensures clean state for new login attempts
+   */
   useEffect(() => {
-    // Clear errors when component mounts
     dispatch(clearError());
   }, [dispatch]);
 
+  /**
+   * Validates the login form inputs
+   * Checks for required fields and email format
+   * @returns {boolean} - True if form is valid, false otherwise
+   */
   const validateForm = () => {
     const errors = {};
 
     if (!email.trim()) errors.email = 'Email is required';
     if (!password) errors.password = 'Password is required';
 
-    // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (email && !emailRegex.test(email)) {
       errors.email = 'Please enter a valid email address';
@@ -107,6 +126,11 @@ const LoginPage = () => {
     return Object.keys(errors).length === 0;
   };
 
+  /**
+   * Handles form submission for user login
+   * Validates form data and dispatches login action
+   * @param {Event} e - Form submission event
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -119,10 +143,8 @@ const LoginPage = () => {
         email: email.trim(), 
         password 
       })).unwrap();
-      // Navigation is handled in useEffect after successful login
     } catch (error) {
-      // Error is handled by Redux and displayed in the UI
-      console.error('Login failed:', error);
+      // Error handling is managed by Redux slice
     }
   };
 
@@ -141,7 +163,6 @@ const LoginPage = () => {
           </div>
           <h2 className={styles.authTitle}>Welcome to Sign In <span className={styles.buddyText}>Buddy!</span></h2>
           
-          {/* Display errors */}
           {error && (
             <div className={styles.errorMessage}>
               {error}

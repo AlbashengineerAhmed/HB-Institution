@@ -5,24 +5,30 @@ import { logout } from '../../store/slices/authSlice';
 import { getDashboardLink, getRoleDisplayName } from '../../utils/roleUtils';
 import styles from './Header.module.css';
 
+/**
+ * Header component that provides site navigation and user authentication controls
+ * Includes dropdown menus, mobile navigation, and user profile management
+ */
 const Header = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { isAuthenticated, user } = useSelector((state) => state.auth);
   
-  // Get dashboard link based on user role
   const dashboardLink = getDashboardLink(user?.role);
   
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   
-  // Refs for timeout management
   const dropdownTimeoutRef = useRef(null);
   const userDropdownTimeoutRef = useRef(null);
 
+  /**
+   * Handles dropdown menu toggle functionality
+   * Manages opening and closing of navigation dropdown menus
+   * @param {string} dropdownName - Name of the dropdown to toggle
+   */
   const handleDropdownToggle = (dropdownName) => {
-    // Clear any existing timeout when clicking
     if (dropdownTimeoutRef.current) {
       clearTimeout(dropdownTimeoutRef.current);
       dropdownTimeoutRef.current = null;
@@ -35,18 +41,29 @@ const Header = () => {
     }
   };
 
+  /**
+   * Toggles the mobile navigation menu
+   * Controls the visibility of the mobile menu overlay
+   */
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
 
+  /**
+   * Handles user logout functionality
+   * Dispatches logout action and redirects to home page
+   */
   const handleLogout = () => {
     dispatch(logout());
     setUserDropdownOpen(false);
     navigate('/');
   };
 
+  /**
+   * Toggles the user profile dropdown menu
+   * Manages opening and closing of user account dropdown
+   */
   const toggleUserDropdown = () => {
-    // Clear any existing timeout when clicking
     if (userDropdownTimeoutRef.current) {
       clearTimeout(userDropdownTimeoutRef.current);
       userDropdownTimeoutRef.current = null;
@@ -55,56 +72,68 @@ const Header = () => {
     setUserDropdownOpen(!userDropdownOpen);
   };
 
-  // Close dropdowns when clicking outside
+  /**
+   * Closes all dropdown menus when clicking outside
+   * Handles outside click events to close open dropdowns
+   */
   const handleOutsideClick = () => {
     setActiveDropdown(null);
     setUserDropdownOpen(false);
   };
 
-  // Close dropdown when a link is clicked
+  /**
+   * Closes dropdown menus when a navigation link is clicked
+   * Ensures clean navigation experience on mobile and desktop
+   */
   const handleLinkClick = () => {
     setActiveDropdown(null);
     setMobileMenuOpen(false);
   };
 
-  // Handle dropdown mouse leave with delay
+  /**
+   * Handles dropdown mouse leave event with delay
+   * Implements delayed closing to improve user experience
+   */
   const handleDropdownMouseLeave = () => {
-    // Clear any existing timeout
     if (dropdownTimeoutRef.current) {
       clearTimeout(dropdownTimeoutRef.current);
     }
     
-    // Set a new timeout to close the dropdown after 300ms
     dropdownTimeoutRef.current = setTimeout(() => {
       setActiveDropdown(null);
     }, 300);
   };
 
-  // Handle dropdown mouse enter to cancel closing
+  /**
+   * Handles dropdown mouse enter event
+   * Cancels any pending dropdown close timeout
+   */
   const handleDropdownMouseEnter = () => {
-    // Clear the timeout if mouse re-enters
     if (dropdownTimeoutRef.current) {
       clearTimeout(dropdownTimeoutRef.current);
       dropdownTimeoutRef.current = null;
     }
   };
 
-  // Handle user dropdown mouse leave with delay
+  /**
+   * Handles user dropdown mouse leave event with delay
+   * Implements delayed closing for user dropdown menu
+   */
   const handleUserDropdownMouseLeave = () => {
-    // Clear any existing timeout
     if (userDropdownTimeoutRef.current) {
       clearTimeout(userDropdownTimeoutRef.current);
     }
     
-    // Set a new timeout to close the dropdown after 300ms
     userDropdownTimeoutRef.current = setTimeout(() => {
       setUserDropdownOpen(false);
     }, 300);
   };
 
-  // Handle user dropdown mouse enter to cancel closing
+  /**
+   * Handles user dropdown mouse enter event
+   * Cancels any pending user dropdown close timeout
+   */
   const handleUserDropdownMouseEnter = () => {
-    // Clear the timeout if mouse re-enters
     if (userDropdownTimeoutRef.current) {
       clearTimeout(userDropdownTimeoutRef.current);
       userDropdownTimeoutRef.current = null;
@@ -286,7 +315,6 @@ const Header = () => {
                   </div>
                 </div>
                 <div className={styles.userActions}>
-                  {/* Dashboard Link - Role Based */}
                   {dashboardLink && (
                     <Link 
                       to={dashboardLink.path} 

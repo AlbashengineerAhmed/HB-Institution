@@ -1,18 +1,21 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { API_CONFIG } from '../../config/api';
 
-const API_BASE_URL = 'https://hb-institution.vercel.app/api/v1';
+/**
+ * Creates axios instance with base configuration for group-related API calls
+ * Sets default headers and base URL for all group requests
+ */
+const api = axios.create(API_CONFIG);
 
-// Create axios instance
-const api = axios.create({
-  baseURL: API_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
-
-// Helper function to extract error message from backend response
+/**
+ * Helper function to extract error message from backend response
+ * Checks multiple possible error message fields and returns appropriate message
+ * @param {Object} error - The error object from axios
+ * @param {string} defaultMessage - Default message if no specific error found
+ * @returns {string} - Formatted error message
+ */
 const getErrorMessage = (error, defaultMessage = 'An error occurred') => {
   return error.response?.data?.errMas || 
          error.response?.data?.message || 
@@ -22,7 +25,10 @@ const getErrorMessage = (error, defaultMessage = 'An error occurred') => {
          defaultMessage;
 };
 
-// Request interceptor to add auth token
+/**
+ * Request interceptor to add authentication token to requests
+ * Automatically adds Bearer token to authorization header if available
+ */
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('authToken');
@@ -38,7 +44,10 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Response interceptor for better error handling
+/**
+ * Response interceptor for error handling and logging
+ * Logs responses and errors for debugging purposes
+ */
 api.interceptors.response.use(
   (response) => {
     console.log('API Response:', response.status, response.data);
@@ -50,12 +59,16 @@ api.interceptors.response.use(
   }
 );
 
-// AVAILABLE API METHODS - Only create and update are working
+/**
+ * Async thunk to fetch instructors for group assignment
+ * Retrieves list of available instructors from the server
+ * @returns {Promise} - Instructors data
+ */
 export const fetchInstructors = createAsyncThunk(
   'groups/fetchInstructors',
   async (_, { rejectWithValue }) => {
     try {
-      console.log('Fetching instructors from:', `${API_BASE_URL}/user/instructors`);
+      console.log('Fetching instructors from API endpoint: /user/instructors');
       const response = await api.get('/user/instructors');
       console.log('Instructors response:', response.data);
       return response.data;
@@ -68,6 +81,12 @@ export const fetchInstructors = createAsyncThunk(
   }
 );
 
+/**
+ * Async thunk to create a new group
+ * Creates a group with the provided data and adds it to the state
+ * @param {Object} groupData - Group data including code, level, course, instructor, etc.
+ * @returns {Promise} - Created group data
+ */
 export const createGroup = createAsyncThunk(
   'groups/createGroup',
   async (groupData, { rejectWithValue }) => {
@@ -86,6 +105,14 @@ export const createGroup = createAsyncThunk(
   }
 );
 
+/**
+ * Async thunk to update an existing group
+ * Updates group data and refreshes the state with the updated information
+ * @param {Object} params - Object containing groupId and groupData
+ * @param {string} params.groupId - The ID of the group to update
+ * @param {Object} params.groupData - Updated group data
+ * @returns {Promise} - Updated group data with groupId
+ */
 export const updateGroup = createAsyncThunk(
   'groups/updateGroup',
   async ({ groupId, groupData }, { rejectWithValue }) => {

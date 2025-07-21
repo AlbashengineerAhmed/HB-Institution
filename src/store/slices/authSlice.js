@@ -1,20 +1,22 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { API_CONFIG } from '../../config/api';
 
-const API_BASE_URL = 'https://hb-institution.vercel.app/api/v1';
+/**
+ * Creates axios instance with base configuration
+ * Sets default headers and base URL for all requests
+ */
+const api = axios.create(API_CONFIG);
 
-// Create axios instance
-const api = axios.create({
-  baseURL: API_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
-
-// Helper function to extract error message from backend response
+/**
+ * Helper function to extract error message from backend response
+ * Checks multiple possible error message fields and returns appropriate message
+ * @param {Object} error - The error object from axios
+ * @param {string} defaultMessage - Default message if no specific error found
+ * @returns {string} - Formatted error message
+ */
 const getErrorMessage = (error, defaultMessage = 'An error occurred') => {
-  // Check different possible error message fields from backend
   return error.response?.data?.errMas || 
          error.response?.data?.message || 
          error.response?.data?.messege || 
@@ -23,19 +25,14 @@ const getErrorMessage = (error, defaultMessage = 'An error occurred') => {
          defaultMessage;
 };
 
-// Request interceptor to add auth token
+/**
+ * Request interceptor to add authentication token to requests
+ * Automatically adds Bearer token to authorization header if available
+ */
 api.interceptors.request.use(
   (config) => {
-    console.log('Making API request:', {
-      url: config.url,
-      method: config.method,
-      data: config.data,
-      headers: config.headers
-    });
-    
     const token = localStorage.getItem('authToken');
     if (token) {
-      // Ensure token starts with Bearer
       const bearerToken = token.startsWith('Bearer ') ? token : `Bearer ${token}`;
       config.headers.authorization = bearerToken;
     }
@@ -44,14 +41,13 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Response interceptor for error handling
+/**
+ * Response interceptor for global error handling
+ * Handles 401 errors by clearing auth data and redirecting to login
+ */
 api.interceptors.response.use(
-  (response) => {
-    console.log('API response received:', response);
-    return response;
-  },
+  (response) => response,
   (error) => {
-    console.error('API error:', error);
     if (error.response?.status === 401) {
       localStorage.removeItem('authToken');
       localStorage.removeItem('user');
@@ -61,7 +57,12 @@ api.interceptors.response.use(
   }
 );
 
-// Async thunks for API calls
+/**
+ * Async thunk for student registration
+ * Registers a new student account with provided user data
+ * @param {Object} userData - User registration data including firstName, lastName, email, password
+ * @returns {Promise} - Registration response data
+ */
 export const registerStudent = createAsyncThunk(
   'auth/registerStudent',
   async (userData, { rejectWithValue }) => {
@@ -70,24 +71,15 @@ export const registerStudent = createAsyncThunk(
       lastName: userData.lastName,
       email: userData.email,
       password: userData.password,
-      confirmPassword: userData.password, // Use same password for confirmation
+      confirmPassword: userData.password,
       role: 'student'
     };
     
     try {
-      console.log('Sending student registration data:', requestData);
-      
       const response = await api.post('/auth/register', requestData);
-      console.log('Student registration response:', response.data);
-      
       toast.success('Student registration successful!');
       return response.data;
     } catch (error) {
-      console.error('Student registration error:', error);
-      console.error('Error response:', error.response?.data);
-      console.error('Error status:', error.response?.status);
-      console.error('Request data that failed:', requestData);
-      
       const errorMessage = getErrorMessage(error, 'Student registration failed');
       toast.error(errorMessage);
       return rejectWithValue(errorMessage);
@@ -95,6 +87,12 @@ export const registerStudent = createAsyncThunk(
   }
 );
 
+/**
+ * Async thunk for instructor registration
+ * Registers a new instructor account with provided user data and specialization
+ * @param {Object} userData - User registration data including firstName, lastName, email, password, specialization
+ * @returns {Promise} - Registration response data
+ */
 export const registerInstructor = createAsyncThunk(
   'auth/registerInstructor',
   async (userData, { rejectWithValue }) => {
@@ -103,25 +101,16 @@ export const registerInstructor = createAsyncThunk(
       lastName: userData.lastName,
       email: userData.email,
       password: userData.password,
-      confirmPassword: userData.password, // Use same password for confirmation
+      confirmPassword: userData.password,
       role: 'instructor',
       specialization: userData.specialization
     };
     
     try {
-      console.log('Sending instructor registration data:', requestData);
-      
       const response = await api.post('/auth/register', requestData);
-      console.log('Instructor registration response:', response.data);
-      
       toast.success('Instructor registration successful!');
       return response.data;
     } catch (error) {
-      console.error('Instructor registration error:', error);
-      console.error('Error response:', error.response?.data);
-      console.error('Error status:', error.response?.status);
-      console.error('Request data that failed:', requestData);
-      
       const errorMessage = getErrorMessage(error, 'Instructor registration failed');
       toast.error(errorMessage);
       return rejectWithValue(errorMessage);
@@ -129,16 +118,19 @@ export const registerInstructor = createAsyncThunk(
   }
 );
 
+/**
+ * Async thunk for user login
+ * Authenticates user with email and password, stores token and user data
+ * @param {Object} credentials - Login credentials containing email and password
+ * @returns {Promise} - Login response with user data and token
+ */
 export const loginUser = createAsyncThunk(
   'auth/loginUser',
   async (credentials, { rejectWithValue }) => {
     try {
-      console.log('Sending login data:', credentials);
-      
       const response = await api.post('/auth/login', credentials);
-      console.log('Login response:', response.data);
       
-      // Store token and user data
+      // Store authentication data in localStorage
       if (response.data.token) {
         localStorage.setItem('authToken', response.data.token);
       }
@@ -149,10 +141,6 @@ export const loginUser = createAsyncThunk(
       toast.success('Login successful!');
       return response.data;
     } catch (error) {
-      console.error('Login error:', error);
-      console.error('Error response:', error.response?.data);
-      console.error('Error status:', error.response?.status);
-      
       const errorMessage = getErrorMessage(error, 'Login failed');
       toast.error(errorMessage);
       return rejectWithValue(errorMessage);
@@ -160,21 +148,20 @@ export const loginUser = createAsyncThunk(
   }
 );
 
+/**
+ * Async thunk for password reset request
+ * Sends password reset code to user's email address
+ * @param {string} email - User's email address
+ * @returns {Promise} - Response confirming reset code was sent
+ */
 export const forgetPassword = createAsyncThunk(
   'auth/forgetPassword',
   async (email, { rejectWithValue }) => {
     try {
-      console.log('Sending forget password request for email:', email);
-      
       const response = await api.post('/auth/forget-password', { email });
-      console.log('Forget password response:', response.data);
-      
       toast.success('Password reset code sent to your email!');
       return response.data;
     } catch (error) {
-      console.error('Forget password error:', error);
-      console.error('Error response:', error.response?.data);
-      
       const errorMessage = getErrorMessage(error, 'Failed to send reset code');
       toast.error(errorMessage);
       return rejectWithValue(errorMessage);
@@ -182,21 +169,20 @@ export const forgetPassword = createAsyncThunk(
   }
 );
 
+/**
+ * Async thunk for verification code validation
+ * Verifies the password reset code sent to user's email
+ * @param {string} code - Verification code from email
+ * @returns {Promise} - Response confirming code is valid
+ */
 export const verifyCode = createAsyncThunk(
   'auth/verifyCode',
   async (code, { rejectWithValue }) => {
     try {
-      console.log('Sending verification code:', code);
-      
       const response = await api.post('/auth/verify-code', { code });
-      console.log('Verify code response:', response.data);
-      
       toast.success('Code verified successfully!');
       return response.data;
     } catch (error) {
-      console.error('Verify code error:', error);
-      console.error('Error response:', error.response?.data);
-      
       const errorMessage = getErrorMessage(error, 'Invalid verification code');
       toast.error(errorMessage);
       return rejectWithValue(errorMessage);
@@ -204,22 +190,21 @@ export const verifyCode = createAsyncThunk(
   }
 );
 
+/**
+ * Async thunk for password reset
+ * Resets user's password after successful code verification
+ * @param {Object} data - Object containing email and newPassword
+ * @returns {Promise} - Response confirming password was reset
+ */
 export const resetPassword = createAsyncThunk(
   'auth/resetPassword',
   async ({ email, newPassword }, { rejectWithValue }) => {
     try {
       const requestData = { email, newPassword };
-      console.log('Sending reset password request:', requestData);
-      
       const response = await api.post('/auth/reset-password', requestData);
-      console.log('Reset password response:', response.data);
-      
       toast.success('Password reset successful!');
       return response.data;
     } catch (error) {
-      console.error('Reset password error:', error);
-      console.error('Error response:', error.response?.data);
-      
       const errorMessage = getErrorMessage(error, 'Password reset failed');
       toast.error(errorMessage);
       return rejectWithValue(errorMessage);
@@ -227,22 +212,32 @@ export const resetPassword = createAsyncThunk(
   }
 );
 
-// Initial state
+/**
+ * Initial state for authentication slice
+ * Loads existing auth data from localStorage if available
+ */
 const initialState = {
   user: JSON.parse(localStorage.getItem('user')) || null,
   token: localStorage.getItem('authToken') || null,
   isLoading: false,
   isAuthenticated: !!localStorage.getItem('authToken'),
   error: null,
-  resetEmail: null, // Store email for password reset flow
-  isCodeVerified: false, // Track if verification code is verified
+  resetEmail: null,
+  isCodeVerified: false,
 };
 
-// Auth slice
+/**
+ * Authentication slice with reducers and extra reducers for async actions
+ * Manages user authentication state and related operations
+ */
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
+    /**
+     * Logs out user by clearing all authentication data
+     * Removes token and user data from localStorage and state
+     */
     logout: (state) => {
       localStorage.removeItem('authToken');
       localStorage.removeItem('user');
@@ -253,12 +248,24 @@ const authSlice = createSlice({
       state.isCodeVerified = false;
       toast.success('Logged out successfully!');
     },
+    /**
+     * Clears any error messages from state
+     * Used to reset error state after displaying to user
+     */
     clearError: (state) => {
       state.error = null;
     },
+    /**
+     * Sets the email for password reset flow
+     * Stores email to be used in subsequent reset steps
+     */
     setResetEmail: (state, action) => {
       state.resetEmail = action.payload;
     },
+    /**
+     * Clears password reset state
+     * Resets email and verification status after successful reset
+     */
     clearResetState: (state) => {
       state.resetEmail = null;
       state.isCodeVerified = false;
@@ -266,7 +273,7 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Register Student
+      // Register Student cases
       .addCase(registerStudent.pending, (state) => {
         state.isLoading = true;
         state.error = null;
@@ -280,7 +287,7 @@ const authSlice = createSlice({
         state.error = action.payload;
       })
       
-      // Register Instructor
+      // Register Instructor cases
       .addCase(registerInstructor.pending, (state) => {
         state.isLoading = true;
         state.error = null;
@@ -294,7 +301,7 @@ const authSlice = createSlice({
         state.error = action.payload;
       })
       
-      // Login
+      // Login cases
       .addCase(loginUser.pending, (state) => {
         state.isLoading = true;
         state.error = null;
@@ -312,7 +319,7 @@ const authSlice = createSlice({
         state.isAuthenticated = false;
       })
       
-      // Forget Password
+      // Forget Password cases
       .addCase(forgetPassword.pending, (state) => {
         state.isLoading = true;
         state.error = null;
@@ -326,7 +333,7 @@ const authSlice = createSlice({
         state.error = action.payload;
       })
       
-      // Verify Code
+      // Verify Code cases
       .addCase(verifyCode.pending, (state) => {
         state.isLoading = true;
         state.error = null;
@@ -342,7 +349,7 @@ const authSlice = createSlice({
         state.isCodeVerified = false;
       })
       
-      // Reset Password
+      // Reset Password cases
       .addCase(resetPassword.pending, (state) => {
         state.isLoading = true;
         state.error = null;

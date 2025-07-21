@@ -1,18 +1,21 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { API_CONFIG } from '../../config/api';
 
-const API_BASE_URL = 'https://hb-institution.vercel.app/api/v1';
+/**
+ * Creates axios instance with base configuration for course-related API calls
+ * Sets default headers and base URL for all course requests
+ */
+const api = axios.create(API_CONFIG);
 
-// Create axios instance
-const api = axios.create({
-  baseURL: API_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
-
-// Helper function to extract error message from backend response
+/**
+ * Helper function to extract error message from backend response
+ * Checks multiple possible error message fields and returns appropriate message
+ * @param {Object} error - The error object from axios
+ * @param {string} defaultMessage - Default message if no specific error found
+ * @returns {string} - Formatted error message
+ */
 const getErrorMessage = (error, defaultMessage = 'An error occurred') => {
   return error.response?.data?.errMas || 
          error.response?.data?.message || 
@@ -22,7 +25,10 @@ const getErrorMessage = (error, defaultMessage = 'An error occurred') => {
          defaultMessage;
 };
 
-// Request interceptor to add auth token
+/**
+ * Request interceptor to add authentication token to requests
+ * Automatically adds Bearer token to authorization header if available
+ */
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('authToken');
@@ -35,18 +41,25 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Response interceptor for better error handling
+/**
+ * Response interceptor for error handling
+ * Passes through successful responses and rejects errors
+ */
 api.interceptors.response.use(
   (response) => response,
   (error) => Promise.reject(error)
 );
 
-// Async thunks for API calls
+/**
+ * Async thunk to fetch courses with optional filtering parameters
+ * Supports pagination, category filtering, and search functionality
+ * @param {Object} params - Query parameters including category, search, page, limit
+ * @returns {Promise} - Course data with pagination information
+ */
 export const fetchCourses = createAsyncThunk(
   'courses/fetchCourses',
   async (params = {}, { rejectWithValue }) => {
     try {
-      // Build query string from params
       const queryParams = new URLSearchParams();
       if (params.category) queryParams.append('category', params.category);
       if (params.search) queryParams.append('search', params.search);
@@ -66,6 +79,12 @@ export const fetchCourses = createAsyncThunk(
   }
 );
 
+/**
+ * Async thunk to fetch a specific course by its ID
+ * Retrieves detailed information about a single course
+ * @param {string} courseId - The unique identifier of the course
+ * @returns {Promise} - Detailed course data
+ */
 export const fetchCourseById = createAsyncThunk(
   'courses/fetchCourseById',
   async (courseId, { rejectWithValue }) => {
@@ -80,6 +99,12 @@ export const fetchCourseById = createAsyncThunk(
   }
 );
 
+/**
+ * Async thunk to search courses by search term
+ * Performs text-based search across course titles and descriptions
+ * @param {string} searchTerm - The search query string
+ * @returns {Promise} - Filtered course results matching search term
+ */
 export const searchCourses = createAsyncThunk(
   'courses/searchCourses',
   async (searchTerm, { rejectWithValue }) => {
@@ -94,6 +119,12 @@ export const searchCourses = createAsyncThunk(
   }
 );
 
+/**
+ * Async thunk to fetch courses filtered by category
+ * Retrieves all courses belonging to a specific category
+ * @param {string} categoryId - The unique identifier of the category
+ * @returns {Promise} - Courses belonging to the specified category
+ */
 export const fetchCoursesByCategory = createAsyncThunk(
   'courses/fetchCoursesByCategory',
   async (categoryId, { rejectWithValue }) => {
@@ -108,11 +139,18 @@ export const fetchCoursesByCategory = createAsyncThunk(
   }
 );
 
+/**
+ * Async thunk to create a new course
+ * Creates a new course with provided data including file upload support
+ * @param {Object} data - Object containing categoryId and courseData
+ * @param {string} data.categoryId - The category ID to assign the course to
+ * @param {Object} data.courseData - Course information including title, description, price, etc.
+ * @returns {Promise} - Created course data
+ */
 export const createCourse = createAsyncThunk(
   'courses/createCourse',
   async ({ categoryId, courseData }, { rejectWithValue }) => {
     try {
-      // Create FormData for file upload
       const formData = new FormData();
       formData.append('title', courseData.title);
       formData.append('description', courseData.description);
@@ -146,6 +184,12 @@ export const createCourse = createAsyncThunk(
   }
 );
 
+/**
+ * Async thunk to delete a course
+ * Removes a course from the system permanently
+ * @param {string} courseId - The unique identifier of the course to delete
+ * @returns {Promise} - Confirmation of deletion with course ID
+ */
 export const deleteCourse = createAsyncThunk(
   'courses/deleteCourse',
   async (courseId, { rejectWithValue }) => {
@@ -161,7 +205,10 @@ export const deleteCourse = createAsyncThunk(
   }
 );
 
-// Initial state
+/**
+ * Initial state for course slice
+ * Defines default values for all course-related state properties
+ */
 const initialState = {
   courses: [],
   selectedCourse: null,
@@ -179,26 +226,53 @@ const initialState = {
   },
 };
 
-// Course slice
+/**
+ * Course slice with reducers and extra reducers for async actions
+ * Manages course state including filtering, searching, and CRUD operations
+ */
 const courseSlice = createSlice({
   name: 'courses',
   initialState,
   reducers: {
+    /**
+     * Clears any error messages from state
+     * Used to reset error state after displaying to user
+     */
     clearError: (state) => {
       state.error = null;
     },
+    /**
+     * Clears the currently selected course
+     * Resets selectedCourse to null
+     */
     clearSelectedCourse: (state) => {
       state.selectedCourse = null;
     },
+    /**
+     * Sets the currently selected course
+     * Updates selectedCourse with provided course data
+     */
     setSelectedCourse: (state, action) => {
       state.selectedCourse = action.payload;
     },
+    /**
+     * Updates the search term for course filtering
+     * Sets the search term used for filtering courses
+     */
     setSearchTerm: (state, action) => {
       state.searchTerm = action.payload;
     },
+    /**
+     * Updates the selected category for course filtering
+     * Sets the category used for filtering courses
+     */
     setSelectedCategory: (state, action) => {
       state.selectedCategory = action.payload;
     },
+    /**
+     * Filters courses based on current search term and category
+     * Applies both text search and category filtering to course list
+     */
     filterCourses: (state) => {
       let filtered = [...state.courses];
       
@@ -219,6 +293,10 @@ const courseSlice = createSlice({
       
       state.filteredCourses = filtered;
     },
+    /**
+     * Clears all applied filters
+     * Resets search term and category to default values
+     */
     clearFilters: (state) => {
       state.searchTerm = '';
       state.selectedCategory = 'all';
@@ -227,7 +305,7 @@ const courseSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Fetch Courses
+      // Fetch Courses cases
       .addCase(fetchCourses.pending, (state) => {
         state.isLoading = true;
         state.error = null;
@@ -246,7 +324,7 @@ const courseSlice = createSlice({
         state.filteredCourses = [];
       })
       
-      // Fetch Course by ID
+      // Fetch Course by ID cases
       .addCase(fetchCourseById.pending, (state) => {
         state.isLoading = true;
         state.error = null;
@@ -262,7 +340,7 @@ const courseSlice = createSlice({
         state.selectedCourse = null;
       })
       
-      // Search Courses
+      // Search Courses cases
       .addCase(searchCourses.pending, (state) => {
         state.isLoading = true;
         state.error = null;
@@ -277,7 +355,7 @@ const courseSlice = createSlice({
         state.error = action.payload;
       })
       
-      // Fetch Courses by Category
+      // Fetch Courses by Category cases
       .addCase(fetchCoursesByCategory.pending, (state) => {
         state.isLoading = true;
         state.error = null;
@@ -292,14 +370,13 @@ const courseSlice = createSlice({
         state.error = action.payload;
       })
       
-      // Create Course
+      // Create Course cases
       .addCase(createCourse.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
       .addCase(createCourse.fulfilled, (state, action) => {
         state.isLoading = false;
-        // Handle the response format: action.payload.course
         const newCourse = action.payload.course || action.payload.data;
         if (newCourse) {
           state.courses.push(newCourse);
@@ -312,7 +389,7 @@ const courseSlice = createSlice({
         state.error = action.payload;
       })
       
-      // Delete Course
+      // Delete Course cases
       .addCase(deleteCourse.pending, (state) => {
         state.isLoading = true;
         state.error = null;
