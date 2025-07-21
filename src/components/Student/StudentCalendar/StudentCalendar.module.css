@@ -12,7 +12,6 @@
 /* Calendar Header */
 .calendarHeader {
   margin-bottom: 30px;
-  text-align: center;
   background: var(--gradient-start);
   padding: 24px;
   border-radius: 16px;
@@ -20,7 +19,20 @@
   box-shadow: 0 4px 20px rgba(253, 198, 44, 0.1);
 }
 
-.calendarHeader h2 {
+.headerTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+  gap: 20px;
+}
+
+.headerLeft {
+  flex: 1;
+  text-align: left;
+}
+
+.headerLeft h2 {
   color: var(--primary-color);
   font-size: 2.2rem;
   font-weight: 700;
@@ -28,11 +40,69 @@
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.calendarHeader p {
+.headerLeft p {
   color: rgba(255, 255, 255, 0.9);
   font-size: 1.2rem;
-  margin-bottom: 24px;
+  margin: 0;
   font-weight: 500;
+}
+
+/* Current Time Display */
+.currentTimeDisplay {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(253, 198, 44, 0.1);
+  padding: 16px 20px;
+  border-radius: 12px;
+  border: 2px solid rgba(253, 198, 44, 0.3);
+  box-shadow: 0 4px 12px rgba(253, 198, 44, 0.2);
+  min-width: 220px;
+  animation: timeGlow 3s ease-in-out infinite;
+}
+
+@keyframes timeGlow {
+  0%, 100% { 
+    box-shadow: 0 4px 12px rgba(253, 198, 44, 0.2);
+    border-color: rgba(253, 198, 44, 0.3);
+  }
+  50% { 
+    box-shadow: 0 6px 20px rgba(253, 198, 44, 0.4);
+    border-color: rgba(253, 198, 44, 0.5);
+  }
+}
+
+.timeIcon {
+  font-size: 2rem;
+  color: var(--primary-color);
+  animation: clockTick 1s ease-in-out infinite;
+}
+
+@keyframes clockTick {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+.timeInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.currentTime {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  font-family: 'Courier New', monospace;
+  letter-spacing: 1px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.currentDate {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 500;
+  text-transform: capitalize;
 }
 
 /* Calendar Stats */
@@ -864,12 +934,42 @@
     margin: 5px 0;
   }
 
-  .calendarHeader h2 {
+  .headerTop {
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    text-align: center;
+  }
+
+  .headerLeft {
+    text-align: center;
+  }
+
+  .headerLeft h2 {
     font-size: 1.3rem;
   }
 
-  .calendarHeader p {
+  .headerLeft p {
     font-size: 0.9rem;
+  }
+
+  .currentTimeDisplay {
+    min-width: auto;
+    width: 100%;
+    max-width: 280px;
+    padding: 12px 16px;
+  }
+
+  .timeIcon {
+    font-size: 1.5rem;
+  }
+
+  .currentTime {
+    font-size: 1.2rem;
+  }
+
+  .currentDate {
+    font-size: 0.8rem;
   }
 
   .calendarStats {
@@ -1042,13 +1142,34 @@
     margin-bottom: 15px;
   }
 
-  .calendarHeader h2 {
+  .headerTop {
+    gap: 12px;
+  }
+
+  .headerLeft h2 {
     font-size: 1.1rem;
   }
 
-  .calendarHeader p {
+  .headerLeft p {
     font-size: 0.8rem;
     margin-bottom: 15px;
+  }
+
+  .currentTimeDisplay {
+    padding: 10px 12px;
+    gap: 8px;
+  }
+
+  .timeIcon {
+    font-size: 1.3rem;
+  }
+
+  .currentTime {
+    font-size: 1rem;
+  }
+
+  .currentDate {
+    font-size: 0.75rem;
   }
 
   .calendarStats {
@@ -1400,5 +1521,51 @@
   /* Compact time slots for small screens */
   .calendar :global(.rbc-time-view) {
     max-height: 60vh !important;
+  }
+}
+
+/* Improved mobile styles for timer */
+@media (max-width: 768px) {
+  .calendarHeader {
+  }
+
+  .headerTop {
+  }
+
+  .headerLeft {
+  }
+
+  .currentTimeDisplay {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .timeIcon {
+  }
+
+  .timeInfo {
+    
+  }
+
+  .currentTime {
+  }
+
+  .currentDate {
+  }
+}
+
+@media (max-width: 480px) {
+  .currentTimeDisplay {
+  }
+
+  .timeIcon {
+  }
+
+  .currentTime {
+  }
+
+  .currentDate {
   }
 }

@@ -81,6 +81,7 @@ const StudentCalendar = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [showEventModal, setShowEventModal] = useState(false);
+  const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
     fetchCalendarEvents();
@@ -95,6 +96,15 @@ const StudentCalendar = () => {
     return () => {
       window.removeEventListener('resize', handleResize);
     };
+  }, []);
+
+  // Update current time every second
+  useEffect(() => {
+    const timeInterval = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+
+    return () => clearInterval(timeInterval);
   }, []);
 
   const fetchCalendarEvents = async () => {
@@ -279,8 +289,23 @@ const StudentCalendar = () => {
   return (
     <div className={styles.calendarContainer}>
       <div className={styles.calendarHeader}>
-        <h2>📅 My Class Schedule</h2>
-        <p>View your upcoming lessons and course schedule</p>
+        <div className={styles.headerTop}>
+          <div className={styles.headerLeft}>
+            <h2>📅 My Class Schedule</h2>
+            <p>View your upcoming lessons and course schedule</p>
+          </div>
+          <div className={styles.currentTimeDisplay}>
+            <div className={styles.timeIcon}>🕐</div>
+            <div className={styles.timeInfo}>
+              <div className={styles.currentTime}>
+                {moment(currentTime).format('h:mm:ss A')}
+              </div>
+              <div className={styles.currentDate}>
+                {moment(currentTime).format('dddd, MMMM Do, YYYY')}
+              </div>
+            </div>
+          </div>
+        </div>
         <div className={styles.calendarStats}>
           <div className={styles.statItem}>
             <span className={styles.statValue}>{events.length}</span>
