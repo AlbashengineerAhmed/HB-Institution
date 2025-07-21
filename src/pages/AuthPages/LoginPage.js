@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import { loginUser, clearError } from '../../store/slices/authSlice';
 import { getDashboardRoute } from '../../utils/roleUtils';
 import styles from './AuthPages.module.css';
@@ -21,6 +22,51 @@ const LoginPage = () => {
 
   // Get the intended destination from location state or default to role-based dashboard
   const from = location.state?.from?.pathname;
+
+  // Check for URL parameters and show toast notifications
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+    const message = urlParams.get('message');
+    
+    if (message) {
+      // Handle different message types from backend redirects
+      switch (message) {
+        case 'confirmed':
+          toast.success('Email confirmed successfully! You can now log in.');
+          break;
+        case 'alreadyConfirmed':
+          toast.info('Your email is already confirmed. You can log in.');
+          break;
+        case 'passwordReset':
+          toast.success('Password reset successfully! You can now log in with your new password.');
+          break;
+        case 'registrationComplete':
+          toast.success('Registration completed successfully! Please log in.');
+          break;
+        case 'sessionExpired':
+          toast.warning('Your session has expired. Please log in again.');
+          break;
+        case 'unauthorized':
+          toast.error('Unauthorized access. Please log in to continue.');
+          break;
+        case 'accountActivated':
+          toast.success('Account activated successfully! You can now log in.');
+          break;
+        case 'emailVerified':
+          toast.success('Email verified successfully! You can now log in.');
+          break;
+        default:
+          // For any other message, show it as info
+          toast.info(decodeURIComponent(message));
+          break;
+      }
+      
+      // Clean up the URL by removing the message parameter
+      const newUrl = new URL(window.location);
+      newUrl.searchParams.delete('message');
+      window.history.replaceState({}, '', newUrl.pathname + newUrl.search);
+    }
+  }, [location.search]);
 
   useEffect(() => {
     if (isAuthenticated && user) {

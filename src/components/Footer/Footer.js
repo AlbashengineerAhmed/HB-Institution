@@ -43,12 +43,14 @@ const Footer = () => {
             </div>
             
             <div className={styles.footerLinksColumn}>
-              <h3 className={styles.footerHeading}>Subscribe to Newsletter</h3>
-              <p className={styles.newsletterText}>Stay updated with our latest news and offers</p>
-              <form className={styles.newsletterForm}>
-                <input type="email" placeholder="Your email address" className={styles.newsletterInput} />
-                <button type="submit" className={styles.newsletterButton}>Subscribe</button>
-              </form>
+              <h3 className={styles.footerHeading}>Support & Resources</h3>
+              <ul className={styles.footerList}>
+                <li><Link to="/help">Help Center</Link></li>
+                <li><Link to="/faq">FAQ</Link></li>
+                <li><Link to="/support">Technical Support</Link></li>
+                <li><Link to="/community">Community Forum</Link></li>
+                <li><Link to="/contact">Contact Support</Link></li>
+              </ul>
             </div>
           </div>
         </div>

@@ -32,6 +32,7 @@ import CoursesPage from './pages/CoursesPage/CoursesPage';
 import CourseDetailsPage from './pages/CourseDetailsPage/CourseDetailsPage';
 import EnrollmentPage from './pages/EnrollmentPage/EnrollmentPage';
 import EnrollmentSuccessPage from './pages/EnrollmentSuccessPage/EnrollmentSuccessPage';
+import ContactPage from './pages/ContactPage/ContactPage';
 
 // Admin Pages
 import AdminDashboard from './pages/AdminDashboard/AdminDashboard';
@@ -43,6 +44,9 @@ import SettingsPage from './pages/SettingsPage/SettingsPage';
 // Dashboard Pages
 import InstructorDashboard from './pages/InstructorDashboard/InstructorDashboard';
 import StudentDashboard from './pages/StudentDashboard/StudentDashboard';
+
+// 404 Page
+import NotFoundPage from './pages/NotFoundPage/NotFoundPage';
 
 // Route change tracker wrapper component
 const AppContent = () => {
@@ -85,6 +89,7 @@ const AppContent = () => {
           <Route path="/community/*" element={<CommunityPage />} />
           <Route path="/why-hbi" element={<WhyHBIPage />} />
           <Route path="/why-hbi/*" element={<WhyHBIPage />} />
+          <Route path="/contact" element={<ContactPage />} />
           
           {/* Course Routes */}
           <Route path="/courses" element={<CoursesPage />} />
@@ -160,15 +165,11 @@ const AppContent = () => {
               </ProtectedRoute>
             } 
           />
+          
+          {/* 404 Catch-All Route - Must be last */}
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>
-      
-      {/* Conditionally render Footer - HIDDEN on dashboard and profile pages */}
-      {!isDashboardRoute && <Footer />}
-      
-      <WhatsAppFloat />
-      <ScrollToTop />
-      {!isInitialLoad && <RouteChangeTracker />}
       <ToastContainer
         position="top-right"
         autoClose={5000}
@@ -181,10 +182,17 @@ const AppContent = () => {
         pauseOnHover
         theme="dark"
         toastStyle={{
-          backgroundColor: 'var(--secondary-color)',
+          backgroundColor: 'var(--gradient-end)',
           color: 'var(--text-color)',
         }}
       />
+      {/* Conditionally render Footer - HIDDEN on dashboard and profile pages */}
+      {!isDashboardRoute && <Footer />}
+      
+      <WhatsAppFloat />
+      <ScrollToTop />
+      {!isInitialLoad && <RouteChangeTracker />}
+
     </div>
   );
 };

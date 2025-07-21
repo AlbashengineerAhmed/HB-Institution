@@ -160,6 +160,12 @@ const StudentCalendar = () => {
     setCurrentView(view);
   }, []);
 
+  // Helper function to check if a date has events
+  const hasEventsOnDate = (date) => {
+    const dateStr = moment(date).format('YYYY-MM-DD');
+    return events.some(event => moment(event.start).format('YYYY-MM-DD') === dateStr);
+  };
+
   // Get events for current view period
   const getCurrentPeriodEvents = () => {
     if (currentView === 'month') {
@@ -213,11 +219,18 @@ const StudentCalendar = () => {
       return <span>{event.title}</span>;
     },
     month: {
-      dateHeader: ({ date, label }) => (
-        <div className={styles.customDateHeader}>
-          <span className={styles.dateNumber}>{label}</span>
-        </div>
-      )
+      dateHeader: ({ date, label }) => {
+        const hasEvents = hasEventsOnDate(date);
+        const isToday = moment(date).isSame(moment(), 'day');
+        
+        return (
+          <div className={styles.customDateHeader}>
+            <div className={`${styles.dateContainer} ${hasEvents ? styles.hasEvents : ''} ${isToday ? styles.isToday : ''}`}>
+              <span className={styles.dateNumber}>{label}</span>
+            </div>
+          </div>
+        );
+      }
     },
     day: {
       header: ({ date }) => (
