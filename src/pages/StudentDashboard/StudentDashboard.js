@@ -345,10 +345,6 @@ const StudentDashboard = () => {
               <span className={styles.statValue}>{studentData.completedCourses}</span>
               <span className={styles.statLabel}>Completed</span>
             </div>
-            <div className={styles.statItem}>
-              <span className={styles.statValue}>{studentData.totalProgress}%</span>
-              <span className={styles.statLabel}>Progress</span>
-            </div>
           </div>
 
           {/* Navigation Menu */}

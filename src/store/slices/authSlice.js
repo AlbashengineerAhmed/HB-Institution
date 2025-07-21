@@ -77,7 +77,7 @@ export const registerStudent = createAsyncThunk(
     
     try {
       const response = await api.post('/auth/register', requestData);
-      toast.success('Student registration successful!');
+      toast.success('Student registration successful! Please check your email to confirm your account.');
       return response.data;
     } catch (error) {
       const errorMessage = getErrorMessage(error, 'Student registration failed');
@@ -108,7 +108,7 @@ export const registerInstructor = createAsyncThunk(
     
     try {
       const response = await api.post('/auth/register', requestData);
-      toast.success('Instructor registration successful!');
+      toast.success('Instructor registration successful! Please check your email to confirm your account.');
       return response.data;
     } catch (error) {
       const errorMessage = getErrorMessage(error, 'Instructor registration failed');

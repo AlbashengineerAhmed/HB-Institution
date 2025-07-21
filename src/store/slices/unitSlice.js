@@ -1,18 +1,21 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { API_CONFIG } from '../../config/api';
 
-const API_BASE_URL = 'https://hb-institution.vercel.app/api/v1';
+/**
+ * Creates axios instance with base configuration for unit-related API calls
+ * Sets default headers and base URL for all unit requests
+ */
+const api = axios.create(API_CONFIG);
 
-// Create axios instance
-const api = axios.create({
-  baseURL: API_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
-
-// Helper function to extract error message from backend response
+/**
+ * Helper function to extract error message from backend response
+ * Checks multiple possible error message fields and returns appropriate message
+ * @param {Object} error - The error object from axios
+ * @param {string} defaultMessage - Default message if no specific error found
+ * @returns {string} - Formatted error message
+ */
 const getErrorMessage = (error, defaultMessage = 'An error occurred') => {
   return error.response?.data?.errMas || 
          error.response?.data?.message || 
@@ -22,7 +25,10 @@ const getErrorMessage = (error, defaultMessage = 'An error occurred') => {
          defaultMessage;
 };
 
-// Request interceptor to add auth token
+/**
+ * Request interceptor to add authentication token to requests
+ * Automatically adds Bearer token to authorization header if available
+ */
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('authToken');
@@ -35,13 +41,21 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Response interceptor for better error handling
+/**
+ * Response interceptor for error handling
+ * Passes through successful responses and rejects errors
+ */
 api.interceptors.response.use(
   (response) => response,
   (error) => Promise.reject(error)
 );
 
-// Async thunks for API calls
+/**
+ * Async thunk to fetch units for a specific course
+ * Retrieves all units belonging to a course
+ * @param {string} courseId - The ID of the course to fetch units for
+ * @returns {Promise} - Units data for the specified course
+ */
 export const fetchUnits = createAsyncThunk(
   'units/fetchUnits',
   async (courseId, { rejectWithValue }) => {
@@ -56,6 +70,12 @@ export const fetchUnits = createAsyncThunk(
   }
 );
 
+/**
+ * Async thunk to fetch a specific unit by ID with its lessons
+ * Retrieves detailed unit information including associated lessons
+ * @param {string} unitId - The ID of the unit to fetch
+ * @returns {Promise} - Unit details with lessons data
+ */
 export const fetchUnitById = createAsyncThunk(
   'units/fetchUnitById',
   async (unitId, { rejectWithValue }) => {
@@ -70,6 +90,14 @@ export const fetchUnitById = createAsyncThunk(
   }
 );
 
+/**
+ * Async thunk to create a new unit for a course
+ * Creates a unit with the provided data and associates it with a course
+ * @param {Object} params - Object containing courseId and unitData
+ * @param {string} params.courseId - The ID of the course to create the unit for
+ * @param {Object} params.unitData - Unit data including title, description, etc.
+ * @returns {Promise} - Created unit data
+ */
 export const createUnit = createAsyncThunk(
   'units/createUnit',
   async ({ courseId, unitData }, { rejectWithValue }) => {
@@ -85,6 +113,14 @@ export const createUnit = createAsyncThunk(
   }
 );
 
+/**
+ * Async thunk to update an existing unit
+ * Updates unit data with the provided information
+ * @param {Object} params - Object containing unitId and unitData
+ * @param {string} params.unitId - The ID of the unit to update
+ * @param {Object} params.unitData - Updated unit data
+ * @returns {Promise} - Updated unit data
+ */
 export const updateUnit = createAsyncThunk(
   'units/updateUnit',
   async ({ unitId, unitData }, { rejectWithValue }) => {
@@ -100,6 +136,12 @@ export const updateUnit = createAsyncThunk(
   }
 );
 
+/**
+ * Async thunk to delete a unit
+ * Removes a unit from the system permanently
+ * @param {string} unitId - The ID of the unit to delete
+ * @returns {Promise} - The deleted unit ID
+ */
 export const deleteUnit = createAsyncThunk(
   'units/deleteUnit',
   async (unitId, { rejectWithValue }) => {

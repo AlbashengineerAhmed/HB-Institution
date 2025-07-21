@@ -215,30 +215,13 @@ const ProfilePage = () => {
             👤 Basic Info
           </button>
           
-          {currentUser.role === 'student' && (
-            <button
-              className={`${styles.tabBtn} ${activeTab === 'courses' ? styles.active : ''}`}
-              onClick={() => setActiveTab('courses')}
-            >
-              📚 My Courses
-            </button>
-          )}
-          
           {currentUser.role === 'instructor' && (
-            <>
-              <button
-                className={`${styles.tabBtn} ${activeTab === 'professional' ? styles.active : ''}`}
-                onClick={() => setActiveTab('professional')}
-              >
-                🎓 Professional Info
-              </button>
-              <button
-                className={`${styles.tabBtn} ${activeTab === 'courses' ? styles.active : ''}`}
-                onClick={() => setActiveTab('courses')}
-              >
-                📚 My Courses
-              </button>
-            </>
+            <button
+              className={`${styles.tabBtn} ${activeTab === 'professional' ? styles.active : ''}`}
+              onClick={() => setActiveTab('professional')}
+            >
+              🎓 Professional Info
+            </button>
           )}
           
           {currentUser.role === 'admin' && (
@@ -286,14 +269,12 @@ const ProfilePage = () => {
                       value={formData.email}
                       onChange={handleInputChange}
                       className={styles.formInput}
-                      disabled={!isEditing || currentUser.role === 'admin'}
+                      disabled={true}
                       required
                     />
-                    {currentUser.role === 'admin' && (
-                      <small className={styles.formNote}>
-                        Admin email cannot be changed directly
-                      </small>
-                    )}
+                    <small className={styles.formNote}>
+                      Email address cannot be changed
+                    </small>
                   </div>
                 </div>
                 
@@ -446,21 +427,7 @@ const ProfilePage = () => {
             </div>
           )}
 
-          {activeTab === 'courses' && (
-            <div className={styles.coursesTab}>
-              <h3 className={styles.tabTitle}>
-                {currentUser.role === 'student' ? 'Enrolled Courses' : 'My Courses'}
-              </h3>
-              
-              <div className={styles.coursesList}>
-                <div className={styles.noCoursesMessage}>
-                  <p>No courses available at the moment.</p>
-                  <p>Course data will be loaded from your dashboard.</p>
-                </div>
-              </div>
-            </div>
-          )}
-
+          
           {activeTab === 'admin' && currentUser.role === 'admin' && (
             <div className={styles.adminTab}>
               <h3 className={styles.tabTitle}>Admin Settings</h3>

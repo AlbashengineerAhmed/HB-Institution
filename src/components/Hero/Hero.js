@@ -2,10 +2,19 @@ import React, { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './Hero.module.css';
 
+/**
+ * Hero component that displays the main landing section of the website
+ * Features video playback functionality, statistics, and call-to-action buttons
+ * @returns {JSX.Element} Hero section with interactive video and content cards
+ */
 const Hero = () => {
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
   const videoRef = useRef(null);
 
+  /**
+   * Handles video play functionality
+   * Sets video playing state and auto-plays the video after a short delay
+   */
   const handlePlayVideo = () => {
     setIsVideoPlaying(true);
     // Auto-play the video when it becomes visible
@@ -16,7 +25,10 @@ const Hero = () => {
     }, 100);
   };
   
-  // Function to close video and show image again
+  /**
+   * Handles video close functionality
+   * Stops video playback and resets to initial state
+   */
   const handleCloseVideo = () => {
     setIsVideoPlaying(false);
     if (videoRef.current) {
@@ -25,7 +37,10 @@ const Hero = () => {
     }
   };
 
-  // Handle video end
+  /**
+   * Handles video end event
+   * Automatically closes video when playback completes
+   */
   const handleVideoEnd = () => {
     setIsVideoPlaying(false);
   };
