@@ -113,6 +113,7 @@ const AppContent = () => {
           
           {/* Auth Routes */}
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/login/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
           <Route path="/verify-code" element={<VerifyCodePage />} />
