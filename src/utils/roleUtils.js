@@ -44,7 +44,7 @@ export const getDashboardLink = (role) => {
       icon: 'fas fa-chalkboard-teacher'
     },
     [ROLES.STUDENT]: {
-      label: 'Student Dashboard',
+      label: 'My Courses',
       path: '/student-dashboard',
       icon: 'fas fa-graduation-cap'
     }

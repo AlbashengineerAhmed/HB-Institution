@@ -37,9 +37,8 @@ import ContactPage from './pages/ContactPage/ContactPage';
 // Admin Pages
 import AdminDashboard from './pages/AdminDashboard/AdminDashboard';
 
-// Profile & Settings Pages
+// Profile Pages
 import ProfilePage from './pages/ProfilePage/ProfilePage';
-import SettingsPage from './pages/SettingsPage/SettingsPage';
 
 // Dashboard Pages
 import InstructorDashboard from './pages/InstructorDashboard/InstructorDashboard';
@@ -76,8 +75,7 @@ const AppContent = () => {
     '/admin',
     '/instructor-dashboard',
     '/student-dashboard',
-    '/profile',
-    '/settings'
+    '/profile'
   ];
 
   /**
@@ -137,16 +135,6 @@ const AppContent = () => {
             element={
               <ProtectedRoute>
                 <ProfilePage />
-              </ProtectedRoute>
-            } 
-          />
-          
-          {/* Settings Route - Protected */}
-          <Route 
-            path="/settings" 
-            element={
-              <ProtectedRoute>
-                <SettingsPage />
               </ProtectedRoute>
             } 
           />

@@ -330,11 +330,7 @@ const Header = () => {
                     <i className="fas fa-user"></i>
                     Profile
                   </Link>
-                  <Link to="/settings" className={styles.userAction} onClick={() => setUserDropdownOpen(false)}>
-                    <i className="fas fa-cog"></i>
-                    Settings
-                  </Link>
-                  <button onClick={handleLogout} className={styles.logoutBtn}>
+                                    <button onClick={handleLogout} className={styles.logoutBtn}>
                     <i className="fas fa-sign-out-alt"></i>
                     Logout
                   </button>
