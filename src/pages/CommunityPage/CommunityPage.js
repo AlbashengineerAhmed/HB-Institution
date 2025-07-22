@@ -1,13 +1,12 @@
 import React from 'react';
 import styles from './CommunityPage.module.css';
-import styles from './CommunityPage.module.css';
 
 const CommunityPage = () => {
   return (
     <div className={styles.communityPage}>
             {/* Community Banner Section */}
             <section className={styles.communityBanner}>
-              <div className={container}>
+              <div className={styles.container}>
                 <div className={styles.bannerContent}>
                   <h1 className={styles.bannerTitle}>Our Community</h1>
                   <p className={styles.bannerDescription}>
@@ -19,7 +18,7 @@ const CommunityPage = () => {
       
             {/* Student Life Section */}
             <section className={styles.studentLifeSection}>
-              <div className={container}>
+              <div className={styles.container}>
                 <div className="section-header">
                   <h2 className="section-title">Student Life</h2>
                 </div>
