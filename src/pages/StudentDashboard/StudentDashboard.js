@@ -325,7 +325,23 @@ const StudentDashboard = () => {
             
             <div className={styles.studentInfo}>
               <div className={styles.studentAvatar}>
-                {studentData.firstName?.charAt(0) || studentData.email?.charAt(0) || 'S'}
+                {(user?.avatar || user?.profilePicture || user?.image) ? (
+                  <img 
+                    src={user?.avatar || user?.profilePicture || user?.image} 
+                    alt="Profile" 
+                    className={styles.studentAvatarImage}
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                      e.target.nextSibling.style.display = 'flex';
+                    }}
+                  />
+                ) : null}
+                <div 
+                  className={styles.studentAvatarText}
+                  style={{ display: (user?.avatar || user?.profilePicture || user?.image) ? 'none' : 'flex' }}
+                >
+                  {studentData.firstName?.charAt(0) || studentData.email?.charAt(0) || 'S'}
+                </div>
               </div>
               <div className={styles.studentDetails}>
                 <h3 className={styles.studentName}>{studentData.name}</h3>

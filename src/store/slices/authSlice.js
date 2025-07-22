@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { API_CONFIG } from '../../config/api';
+import { updatePassword as updatePasswordService, updateProfile as updateProfileService, getUserProfile } from '../../services/profileService';
 
 /**
  * Creates axios instance with base configuration
@@ -213,6 +214,62 @@ export const resetPassword = createAsyncThunk(
 );
 
 /**
+ * Async thunk for updating user password
+ * Updates user's password when logged in
+ * @param {Object} passwordData - Object containing currentPassword and newPassword
+ * @returns {Promise} - Response confirming password was updated
+ */
+export const updatePassword = createAsyncThunk(
+  'auth/updatePassword',
+  async (passwordData, { rejectWithValue }) => {
+    try {
+      const response = await updatePasswordService(passwordData);
+      return response;
+    } catch (error) {
+      const errorMessage = getErrorMessage(error, 'Failed to update password');
+      return rejectWithValue(errorMessage);
+    }
+  }
+);
+
+/**
+ * Async thunk for updating user profile
+ * Updates user's profile information including image upload
+ * @param {FormData} formData - FormData containing profile data and optional image
+ * @returns {Promise} - Response with updated user data
+ */
+export const updateProfile = createAsyncThunk(
+  'auth/updateProfile',
+  async (formData, { rejectWithValue }) => {
+    try {
+      const response = await updateProfileService(formData);
+      return response;
+    } catch (error) {
+      const errorMessage = getErrorMessage(error, 'Failed to update profile');
+      return rejectWithValue(errorMessage);
+    }
+  }
+);
+
+/**
+ * Async thunk for fetching user profile
+ * Fetches complete user profile data from server and updates state
+ * @returns {Promise} - Response with complete user data
+ */
+export const fetchUserProfile = createAsyncThunk(
+  'auth/fetchUserProfile',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await getUserProfile();
+      return response;
+    } catch (error) {
+      const errorMessage = getErrorMessage(error, 'Failed to fetch user profile');
+      return rejectWithValue(errorMessage);
+    }
+  }
+);
+
+/**
  * Initial state for authentication slice
  * Loads existing auth data from localStorage if available
  */
@@ -246,6 +303,7 @@ const authSlice = createSlice({
       state.isAuthenticated = false;
       state.resetEmail = null;
       state.isCodeVerified = false;
+      state.isLoading = false;
       toast.success('Logged out successfully!');
     },
     /**
@@ -254,6 +312,13 @@ const authSlice = createSlice({
      */
     clearError: (state) => {
       state.error = null;
+    },
+    /**
+     * Clears loading state
+     * Used to reset loading state when needed
+     */
+    clearLoading: (state) => {
+      state.isLoading = false;
     },
     /**
      * Sets the email for password reset flow
@@ -363,9 +428,61 @@ const authSlice = createSlice({
       .addCase(resetPassword.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
+      })
+      
+      // Update Password cases
+      .addCase(updatePassword.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(updatePassword.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error = null;
+      })
+      .addCase(updatePassword.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      })
+      
+      // Update Profile cases
+      .addCase(updateProfile.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(updateProfile.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error = null;
+        // Update user data in state if response contains updated user data
+        if (action.payload.user) {
+          state.user = action.payload.user;
+          localStorage.setItem('user', JSON.stringify(action.payload.user));
+        }
+      })
+      .addCase(updateProfile.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      })
+      
+      // Fetch User Profile cases
+      .addCase(fetchUserProfile.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchUserProfile.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error = null;
+        // Update user data in state with complete profile data
+        if (action.payload.user) {
+          state.user = action.payload.user;
+          localStorage.setItem('user', JSON.stringify(action.payload.user));
+        }
+      })
+      .addCase(fetchUserProfile.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
       });
   },
 });
 
-export const { logout, clearError, setResetEmail, clearResetState } = authSlice.actions;
+export const { logout, clearError, clearLoading, setResetEmail, clearResetState } = authSlice.actions;
 export default authSlice.reducer;

@@ -1,76 +1,70 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { updatePassword, updateProfile, clearLoading, fetchUserProfile } from '../../store/slices/authSlice';
 import styles from './ProfilePage.module.css';
 
 const ProfilePage = () => {
   const navigate = useNavigate();
-  const { user } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const { user, isLoading } = useSelector((state) => state.auth);
   
-  // Use real user data from Redux store
+  // Clear any persistent loading state on component mount
+  useEffect(() => {
+    dispatch(clearLoading());
+  }, [dispatch]);
+  
+  // Only use data from backend - no hardcoded fallbacks
   const currentUser = {
     id: user?.id || user?._id,
-    role: user?.role || 'student',
-    profilePicture: user?.profilePicture || '/images/default-avatar.jpg',
-    fullName: user?.firstName && user?.lastName ? `${user.firstName} ${user.lastName}` : user?.fullName || 'User',
-    email: user?.email || '',
-    phone: user?.phone || '',
-    gender: user?.gender || 'male',
-    country: user?.country || '',
-    bio: user?.bio || '',
-    // Instructor specific fields
-    specialty: user?.specialty || '',
-    experience: user?.experience || '',
-    socialLinks: user?.socialLinks || {},
-    teachingSubjects: user?.teachingSubjects || [],
-    certifications: user?.certifications || [],
-    // Admin specific fields
-    adminLevel: user?.adminLevel || 'Administrator',
-    permissions: user?.permissions || [],
-    lastLogin: user?.lastLogin || new Date().toLocaleString()
+    role: user?.role,
+    profilePicture: user?.avatar || user?.profilePicture || user?.image,
+    firstName: user?.firstName,
+    lastName: user?.lastName,
+    fullName: user?.firstName && user?.lastName ? `${user.firstName} ${user.lastName}` : user?.fullName,
+    email: user?.email,
+    phoneNumber: user?.phoneNumber || user?.phone,
+    gender: user?.gender,
+    country: user?.country,
+    bio: user?.bio,
+    // Only show fields that exist in backend
+    specialty: user?.specialty,
+    experience: user?.experience,
+    socialLinks: user?.socialLinks,
+    teachingSubjects: user?.teachingSubjects,
+    certifications: user?.certifications,
+    adminLevel: user?.adminLevel,
+    permissions: user?.permissions,
+    lastLogin: user?.lastLogin
   };
 
   const [formData, setFormData] = useState({
-    fullName: currentUser.fullName,
-    email: currentUser.email,
-    phone: currentUser.phone,
-    gender: currentUser.gender,
-    country: currentUser.country,
-    bio: currentUser.bio,
+    firstName: currentUser.firstName || '',
+    lastName: currentUser.lastName || '',
+    phoneNumber: currentUser.phoneNumber || '',
     currentPassword: '',
     newPassword: '',
-    confirmPassword: '',
-    // Instructor specific
-    specialty: currentUser.specialty,
-    experience: currentUser.experience,
-    linkedin: currentUser.socialLinks?.linkedin || '',
-    youtube: currentUser.socialLinks?.youtube || '',
-    teachingSubjects: Array.isArray(currentUser.teachingSubjects) ? currentUser.teachingSubjects.join(', ') : ''
+    confirmPassword: ''
   });
 
   const [activeTab, setActiveTab] = useState('basic');
   const [isEditing, setIsEditing] = useState(false);
-  const [profileImage, setProfileImage] = useState(currentUser.profilePicture);
+  const [profileImage, setProfileImage] = useState(null);
+  const [selectedImageFile, setSelectedImageFile] = useState(null);
 
   // Update form data when user data changes
   useEffect(() => {
-    setFormData({
-      fullName: currentUser.fullName,
-      email: currentUser.email,
-      phone: currentUser.phone,
-      gender: currentUser.gender,
-      country: currentUser.country,
-      bio: currentUser.bio,
-      currentPassword: '',
-      newPassword: '',
-      confirmPassword: '',
-      specialty: currentUser.specialty,
-      experience: currentUser.experience,
-      linkedin: currentUser.socialLinks?.linkedin || '',
-      youtube: currentUser.socialLinks?.youtube || '',
-      teachingSubjects: Array.isArray(currentUser.teachingSubjects) ? currentUser.teachingSubjects.join(', ') : ''
-    });
-    setProfileImage(currentUser.profilePicture);
+    if (user) {
+      setFormData({
+        firstName: currentUser.firstName || '',
+        lastName: currentUser.lastName || '',
+        phoneNumber: currentUser.phoneNumber || '',
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: ''
+      });
+      setProfileImage(currentUser.profilePicture);
+    }
   }, [user]);
 
   const handleInputChange = (e) => {
@@ -84,6 +78,7 @@ const ProfilePage = () => {
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
+      setSelectedImageFile(file);
       const reader = new FileReader();
       reader.onload = (e) => {
         setProfileImage(e.target.result);
@@ -92,33 +87,84 @@ const ProfilePage = () => {
     }
   };
 
-  const handleSave = (e) => {
+  const handleSaveProfile = async (e) => {
     e.preventDefault();
-    console.log('Saving profile data:', formData);
-    setIsEditing(false);
-    // TODO: Implement API call to update profile
-    // dispatch(updateProfile(formData));
+    
+    try {
+      // Create FormData for profile update
+      const profileFormData = new FormData();
+      
+      // Add text fields only if they have values from backend
+      if (formData.firstName) {
+        profileFormData.append('firstName', formData.firstName);
+      }
+      if (formData.phoneNumber) {
+        profileFormData.append('phoneNumber', formData.phoneNumber);
+      }
+      
+      // Add image if selected
+      if (selectedImageFile) {
+        profileFormData.append('image', selectedImageFile);
+      }
+
+      // Only send profile update if there's data to update
+      if (profileFormData.has('firstName') || profileFormData.has('phoneNumber') || profileFormData.has('image')) {
+        await dispatch(updateProfile(profileFormData)).unwrap();
+        
+        // Fetch updated user profile to ensure we have the latest data including avatar
+        await dispatch(fetchUserProfile()).unwrap();
+      }
+
+      setIsEditing(false);
+      setSelectedImageFile(null);
+    } catch (error) {
+      console.error('Failed to update profile:', error);
+    }
+  };
+
+  const handleUpdatePassword = async (e) => {
+    e.preventDefault();
+    
+    if (!formData.currentPassword || !formData.newPassword) {
+      alert('Please fill in both current and new password');
+      return;
+    }
+
+    if (formData.newPassword !== formData.confirmPassword) {
+      alert('New passwords do not match');
+      return;
+    }
+
+    try {
+      await dispatch(updatePassword({
+        currentPassword: formData.currentPassword,
+        newPassword: formData.newPassword
+      })).unwrap();
+
+      // Clear password fields after successful update
+      setFormData(prev => ({
+        ...prev,
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: ''
+      }));
+    } catch (error) {
+      console.error('Failed to update password:', error);
+    }
   };
 
   const handleCancel = () => {
     setFormData({
-      fullName: currentUser.fullName,
-      email: currentUser.email,
-      phone: currentUser.phone,
-      gender: currentUser.gender,
-      country: currentUser.country,
-      bio: currentUser.bio,
+      firstName: currentUser.firstName || '',
+      lastName: currentUser.lastName || '',
+      phoneNumber: currentUser.phoneNumber || '',
       currentPassword: '',
       newPassword: '',
-      confirmPassword: '',
-      specialty: currentUser.specialty,
-      experience: currentUser.experience,
-      linkedin: currentUser.socialLinks?.linkedin || '',
-      youtube: currentUser.socialLinks?.youtube || '',
-      teachingSubjects: Array.isArray(currentUser.teachingSubjects) ? currentUser.teachingSubjects.join(', ') : ''
+      confirmPassword: ''
     });
     setIsEditing(false);
     setProfileImage(currentUser.profilePicture);
+    setSelectedImageFile(null);
   };
 
   const getRoleDisplayName = (role) => {
@@ -131,6 +177,8 @@ const ProfilePage = () => {
   };
 
   const getRoleBadge = (role) => {
+    if (!role) return null;
+    
     const roleClasses = {
       student: styles.roleStudent,
       instructor: styles.roleInstructor,
@@ -144,6 +192,19 @@ const ProfilePage = () => {
     );
   };
 
+  // Don't render if no user data
+  if (!user) {
+    return (
+      <div className={styles.profilePage}>
+        <div className={styles.container}>
+          <div className={styles.loadingMessage}>
+            Please log in to view your profile.
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className={styles.profilePage}>
       <div className={styles.container}>
@@ -152,7 +213,7 @@ const ProfilePage = () => {
           <div className={styles.profileImageSection}>
             <div className={styles.profileImageContainer}>
               <img 
-                src={profileImage} 
+                src={profileImage || '/images/default-avatar.jpg'} 
                 alt="Profile" 
                 className={styles.profileImage}
                 onError={(e) => {
@@ -174,8 +235,12 @@ const ProfilePage = () => {
           </div>
           
           <div className={styles.profileInfo}>
-            <h1 className={styles.profileName}>{currentUser.fullName}</h1>
-            <p className={styles.profileEmail}>{currentUser.email}</p>
+            <h1 className={styles.profileName}>
+              {currentUser.fullName || 'User'}
+            </h1>
+            {currentUser.email && (
+              <p className={styles.profileEmail}>{currentUser.email}</p>
+            )}
             {getRoleBadge(currentUser.role)}
           </div>
           
@@ -191,13 +256,15 @@ const ProfilePage = () => {
               <div className={styles.editActions}>
                 <button 
                   className={styles.saveBtn}
-                  onClick={handleSave}
+                  onClick={handleSaveProfile}
+                  disabled={isLoading}
                 >
-                  ✅ Save Changes
+                  {isLoading ? '⏳ Saving...' : '✅ Save Changes'}
                 </button>
                 <button 
                   className={styles.cancelBtn}
                   onClick={handleCancel}
+                  disabled={isLoading}
                 >
                   ❌ Cancel
                 </button>
@@ -215,24 +282,6 @@ const ProfilePage = () => {
             👤 Basic Info
           </button>
           
-          {currentUser.role === 'instructor' && (
-            <button
-              className={`${styles.tabBtn} ${activeTab === 'professional' ? styles.active : ''}`}
-              onClick={() => setActiveTab('professional')}
-            >
-              🎓 Professional Info
-            </button>
-          )}
-          
-          {currentUser.role === 'admin' && (
-            <button
-              className={`${styles.tabBtn} ${activeTab === 'admin' ? styles.active : ''}`}
-              onClick={() => setActiveTab('admin')}
-            >
-              👑 Admin Settings
-            </button>
-          )}
-          
           <button
             className={`${styles.tabBtn} ${activeTab === 'security' ? styles.active : ''}`}
             onClick={() => setActiveTab('security')}
@@ -246,228 +295,82 @@ const ProfilePage = () => {
           {activeTab === 'basic' && (
             <div className={styles.basicInfoTab}>
               <h3 className={styles.tabTitle}>Basic Information</h3>
-              <form className={styles.profileForm}>
+              <form className={styles.profileForm} onSubmit={handleSaveProfile}>
                 <div className={styles.formRow}>
                   <div className={styles.formGroup}>
-                    <label className={styles.formLabel}>Full Name *</label>
+                    <label className={styles.formLabel}>First Name</label>
                     <input
                       type="text"
-                      name="fullName"
-                      value={formData.fullName}
+                      name="firstName"
+                      value={formData.firstName}
                       onChange={handleInputChange}
                       className={styles.formInput}
                       disabled={!isEditing}
-                      required
+                      placeholder={!currentUser.firstName ? "Not provided" : ""}
                     />
                   </div>
                   
                   <div className={styles.formGroup}>
-                    <label className={styles.formLabel}>Email Address *</label>
+                    <label className={styles.formLabel}>Last Name</label>
                     <input
-                      type="email"
-                      name="email"
-                      value={formData.email}
+                      type="text"
+                      name="lastName"
+                      value={formData.lastName}
                       onChange={handleInputChange}
                       className={styles.formInput}
+                      disabled={!isEditing}
+                      placeholder={!currentUser.lastName ? "Not provided" : ""}
+                    />
+                  </div>
+                </div>
+                
+                <div className={styles.formRow}>
+                  <div className={styles.formGroup}>
+                    <label className={styles.formLabel}>Email Address</label>
+                    <input
+                      type="email"
+                      value={currentUser.email || 'Not provided'}
+                      className={styles.formInput}
                       disabled={true}
-                      required
                     />
                     <small className={styles.formNote}>
                       Email address cannot be changed
                     </small>
                   </div>
-                </div>
-                
-                <div className={styles.formRow}>
-                  <div className={styles.formGroup}>
+                                    <div className={styles.formGroup}>
                     <label className={styles.formLabel}>Phone Number</label>
                     <input
                       type="tel"
-                      name="phone"
-                      value={formData.phone}
+                      name="phoneNumber"
+                      value={formData.phoneNumber}
                       onChange={handleInputChange}
                       className={styles.formInput}
                       disabled={!isEditing}
+                      placeholder={!currentUser.phoneNumber ? "Not provided" : ""}
                     />
                   </div>
                   
-                  <div className={styles.formGroup}>
-                    <label className={styles.formLabel}>Gender</label>
-                    <select
-                      name="gender"
-                      value={formData.gender}
-                      onChange={handleInputChange}
-                      className={styles.formSelect}
-                      disabled={!isEditing}
-                    >
-                      <option value="male">Male</option>
-                      <option value="female">Female</option>
-                    </select>
-                  </div>
-                </div>
-                
-                <div className={styles.formGroup}>
-                  <label className={styles.formLabel}>Country</label>
-                  <input
-                    type="text"
-                    name="country"
-                    value={formData.country}
-                    onChange={handleInputChange}
-                    className={styles.formInput}
-                    disabled={!isEditing}
-                  />
-                </div>
-                
-                <div className={styles.formGroup}>
-                  <label className={styles.formLabel}>Bio</label>
-                  <textarea
-                    name="bio"
-                    value={formData.bio}
-                    onChange={handleInputChange}
-                    className={styles.formTextarea}
-                    rows="4"
-                    disabled={!isEditing}
-                    placeholder="Tell us about yourself..."
-                  />
-                </div>
-              </form>
-            </div>
-          )}
-
-          {activeTab === 'professional' && currentUser.role === 'instructor' && (
-            <div className={styles.professionalTab}>
-              <h3 className={styles.tabTitle}>Professional Information</h3>
-              <form className={styles.profileForm}>
-                <div className={styles.formRow}>
-                  <div className={styles.formGroup}>
-                    <label className={styles.formLabel}>Specialty/Expertise</label>
-                    <input
-                      type="text"
-                      name="specialty"
-                      value={formData.specialty}
-                      onChange={handleInputChange}
-                      className={styles.formInput}
-                      disabled={!isEditing}
-                    />
-                  </div>
-                  
-                  <div className={styles.formGroup}>
-                    <label className={styles.formLabel}>Years of Experience</label>
-                    <input
-                      type="text"
-                      name="experience"
-                      value={formData.experience}
-                      onChange={handleInputChange}
-                      className={styles.formInput}
-                      disabled={!isEditing}
-                    />
-                  </div>
-                </div>
-                
-                <div className={styles.formGroup}>
-                  <label className={styles.formLabel}>Teaching Subjects (comma separated)</label>
-                  <input
-                    type="text"
-                    name="teachingSubjects"
-                    value={formData.teachingSubjects}
-                    onChange={handleInputChange}
-                    className={styles.formInput}
-                    disabled={!isEditing}
-                    placeholder="e.g., Islamic Theology, Quran Studies, Islamic History"
-                  />
                 </div>
                 
                 <div className={styles.formRow}>
                   <div className={styles.formGroup}>
-                    <label className={styles.formLabel}>LinkedIn Profile</label>
+                    <label className={styles.formLabel}>Role</label>
                     <input
-                      type="url"
-                      name="linkedin"
-                      value={formData.linkedin}
-                      onChange={handleInputChange}
+                      type="text"
+                      value={getRoleDisplayName(currentUser.role) || 'Not specified'}
                       className={styles.formInput}
-                      disabled={!isEditing}
-                      placeholder="https://linkedin.com/in/your-profile"
+                      disabled={true}
                     />
                   </div>
-                  
-                  <div className={styles.formGroup}>
-                    <label className={styles.formLabel}>YouTube Channel</label>
-                    <input
-                      type="url"
-                      name="youtube"
-                      value={formData.youtube}
-                      onChange={handleInputChange}
-                      className={styles.formInput}
-                      disabled={!isEditing}
-                      placeholder="https://youtube.com/c/your-channel"
-                    />
-                  </div>
-                </div>
-                
-                <div className={styles.certificationsSection}>
-                  <h4 className={styles.sectionTitle}>Certifications</h4>
-                  <div className={styles.certificationsList}>
-                    {currentUser.certifications?.map((cert, index) => (
-                      <div key={index} className={styles.certificationItem}>
-                        <span className={styles.certificationName}>{cert.name}</span>
-                        <a href={`/files/${cert.file}`} className={styles.certificationLink}>
-                          📄 View Certificate
-                        </a>
-                      </div>
-                    ))}
-                  </div>
-                  {isEditing && (
-                    <button type="button" className={styles.addCertBtn}>
-                      ➕ Add Certification
-                    </button>
-                  )}
                 </div>
               </form>
-            </div>
-          )}
-
-          
-          {activeTab === 'admin' && currentUser.role === 'admin' && (
-            <div className={styles.adminTab}>
-              <h3 className={styles.tabTitle}>Admin Settings</h3>
-              <div className={styles.adminInfo}>
-                <div className={styles.infoCard}>
-                  <h4 className={styles.infoTitle}>Role & Permissions</h4>
-                  <p className={styles.infoText}>
-                    <strong>Role:</strong> {currentUser.adminLevel}
-                  </p>
-                  <p className={styles.infoText}>
-                    <strong>Permissions:</strong> {currentUser.permissions?.join(', ') || 'Full system access'}
-                  </p>
-                  <p className={styles.infoText}>
-                    <strong>Last Login:</strong> {currentUser.lastLogin}
-                  </p>
-                  <p className={styles.infoNote}>
-                    Role and permissions are managed by system administrators and cannot be modified here.
-                  </p>
-                </div>
-                
-                <div className={styles.infoCard}>
-                  <h4 className={styles.infoTitle}>User Management</h4>
-                  <p className={styles.infoText}>
-                    Manage other users through the dedicated admin dashboard.
-                  </p>
-                  <button 
-                    className={styles.adminBtn}
-                    onClick={() => navigate('/admin')}
-                  >
-                    🔧 Go to Admin Dashboard
-                  </button>
-                </div>
-              </div>
             </div>
           )}
 
           {activeTab === 'security' && (
             <div className={styles.securityTab}>
               <h3 className={styles.tabTitle}>Security Settings</h3>
-              <form className={styles.profileForm}>
+              <form className={styles.profileForm} onSubmit={handleUpdatePassword}>
                 <div className={styles.formGroup}>
                   <label className={styles.formLabel}>Current Password</label>
                   <input
@@ -476,8 +379,8 @@ const ProfilePage = () => {
                     value={formData.currentPassword}
                     onChange={handleInputChange}
                     className={styles.formInput}
-                    disabled={!isEditing}
-                    placeholder="Enter current password to change"
+                    placeholder="Enter current password"
+                    required
                   />
                 </div>
                 
@@ -490,8 +393,8 @@ const ProfilePage = () => {
                       value={formData.newPassword}
                       onChange={handleInputChange}
                       className={styles.formInput}
-                      disabled={!isEditing}
                       placeholder="Enter new password"
+                      required
                     />
                   </div>
                   
@@ -503,23 +406,21 @@ const ProfilePage = () => {
                       value={formData.confirmPassword}
                       onChange={handleInputChange}
                       className={styles.formInput}
-                      disabled={!isEditing}
                       placeholder="Confirm new password"
+                      required
                     />
                   </div>
                 </div>
                 
-                {currentUser.role === 'student' && (
-                  <div className={styles.dangerZone}>
-                    <h4 className={styles.dangerTitle}>Danger Zone</h4>
-                    <p className={styles.dangerText}>
-                      Once you delete your account, there is no going back. Please be certain.
-                    </p>
-                    <button type="button" className={styles.deleteBtn}>
-                      🗑️ Request Account Deletion
-                    </button>
-                  </div>
-                )}
+                <div className={styles.formActions}>
+                  <button 
+                    type="submit" 
+                    className={styles.updatePasswordBtn}
+                    disabled={isLoading}
+                  >
+                    {isLoading ? '⏳ Updating...' : '🔒 Update Password'}
+                  </button>
+                </div>
               </form>
             </div>
           )}

@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { logout } from '../../store/slices/authSlice';
+import { logout, fetchUserProfile } from '../../store/slices/authSlice';
 import { getDashboardLink, getRoleDisplayName } from '../../utils/roleUtils';
 import styles from './Header.module.css';
 
@@ -15,6 +15,15 @@ const Header = () => {
   const { isAuthenticated, user } = useSelector((state) => state.auth);
   
   const dashboardLink = getDashboardLink(user?.role);
+  
+  // Fetch complete user profile if user data is incomplete
+  React.useEffect(() => {
+    if (isAuthenticated && user && (!user.role || !user.email)) {
+      console.log('🔍 Header: User data incomplete, fetching complete profile...');
+      console.log('🔍 Header: Current user data:', user);
+      dispatch(fetchUserProfile());
+    }
+  }, [isAuthenticated, user, dispatch]);
   
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -298,7 +307,23 @@ const Header = () => {
             >
               <div className={styles.userProfile} onClick={toggleUserDropdown}>
                 <div className={styles.userAvatar}>
-                  {user?.firstName?.charAt(0) || user?.email?.charAt(0) || 'U'}
+                  {(user?.avatar || user?.profilePicture || user?.image) ? (
+                    <img 
+                      src={user?.avatar || user?.profilePicture || user?.image} 
+                      alt="Profile" 
+                      className={styles.userAvatarImage}
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                        e.target.nextSibling.style.display = 'flex';
+                      }}
+                    />
+                  ) : null}
+                  <div 
+                    className={styles.userAvatarText}
+                    style={{ display: (user?.avatar || user?.profilePicture || user?.image) ? 'none' : 'flex' }}
+                  >
+                    {user?.firstName?.charAt(0) || user?.email?.charAt(0) || 'U'}
+                  </div>
                 </div>
                 <span className={styles.userName}>
                   {user?.firstName || 'User'}

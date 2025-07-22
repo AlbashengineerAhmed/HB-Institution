@@ -204,6 +204,27 @@
   font-size: 0.9rem;
   color: var(--gradient-start);
   text-transform: uppercase;
+  position: relative;
+  overflow: hidden;
+}
+
+.userAvatarImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.userAvatarText {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--gradient-start);
+  text-transform: uppercase;
 }
 
 .userName {

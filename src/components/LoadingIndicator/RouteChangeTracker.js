@@ -7,13 +7,19 @@ const RouteChangeTracker = () => {
   const location = useLocation();
 
   useEffect(() => {
+    // Skip loading indicator for profile page to avoid persistent loading
+    if (location.pathname === '/profile') {
+      setIsLoading(false);
+      return;
+    }
+
     // Show loading indicator when route changes
     setIsLoading(true);
     
-    // Hide loading indicator after a shorter delay for better UX
+    // Hide loading indicator after a very short delay
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 500); // Reduced from 800ms to 500ms
+    }, 200); // Reduced to 200ms for faster transitions
     
     return () => clearTimeout(timer);
   }, [location.pathname]);
