@@ -1,0 +1,75 @@
+communityPage {
+  padding-top: 2rem;
+}
+
+/* Common section styles */
+section {
+  padding: 5rem 0;
+}
+
+/* Using global styles */
+
+.sectionTitle::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 3px;
+  background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+  border-radius: 2px;
+}
+
+/* Community Banner Section */
+.communityBanner {
+  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('../../../public/images/community-banner.jpg');
+  background-size: cover;
+  background-position: center;
+  color: var(--light-text);
+  text-align: center;
+  padding: 8rem 0;
+}
+
+.bannerTitle {
+  font-size: 3.5rem;
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.bannerDescription {
+  font-size: 1.3rem;
+  max-width: 800px;
+  margin: 0 auto;
+  line-height: 1.8;
+}
+
+/* Student Life Section */
+.studentLifeSection {
+  background-color: var(--secondary-color);
+}
+
+.studentLifeContent {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+}
+
+.studentLifeImage {
+  flex: 1;
+  text-align: center;
+}
+
+.studentLifeImage img {
+  max-width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.studentLifeText {
+  flex: 1;
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: var(--text-color);
+}
