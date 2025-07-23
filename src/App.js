@@ -12,6 +12,7 @@ import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import { ROLES } from './utils/roleUtils';
 import HomePage from './pages/HomePage/HomePage';
 import AboutPage from './pages/AboutPage/AboutPage';
+import WhoWeArePage from './pages/WhoWeArePage/WhoWeArePage';
 import CommunityPage from './pages/CommunityPage/CommunityPage';
 import WhyHBIPage from './pages/WhyHBIPage/WhyHBIPage';
 import WhatsAppFloat from './components/WhatsAppFloat/WhatsAppFloat';
@@ -95,6 +96,7 @@ const AppContent = () => {
           <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/about/*" element={<AboutPage />} />
+          <Route path="/who-we-are" element={<WhoWeArePage />} />
           <Route path="/community" element={<CommunityPage />} />
           <Route path="/community/*" element={<CommunityPage />} />
           <Route path="/why-hbi" element={<WhyHBIPage />} />
