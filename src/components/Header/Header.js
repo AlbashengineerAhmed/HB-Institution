@@ -153,13 +153,13 @@ const Header = () => {
     <header className={styles.header}>
       <div className={`container ${styles.headerContainer}`}>
         <div className={styles.logoContainer}>
-          <Link to="/">
-            <img src="/images/logo-black.webp" alt="HB Institution Logo" className={styles.logo} />
+          <Link to="/" aria-label="HB Institution - Go to homepage">
+            <img src="/images/logo-black.webp" alt="HB Institution Logo - Premier Islamic Education Platform" className={styles.logo} />
           </Link>
         </div>
         
-        <nav className={styles.mainNav}>
-          <ul className={`${styles.navList} ${mobileMenuOpen ? styles.show : ''}`}>
+        <nav className={styles.mainNav} role="navigation" aria-label="Main navigation">
+          <ul id="main-navigation" className={`${styles.navList} ${mobileMenuOpen ? styles.show : ''}`} role="menubar">
             <li className={styles.navItem}><Link to="/" className={`${styles.navLink} ${styles.active}`}>Home</Link></li>
             <li 
               className={`${styles.navItem} ${styles.dropdown} ${activeDropdown === 'about' ? styles.active : ''}`}
@@ -370,9 +370,15 @@ const Header = () => {
           )}
         </div>
 
-        <div className={styles.mobileMenuToggle} onClick={toggleMobileMenu}>
+        <button 
+          className={styles.mobileMenuToggle} 
+          onClick={toggleMobileMenu}
+          aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+          aria-expanded={mobileMenuOpen}
+          aria-controls="main-navigation"
+        >
           <i className={`fas ${mobileMenuOpen ? 'fa-times' : 'fa-bars'}`}></i>
-        </div>
+        </button>
         
       </div>
     </header>

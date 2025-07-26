@@ -26,11 +26,6 @@ const ContactPage = () => {
 
   const contactInfo = [
     {
-      icon: 'fas fa-map-marker-alt',
-      title: 'Our Location',
-      details: ['123 Education Street', 'Learning District', 'Knowledge City, KC 12345']
-    },
-    {
       icon: 'fas fa-phone',
       title: 'Phone Numbers',
       details: ['+1 (555) 123-4567', '+1 (555) 987-6543']
@@ -38,7 +33,7 @@ const ContactPage = () => {
     {
       icon: 'fas fa-envelope',
       title: 'Email Addresses',
-      details: ['info@hb-institution.com', 'support@hb-institution.com']
+      details: ['support@hbinstitution.com', 'info@hbinstitution.com']
     },
     {
       icon: 'fas fa-clock',
@@ -319,6 +314,22 @@ const ContactPage = () => {
               </div>
             </div>
 
+            {/* Mission & Vision Section */}
+            <div className={styles.missionSection}>
+              <div className={styles.missionCard}>
+                <h3>🔹 Mission</h3>
+                <p>At <strong>HB Institution</strong>, our mission is to make <strong>high-quality Islamic and academic education freely accessible to every soul</strong> no matter their background, location, or circumstance.</p>
+                <p>We are here to teach with sincerity, lead with purpose, and serve with integrity empowering individuals to grow in knowledge, faith, and contribution.</p>
+              </div>
+
+              <div className={styles.visionCard}>
+                <h3>🔹 Vision</h3>
+                <p>We envision a world where <strong>authentic knowledge is no longer a privilege, but a right.</strong></p>
+                <p>A world where young minds are nurtured, hearts are enlightened, and a new generation rises equipped with faith, wisdom, and the courage to lead.</p>
+                <p>Our vision is to build a <strong>global legacy</strong> of learners and leaders who carry light wherever they go.</p>
+              </div>
+            </div>
+
             {/* Quick Response */}
             <div className={styles.responseInfo}>
               <div className={styles.responseCard}>
@@ -339,21 +350,6 @@ const ContactPage = () => {
           </div>
         </div>
       </div>
-
-      {/* Map Section */}
-      <section className={styles.mapSection}>
-        <div className={styles.mapContainer}>
-          <div className={styles.mapPlaceholder}>
-            <i className="fas fa-map-marked-alt"></i>
-            <h3>Find Us Here</h3>
-            <p>Visit our campus to experience our learning environment firsthand.</p>
-            <button className={styles.mapBtn}>
-              <i className="fas fa-directions"></i>
-              Get Directions
-            </button>
-          </div>
-        </div>
-      </section>
     </div>
   );
 };

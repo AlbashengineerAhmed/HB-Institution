@@ -1,3 +1,25 @@
-# https://www.robotstxt.org/robotstxt.html
+# Robots.txt for HB Institution
 User-agent: *
-Disallow:
+Allow: /
+
+# Sitemap location
+Sitemap: https://hb-institution.com/sitemap.xml
+
+# Disallow admin and private areas
+Disallow: /admin/
+Disallow: /api/
+Disallow: /private/
+Disallow: /*.json$
+Disallow: /node_modules/
+
+# Allow important pages
+Allow: /
+Allow: /about
+Allow: /courses
+Allow: /contact
+Allow: /community
+Allow: /why-hbi
+Allow: /programs
+
+# Crawl delay (optional)
+Crawl-delay: 1

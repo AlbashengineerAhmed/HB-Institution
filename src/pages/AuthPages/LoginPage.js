@@ -88,10 +88,15 @@ const LoginPage = () => {
       if (from && from !== '/login') {
         navigate(from, { replace: true });
       } else {
-        if (user.role?.toLowerCase() === 'admin') {
-          const dashboardRoute = getDashboardRoute(user.role);
+        // Get the appropriate dashboard route based on user role
+        const dashboardRoute = getDashboardRoute(user.role);
+        
+        // If user has a specific role, redirect to their dashboard
+        if (user.role && dashboardRoute !== '/') {
+          console.log('Redirecting user with role:', user.role, 'to:', dashboardRoute);
           navigate(dashboardRoute, { replace: true });
         } else {
+          // Default redirect for users without specific roles
           navigate('/', { replace: true });
         }
       }
@@ -234,8 +239,8 @@ const LoginPage = () => {
           </div>
           
           <div className={styles.authFooter}>
-            <Link to="/terms">Terms of Service</Link>
-            <Link to="/privacy">Privacy Policy</Link>
+            <Link to="/terms-privacy">Terms of Service</Link>
+            <Link to="/terms-privacy">Privacy Policy</Link>
           </div>
         </div>
       </div>

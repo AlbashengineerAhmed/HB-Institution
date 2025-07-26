@@ -829,3 +829,89 @@
     color: rgba(255, 255, 255, 0.5);
   }
 }
+/* Mission & Vision Section */
+.missionSection {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.missionCard,
+.visionCard {
+  background: linear-gradient(135deg, rgba(253, 198, 44, 0.08), rgba(253, 198, 44, 0.03));
+  border: 2px solid rgba(253, 198, 44, 0.2);
+  border-radius: 16px;
+  padding: 25px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.missionCard:hover,
+.visionCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(253, 198, 44, 0.15);
+  border-color: rgba(253, 198, 44, 0.3);
+}
+
+.missionCard::before,
+.visionCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary-color), var(--hover-color));
+}
+
+.missionCard h3,
+.visionCard h3 {
+  color: var(--primary-color);
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 15px;
+}
+
+.missionCard p,
+.visionCard p {
+  color: var(--text-color);
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
+
+@media (max-width: 768px) {
+  .missionCard,
+  .visionCard {
+    padding: 20px;
+  }
+
+  .missionCard h3,
+  .visionCard h3 {
+    font-size: 1.2rem;
+  }
+
+  .missionCard p,
+  .visionCard p {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .missionCard,
+  .visionCard {
+    padding: 18px;
+    margin: 0 5px;
+  }
+
+  .missionCard h3,
+  .visionCard h3 {
+    font-size: 1.1rem;
+  }
+
+  .missionCard p,
+  .visionCard p {
+    font-size: 0.85rem;
+  }
+}

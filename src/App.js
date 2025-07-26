@@ -34,6 +34,7 @@ import CourseDetailsPage from './pages/CourseDetailsPage/CourseDetailsPage';
 import EnrollmentPage from './pages/EnrollmentPage/EnrollmentPage';
 import EnrollmentSuccessPage from './pages/EnrollmentSuccessPage/EnrollmentSuccessPage';
 import ContactPage from './pages/ContactPage/ContactPage';
+import TermsPrivacyPage from './pages/TermsPrivacyPage/TermsPrivacyPage';
 
 // Admin Pages
 import AdminDashboard from './pages/AdminDashboard/AdminDashboard';
@@ -102,6 +103,7 @@ const AppContent = () => {
           <Route path="/why-hbi" element={<WhyHBIPage />} />
           <Route path="/why-hbi/*" element={<WhyHBIPage />} />
           <Route path="/contact" element={<ContactPage />} />
+          <Route path="/terms-privacy" element={<TermsPrivacyPage />} />
           
           {/* Course Routes */}
           <Route path="/courses" element={<CoursesPage />} />
