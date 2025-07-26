@@ -9,7 +9,7 @@ export const API_BASE_URL = 'https://hb-institution.vercel.app/api/v1';
 // API configuration object with common settings
 export const API_CONFIG = {
   baseURL: API_BASE_URL,
-  timeout: 10000, // 10 seconds timeout
+  timeout: 70000, // 10 seconds timeout
   headers: {
     'Content-Type': 'application/json',
   },

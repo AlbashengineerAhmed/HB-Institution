@@ -200,71 +200,132 @@ const ManageCategories = () => {
           </button>
         </div>
       ) : (
-        <div className={styles.tableContainer}>
-          <table className={styles.categoriesTable}>
-            <thead>
-              <tr>
-                <th>Image</th>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Created Date</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredCategories.length > 0 ? (
-                filteredCategories.map((category) => (
-                  <tr key={category._id} className={styles.categoryRow}>
-                    <td>
-                      {category.image ? (
-                        <img
-                          src={category.image}
-                          alt={category.name}
-                          className={styles.categoryImage}
-                          onError={(e) => {
-                            e.target.style.display = 'none';
-                            e.target.nextSibling.style.display = 'flex';
-                          }}
-                        />
-                      ) : (
-                        <div className={styles.noImage}>No Image</div>
-                      )}
-                      <div className={styles.noImage} style={{display: 'none'}}>
-                        Failed to load
+        <>
+          {/* Desktop Table View */}
+          <div className={styles.tableContainer}>
+            <table className={styles.categoriesTable}>
+              <thead>
+                <tr>
+                  <th>Image</th>
+                  <th>Name</th>
+                  <th>Description</th>
+                  <th>Created Date</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredCategories.length > 0 ? (
+                  filteredCategories.map((category) => (
+                    <tr key={category._id} className={styles.categoryRow}>
+                      <td>
+                        {category.image ? (
+                          <img
+                            src={category.image}
+                            alt={category.name}
+                            className={styles.categoryImage}
+                            onError={(e) => {
+                              e.target.style.display = 'none';
+                              e.target.nextSibling.style.display = 'flex';
+                            }}
+                          />
+                        ) : (
+                          <div className={styles.noImage}>No Image</div>
+                        )}
+                        <div className={styles.noImage} style={{display: 'none'}}>
+                          Failed to load
+                        </div>
+                      </td>
+                      <td className={styles.categoryName}>{category.name}</td>
+                      <td className={styles.categoryDescription}>
+                        {category.description?.length > 100
+                          ? `${category.description.substring(0, 100)}...`
+                          : category.description}
+                      </td>
+                      <td className={styles.categoryDate}>
+                        {category.createdAt
+                          ? new Date(category.createdAt).toLocaleDateString()
+                          : 'N/A'}
+                      </td>
+                      <td className={styles.categoryActions}>
+                        <button
+                          onClick={() => handleDeleteClick(category)}
+                          className={styles.deleteButton}
+                          title="Delete Category"
+                        >
+                          🗑️ Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="5" className={styles.noData}>
+                      {searchTerm ? 'No categories found matching your search.' : 'No categories available.'}
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Enhanced Mobile Card View */}
+          <div className={styles.mobileCardView}>
+            {filteredCategories.length > 0 ? (
+              filteredCategories.map((category) => (
+                <div key={category._id} className={styles.categoryCard}>
+                  <div className={styles.cardHeader}>
+                    {category.image ? (
+                      <img
+                        src={category.image}
+                        alt={category.name}
+                        className={styles.cardImage}
+                        onError={(e) => {
+                          e.target.style.display = 'none';
+                          e.target.nextSibling.style.display = 'flex';
+                        }}
+                      />
+                    ) : (
+                      <div className={styles.cardNoImage}>
+                        <span>📷</span>
+                        <small>No Image</small>
                       </div>
-                    </td>
-                    <td className={styles.categoryName}>{category.name}</td>
-                    <td className={styles.categoryDescription}>
-                      {category.description?.length > 100
-                        ? `${category.description.substring(0, 100)}...`
-                        : category.description}
-                    </td>
-                    <td className={styles.categoryDate}>
+                    )}
+                    <div className={styles.cardNoImage} style={{display: category.image ? 'none' : 'flex'}}>
+                      <span>📷</span>
+                      <small>No Image</small>
+                    </div>
+                    <div className={styles.cardContent}>
+                      <h4 className={styles.cardTitle}>{category.name}</h4>
+                    </div>
+                  </div>
+                  <p className={styles.cardDescription}>
+                    {category.description}
+                  </p>
+                  <div className={styles.cardFooter}>
+                    <span className={styles.cardDate}>
                       {category.createdAt
                         ? new Date(category.createdAt).toLocaleDateString()
                         : 'N/A'}
-                    </td>
-                    <td className={styles.categoryActions}>
+                    </span>
+                    <div className={styles.cardActions}>
                       <button
                         onClick={() => handleDeleteClick(category)}
-                        className={styles.deleteButton}
+                        className={styles.cardDeleteButton}
                         title="Delete Category"
                       >
                         🗑️ Delete
                       </button>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="5" className={styles.noData}>
-                    {searchTerm ? 'No categories found matching your search.' : 'No categories available.'}
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+                    </div>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className={styles.noData}>
+                {searchTerm ? 'No categories found matching your search.' : 'No categories available.'}
+              </div>
+            )}
+          </div>
+        </>
       )}
     </div>
   );

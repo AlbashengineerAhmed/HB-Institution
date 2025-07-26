@@ -486,9 +486,41 @@
 }
 
 /* Responsive Design */
+@media (max-width: 1024px) {
+  .manageCategories {
+    padding: 16px;
+  }
+
+  .categoriesHeader,
+  .createHeader {
+    padding: 20px;
+  }
+
+  .headerActions {
+    gap: 16px;
+  }
+
+  .searchSection {
+    max-width: 300px;
+  }
+
+  .createForm {
+    padding: 24px;
+  }
+
+  .tableContainer {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .categoriesTable {
+    min-width: 700px;
+  }
+}
+
 @media (max-width: 768px) {
   .manageCategories {
-    padding: 10px;
+    padding: 12px;
   }
 
   .categoriesHeader,
@@ -496,13 +528,28 @@
     padding: 16px;
   }
 
+  .categoriesHeader h3,
+  .createHeader h3 {
+    font-size: 1.25rem;
+    margin-bottom: 16px;
+  }
+
   .headerActions {
     flex-direction: column;
     align-items: stretch;
+    gap: 12px;
   }
 
   .searchSection {
     max-width: none;
+    order: 1;
+  }
+
+  .createButton {
+    order: 2;
+    width: 100%;
+    padding: 14px 20px;
+    font-size: 1rem;
   }
 
   .createForm {
@@ -511,20 +558,334 @@
 
   .formActions {
     flex-direction: column;
+    gap: 12px;
+  }
+
+  .cancelButton,
+  .submitButton {
+    width: 100%;
+    padding: 14px 20px;
+    font-size: 1rem;
+  }
+
+  /* Mobile-optimized table */
+  .tableContainer {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 8px;
   }
 
   .categoriesTable {
     font-size: 0.85rem;
+    min-width: 600px;
   }
 
   .categoriesTable th,
   .categoriesTable td {
     padding: 12px 8px;
+    white-space: nowrap;
   }
 
   .categoryImage,
   .noImage {
     width: 40px;
     height: 40px;
+    font-size: 0.7rem;
+  }
+
+  .categoryName {
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .categoryDescription {
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .deleteButton {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+  }
+
+  /* Mobile card layout alternative */
+  .mobileCardView {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .manageCategories {
+    padding: 8px;
+  }
+
+  .categoriesHeader,
+  .createHeader {
+    padding: 12px;
+  }
+
+  .categoriesHeader h3,
+  .createHeader h3 {
+    font-size: 1.1rem;
+  }
+
+  .searchInput {
+    padding: 10px 14px;
+    font-size: 0.9rem;
+  }
+
+  .createButton {
+    padding: 12px 16px;
+    font-size: 0.9rem;
+  }
+
+  .createForm {
+    padding: 16px;
+  }
+
+  .formInput,
+  .formTextarea {
+    padding: 10px 14px;
+    font-size: 0.9rem;
+  }
+
+  .formFileInput {
+    padding: 6px;
+    font-size: 0.9rem;
+  }
+
+  .imagePreview img {
+    max-width: 120px;
+    max-height: 120px;
+  }
+
+  /* Switch to card view on very small screens */
+  .tableContainer {
+    display: none;
+  }
+
+  .mobileCardView {
+    display: block;
+    padding: 0 4px;
+  }
+
+  /* Enhanced Mobile Card Styles */
+  .categoryCard {
+    background: linear-gradient(135deg, var(--secondary-color) 0%, rgba(var(--primary-color-rgb), 0.02) 100%);
+    border: 1px solid rgba(var(--primary-color-rgb), 0.15);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .categoryCard::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary-color), var(--hover-color));
+    border-radius: 16px 16px 0 0;
+  }
+
+  .categoryCard:hover {
+    box-shadow: 0 8px 24px rgba(var(--primary-color-rgb), 0.15);
+    transform: translateY(-2px);
+    border-color: rgba(var(--primary-color-rgb), 0.3);
+  }
+
+  .cardHeader {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .cardImage {
+    width: 88px;
+    height: 88px;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 2px solid rgba(var(--primary-color-rgb), 0.2);
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .cardNoImage {
+    width: 88px;
+    height: 88px;
+    background: linear-gradient(135deg, rgba(var(--primary-color-rgb), 0.1), rgba(var(--primary-color-rgb), 0.05));
+    border: 2px dashed rgba(var(--primary-color-rgb), 0.3);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    color: var(--light-text);
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  .cardContent {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .cardTitle {
+    font-weight: 700;
+    color: var(--primary-color);
+    font-size: 1.1rem;
+    margin: 0 0 8px 0;
+    line-height: 1.3;
+    word-wrap: break-word;
+  }
+
+  .cardDescription {
+    color: var(--light-text);
+    opacity: 0.9;
+    line-height: 1.5;
+    margin-bottom: 16px;
+    font-size: 0.9rem;
+    word-wrap: break-word;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .cardFooter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(var(--primary-color-rgb), 0.1);
+  }
+
+  .cardDate {
+    color: var(--light-text);
+    opacity: 0.8;
+    font-size: 0.8rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .cardDate::before {
+    content: '📅';
+    font-size: 0.7rem;
+  }
+
+  .cardActions {
+    display: flex;
+    gap: 8px;
+  }
+
+  .cardDeleteButton {
+    background: linear-gradient(135deg, var(--error-color), #dc2626);
+    color: var(--secondary-color);
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 6px rgba(var(--error-color-rgb), 0.3);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .cardDeleteButton:hover {
+    background: linear-gradient(135deg, #dc2626, #b91c1c);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(var(--error-color-rgb), 0.4);
+  }
+
+  .cardDeleteButton:active {
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 480px) {
+  .manageCategories {
+    padding: 4px;
+  }
+
+  .categoriesHeader,
+  .createHeader {
+    padding: 8px;
+  }
+
+  .categoriesHeader h3,
+  .createHeader h3 {
+    font-size: 1rem;
+  }
+
+  .createForm {
+    padding: 12px;
+  }
+
+  .mobileCardView {
+    padding: 0 2px;
+  }
+
+  .categoryCard {
+    padding: 16px;
+    margin-bottom: 12px;
+    border-radius: 12px;
+  }
+
+  .cardHeader {
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .cardImage,
+  .cardNoImage {
+    width: 72px;
+    height: 72px;
+  }
+
+  .cardTitle {
+    font-size: 1rem;
+  }
+
+  .cardDescription {
+    font-size: 0.85rem;
+    margin-bottom: 12px;
+    -webkit-line-clamp: 2;
+  }
+
+  .cardFooter {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    padding-top: 8px;
+  }
+
+  .cardDate {
+    text-align: center;
+    justify-content: center;
+  }
+
+  .cardActions {
+    justify-content: center;
+  }
+
+  .cardDeleteButton {
+    padding: 10px 20px;
+    font-size: 0.85rem;
   }
 }

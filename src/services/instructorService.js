@@ -73,7 +73,7 @@ export const setInstructorAvailability = async (instructorId, availableTime) => 
   try {
     console.log(`🔄 Setting availability for instructor ${instructorId}...`);
     const requestBody = { availableTime };
-    const response = await api.patch(`/user/${instructorId}/availability`, requestBody);
+    const response = await api.put(`/user/${instructorId}/availability`, requestBody);
     console.log('✅ Instructor availability set successfully:', response.data);
     
     const dayCount = Object.keys(availableTime).length;

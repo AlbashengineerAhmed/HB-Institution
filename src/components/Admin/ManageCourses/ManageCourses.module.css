@@ -1,4 +1,4 @@
-/* ManageCourses.module.css - Simplified Version without Bulk Selection */
+/* ManageCourses.module.css - Enhanced Mobile Responsive Version */
 
 .manageCourses {
   padding: 20px;
@@ -887,9 +887,14 @@
     gap: 16px;
   }
 
+  .tableContainer {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
   .coursesTable {
     font-size: 0.9rem;
-    min-width: 600px;
+    min-width: 800px;
   }
 
   .actionButtons {
@@ -921,6 +926,8 @@
 
   .courseStats {
     gap: 8px;
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   .statItem {
@@ -937,8 +944,13 @@
     gap: 12px;
   }
 
+  .searchInputContainer {
+    max-width: none;
+  }
+
   .searchInput {
     padding: 10px 14px;
+    font-size: 0.9rem;
   }
 
   .filtersSection {
@@ -948,10 +960,16 @@
 
   .filterSelect {
     width: 100%;
+    padding: 10px 14px;
+    font-size: 0.9rem;
   }
 
   .createForm {
     padding: 20px;
+  }
+
+  .createForm h3 {
+    font-size: 1.25rem;
   }
 
   .formActions {
@@ -975,6 +993,67 @@
     max-height: 150px;
   }
 
+  .tableContainer {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 8px;
+  }
+
+  .coursesTable {
+    min-width: 700px;
+    font-size: 0.85rem;
+  }
+
+  .coursesTable th,
+  .coursesTable td {
+    padding: 12px 8px;
+  }
+
+  .courseImageContainer {
+    width: 50px;
+    height: 50px;
+  }
+
+  .courseDetails {
+    max-width: 300px;
+  }
+
+  .courseName {
+    font-size: 1rem;
+  }
+
+  .courseDescription {
+    font-size: 0.8rem;
+    -webkit-line-clamp: 1;
+  }
+
+  .courseMeta {
+    gap: 4px;
+  }
+
+  .courseCategory,
+  .coursePrice {
+    font-size: 0.7rem;
+    padding: 2px 6px;
+  }
+
+  .levelBadge {
+    font-size: 0.6rem;
+    padding: 1px 4px;
+  }
+
+  .actionButtons {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .actionBtn {
+    width: 100%;
+    text-align: center;
+    padding: 6px 8px;
+    font-size: 0.75rem;
+  }
+
   .pagination {
     flex-direction: column;
     gap: 12px;
@@ -984,6 +1063,13 @@
   .paginationControls {
     flex-wrap: wrap;
     justify-content: center;
+    gap: 4px;
+  }
+
+  .paginationBtn {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+    min-width: 35px;
   }
 
   .emptyState {
@@ -1002,18 +1088,13 @@
     font-size: 1rem;
   }
 
-  .actionButtons {
-    flex-direction: column;
-    gap: 4px;
-  }
-
-  .actionBtn {
-    width: 100%;
-    text-align: center;
+  /* Mobile card layout alternative */
+  .mobileCardView {
+    display: none;
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 640px) {
   .manageCourses {
     padding: 8px;
   }
@@ -1024,6 +1105,10 @@
 
   .headerLeft h2 {
     font-size: 1.25rem;
+  }
+
+  .courseStats {
+    gap: 6px;
   }
 
   .createBtn {
@@ -1046,7 +1131,7 @@
   }
 
   .createForm h3 {
-    font-size: 1.25rem;
+    font-size: 1.1rem;
   }
 
   .formGroup input,
@@ -1056,28 +1141,331 @@
     font-size: 0.9rem;
   }
 
+  .imagePreview img {
+    max-width: 120px;
+    max-height: 120px;
+  }
+
+  /* Switch to card view on very small screens */
+  .tableContainer {
+    display: none;
+  }
+
+  .mobileCardView {
+    display: block;
+    padding: 0 4px;
+  }
+
+  /* Enhanced Mobile Card Styles */
+  .courseCard {
+    background: linear-gradient(135deg, var(--secondary-color) 0%, rgba(var(--primary-color-rgb), 0.02) 100%);
+    border: 1px solid rgba(var(--primary-color-rgb), 0.15);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .courseCard::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary-color), var(--hover-color));
+    border-radius: 16px 16px 0 0;
+  }
+
+  .courseCard:hover {
+    box-shadow: 0 8px 24px rgba(var(--primary-color-rgb), 0.15);
+    transform: translateY(-2px);
+    border-color: rgba(var(--primary-color-rgb), 0.3);
+  }
+
+  .cardHeader {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .cardImageContainer {
+    width: 96px;
+    height: 96px;
+    flex-shrink: 0;
+  }
+
+  .cardImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 2px solid rgba(var(--primary-color-rgb), 0.2);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .cardNoImage {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(var(--primary-color-rgb), 0.1), rgba(var(--primary-color-rgb), 0.05));
+    border: 2px dashed rgba(var(--primary-color-rgb), 0.3);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--light-text);
+    font-size: 0.6rem;
+  }
+
+  .cardContent {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .cardTitle {
+    font-weight: 700;
+    color: var(--primary-color);
+    font-size: 1.1rem;
+    margin: 0 0 8px 0;
+    line-height: 1.3;
+    word-wrap: break-word;
+  }
+
+  .cardDescription {
+    color: var(--light-text);
+    opacity: 0.9;
+    line-height: 1.5;
+    margin-bottom: 16px;
+    font-size: 0.9rem;
+    word-wrap: break-word;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .cardMeta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .cardCategory {
+    background: linear-gradient(135deg, rgba(var(--primary-color-rgb), 0.2), rgba(var(--primary-color-rgb), 0.1));
+    color: var(--primary-color);
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border: 1px solid rgba(var(--primary-color-rgb), 0.3);
+  }
+
+  .cardPrice {
+    background: linear-gradient(135deg, var(--success-color), #10b981);
+    color: var(--secondary-color);
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    box-shadow: 0 2px 4px rgba(var(--success-color), 0.3);
+  }
+
+  .cardDuration {
+    background: linear-gradient(135deg, rgba(var(--info-color), 0.2), rgba(var(--info-color), 0.1));
+    color: var(--info-color);
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border: 1px solid rgba(var(--info-color), 0.3);
+  }
+
+  .cardLevels {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+
+  .cardLevelBadge {
+    background: linear-gradient(135deg, rgba(var(--warning-color), 0.2), rgba(var(--warning-color), 0.1));
+    color: var(--warning-color);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.65rem;
+    font-weight: 600;
+    border: 1px solid rgba(var(--warning-color), 0.3);
+  }
+
+  .cardFooter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(var(--primary-color-rgb), 0.1);
+  }
+
+  .cardActions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .cardActionBtn {
+    padding: 8px 14px;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    font-weight: 600;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .cardEditBtn {
+    background: linear-gradient(135deg, var(--warning-color), #f59e0b);
+    color: var(--secondary-color);
+  }
+
+  .cardViewBtn {
+    background: linear-gradient(135deg, var(--info-color), #3b82f6);
+    color: var(--secondary-color);
+  }
+
+  .cardDeleteBtn {
+    background: linear-gradient(135deg, var(--error-color), #dc2626);
+    color: var(--secondary-color);
+  }
+
+  .cardActionBtn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+
+  .cardActionBtn:active {
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 480px) {
+  .manageCourses {
+    padding: 4px;
+  }
+
+  .courseHeader {
+    padding: 8px;
+  }
+
+  .headerLeft h2 {
+    font-size: 1.1rem;
+  }
+
+  .courseStats {
+    gap: 4px;
+  }
+
+  .statItem {
+    font-size: 0.7rem;
+    padding: 3px 6px;
+  }
+
+  .createBtn {
+    padding: 8px 14px;
+    font-size: 0.85rem;
+  }
+
+  .createForm {
+    padding: 12px;
+  }
+
+  .createForm h3 {
+    font-size: 1rem;
+  }
+
   .authError,
   .errorState,
   .loadingState {
-    padding: 24px 16px;
+    padding: 20px 12px;
   }
 
   .authError h3,
   .errorState h3 {
-    font-size: 1.25rem;
+    font-size: 1.1rem;
   }
 
   .authError p,
   .errorState p {
+    font-size: 0.9rem;
+  }
+
+  .mobileCardView {
+    padding: 0 2px;
+  }
+
+  .courseCard {
+    padding: 16px;
+    margin-bottom: 12px;
+    border-radius: 12px;
+  }
+
+  .cardHeader {
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .cardImageContainer {
+    width: 80px;
+    height: 80px;
+  }
+
+  .cardTitle {
     font-size: 1rem;
   }
 
-  .coursesTable {
-    min-width: 500px;
+  .cardDescription {
+    font-size: 0.85rem;
+    margin-bottom: 12px;
+    -webkit-line-clamp: 2;
   }
 
-  .actionBtn {
-    padding: 6px 10px;
+  .cardMeta {
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+
+  .cardFooter {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    padding-top: 12px;
+  }
+
+  .cardActions {
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .cardActionBtn {
+    flex: 1;
+    padding: 8px 12px;
     font-size: 0.75rem;
+  }
+
+  .pagination {
+    padding: 12px;
+  }
+
+  .paginationBtn {
+    padding: 4px 8px;
+    font-size: 0.75rem;
+    min-width: 30px;
   }
 }

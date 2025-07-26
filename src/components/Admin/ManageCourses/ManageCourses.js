@@ -519,7 +519,9 @@ const ManageCourses = () => {
           </button>
         </div>
       ) : (
-        <div className={styles.tableContainer}>
+        <>
+          {/* Desktop Table View */}
+          <div className={styles.tableContainer}>
           <table className={styles.coursesTable}>
             <thead>
               <tr>
@@ -696,6 +698,150 @@ const ManageCourses = () => {
             </div>
           )}
         </div>
+
+        {/* Mobile Card View */}
+        <div className={styles.mobileCardView}>
+          {paginatedCourses.map((course) => (
+            <div key={course.id || course._id} className={styles.courseCard}>
+              <div className={styles.cardHeader}>
+                <div className={styles.cardImageContainer}>
+                  {course.image ? (
+                    <img 
+                      src={course.image} 
+                      alt={course.title || course.name}
+                      className={styles.cardImage}
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                        e.target.nextSibling.style.display = 'flex';
+                      }}
+                    />
+                  ) : null}
+                  <div className={styles.cardNoImage} style={{ display: course.image ? 'none' : 'flex' }}>
+                    <span>📷</span>
+                    <small>No Image</small>
+                  </div>
+                </div>
+                <div className={styles.cardContent}>
+                  <h4 className={styles.cardTitle}>{course.title || course.name}</h4>
+                  <p className={styles.cardDescription}>{course.description}</p>
+                  <div className={styles.cardMeta}>
+                    <span className={styles.cardCategory}>
+                      {course.category || categories.find(cat => cat._id === (course.CategoryId || course.categoryId))?.name || 'Unknown'}
+                    </span>
+                    <span className={styles.cardPrice}>
+                      {course.price && parseFloat(course.price) > 0 
+                        ? `${parseFloat(course.price).toFixed(2)}` 
+                        : 'Free'
+                      }
+                    </span>
+                    <span className={styles.cardDuration}>
+                      {course.duration || 'N/A'}
+                    </span>
+                    {course.levels && course.levels.length > 0 && (
+                      <div className={styles.cardLevels}>
+                        {course.levels.map(level => (
+                          <span key={level} className={styles.cardLevelBadge}>
+                            {level}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+              <div className={styles.cardFooter}>
+                <div className={styles.cardActions}>
+                  <button
+                    className={`${styles.cardActionBtn} ${styles.cardEditBtn}`}
+                    onClick={() => handleEditCourse(course)}
+                    title="Edit Course"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className={`${styles.cardActionBtn} ${styles.cardViewBtn}`}
+                    onClick={() => handleViewCourse(course)}
+                    title="View Details"
+                  >
+                    View
+                  </button>
+                  <button
+                    className={`${styles.cardActionBtn} ${styles.cardDeleteBtn}`}
+                    onClick={() => handleDeleteClick(course)}
+                    title="Delete Course"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+
+          {/* Mobile Pagination */}
+          {totalPages > 1 && (
+            <div className={styles.pagination}>
+              <div className={styles.paginationInfo}>
+                Showing {((currentPage - 1) * itemsPerPage) + 1} to {Math.min(currentPage * itemsPerPage, filteredAndSortedCourses.length)} of {filteredAndSortedCourses.length} courses
+              </div>
+              <div className={styles.paginationControls}>
+                <button
+                  onClick={() => setCurrentPage(1)}
+                  disabled={currentPage === 1}
+                  className={styles.paginationBtn}
+                >
+                  First
+                </button>
+                <button
+                  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                  disabled={currentPage === 1}
+                  className={styles.paginationBtn}
+                >
+                  Previous
+                </button>
+                
+                {/* Page numbers */}
+                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                  let pageNum;
+                  if (totalPages <= 5) {
+                    pageNum = i + 1;
+                  } else if (currentPage <= 3) {
+                    pageNum = i + 1;
+                  } else if (currentPage >= totalPages - 2) {
+                    pageNum = totalPages - 4 + i;
+                  } else {
+                    pageNum = currentPage - 2 + i;
+                  }
+                  
+                  return (
+                    <button
+                      key={pageNum}
+                      onClick={() => setCurrentPage(pageNum)}
+                      className={`${styles.paginationBtn} ${currentPage === pageNum ? styles.active : ''}`}
+                    >
+                      {pageNum}
+                    </button>
+                  );
+                })}
+                
+                <button
+                  onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                  disabled={currentPage === totalPages}
+                  className={styles.paginationBtn}
+                >
+                  Next
+                </button>
+                <button
+                  onClick={() => setCurrentPage(totalPages)}
+                  disabled={currentPage === totalPages}
+                  className={styles.paginationBtn}
+                >
+                  Last
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+        </>
       )}
 
       {filteredAndSortedCourses.length === 0 && courses.length > 0 && (
