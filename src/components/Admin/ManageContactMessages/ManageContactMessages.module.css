@@ -1,0 +1,552 @@
+/* Using global color variables from global.css */
+
+.manageContactMessages {
+  padding: 1rem;
+  width: 100%;
+  background-color: var(--gradient-start);
+  min-height: 100vh;
+}
+
+.header {
+  margin-bottom: 1rem;
+}
+
+.header h2 {
+  color: var(--text-color);
+  margin-bottom: 0.25rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.header p {
+  color: rgba(var(--text-color-rgb), 0.7);
+  font-size: 0.9rem;
+}
+
+.controls {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.deleteAllBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--error-color);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: var(--transition);
+}
+
+.deleteAllBtn:hover {
+  background: rgba(var(--error-color-rgb), 0.8);
+  transform: translateY(-1px);
+  box-shadow: var(--box-shadow);
+}
+
+.refreshBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--primary-color);
+  color: var(--gradient-start);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: var(--transition);
+}
+
+.refreshBtn:hover {
+  background: var(--hover-color);
+  transform: translateY(-1px);
+  box-shadow: var(--box-shadow);
+}
+
+.statsContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.statCard {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: var(--secondary-color);
+  border-radius: 8px;
+  box-shadow: var(--box-shadow);
+  border-left: 3px solid var(--primary-color);
+  transition: var(--transition);
+}
+
+.statCard:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(var(--gradient-start-rgb), 0.3);
+}
+
+.statCard i {
+  font-size: 1.5rem;
+  color: var(--primary-color);
+}
+
+.statCard h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-color);
+}
+
+.statCard p {
+  margin: 0;
+  color: rgba(var(--text-color-rgb), 0.7);
+  font-size: 0.8rem;
+}
+
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem;
+  color: rgba(var(--text-color-rgb), 0.7);
+  background-color: var(--gradient-start);
+  min-height: 50vh;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(var(--primary-color-rgb), 0.2);
+  border-top: 4px solid var(--primary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.emptyState {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: rgba(var(--text-color-rgb), 0.7);
+  background: var(--secondary-color);
+  border-radius: 12px;
+  box-shadow: var(--box-shadow);
+}
+
+.emptyState i {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  color: rgba(var(--primary-color-rgb), 0.5);
+}
+
+.emptyState h3 {
+  margin-bottom: 0.5rem;
+  color: var(--text-color);
+}
+
+.messagesGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.messageCard {
+  background: var(--secondary-color);
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: var(--box-shadow);
+  transition: var(--transition);
+  border-left: 3px solid var(--primary-color);
+}
+
+.messageCard:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(var(--gradient-start-rgb), 0.3);
+}
+
+.messageHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+}
+
+.senderInfo h4 {
+  margin: 0 0 0.2rem 0;
+  color: var(--text-color);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.messageDate {
+  margin: 0;
+  color: rgba(var(--text-color-rgb), 0.7);
+  font-size: 0.8rem;
+}
+
+.messageActions {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.viewBtn, .deleteBtn {
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+  font-size: 0.8rem;
+}
+
+.viewBtn {
+  background: var(--success-color);
+  color: white;
+}
+
+.viewBtn:hover {
+  background: rgba(var(--success-color-rgb), 0.8);
+  transform: translateY(-1px);
+}
+
+.deleteBtn {
+  background: var(--error-color);
+  color: white;
+}
+
+.deleteBtn:hover {
+  background: rgba(var(--error-color-rgb), 0.8);
+  transform: translateY(-1px);
+}
+
+.messageContent {
+  border-top: 1px solid rgba(var(--primary-color-rgb), 0.2);
+  padding-top: 0.75rem;
+}
+
+.messageSubject {
+  margin: 0 0 0.5rem 0;
+  color: var(--text-color);
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.messagePreview {
+  margin: 0 0 0.5rem 0;
+  color: rgba(var(--text-color-rgb), 0.8);
+  line-height: 1.4;
+  font-size: 0.85rem;
+}
+
+.phoneNumber {
+  margin: 0;
+  color: rgba(var(--text-color-rgb), 0.7);
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.phoneNumber i {
+  color: var(--primary-color);
+}
+
+/* Modal Styles */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(var(--gradient-start-rgb), 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modal {
+  background: var(--secondary-color);
+  border-radius: 12px;
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(var(--gradient-start-rgb), 0.5);
+  border: 1px solid rgba(var(--primary-color-rgb), 0.2);
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid rgba(var(--primary-color-rgb), 0.2);
+}
+
+.modalHeader h3 {
+  margin: 0;
+  color: var(--text-color);
+  font-size: 1.25rem;
+}
+
+.closeBtn {
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: rgba(var(--primary-color-rgb), 0.1);
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+  color: var(--text-color);
+}
+
+.closeBtn:hover {
+  background: rgba(var(--primary-color-rgb), 0.2);
+  transform: translateY(-1px);
+}
+
+.modalContent {
+  padding: 1.5rem;
+}
+
+.messageDetails {
+  margin-bottom: 1.5rem;
+}
+
+.detailRow {
+  display: flex;
+  margin-bottom: 0.75rem;
+  gap: 1rem;
+}
+
+.detailRow strong {
+  min-width: 80px;
+  color: var(--text-color);
+}
+
+.detailRow span {
+  color: rgba(var(--text-color-rgb), 0.8);
+}
+
+.messageBody {
+  border-top: 1px solid rgba(var(--primary-color-rgb), 0.2);
+  padding-top: 1.5rem;
+}
+
+.messageBody strong {
+  color: var(--text-color);
+  display: block;
+  margin-bottom: 0.75rem;
+}
+
+.messageText {
+  background: var(--gradient-start);
+  padding: 1rem;
+  border-radius: 8px;
+  line-height: 1.6;
+  color: var(--text-color);
+  white-space: pre-wrap;
+  border: 1px solid rgba(var(--primary-color-rgb), 0.2);
+}
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding: 1.5rem;
+  border-top: 1px solid rgba(var(--primary-color-rgb), 0.2);
+}
+
+.deleteModalBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: var(--error-color);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: var(--transition);
+  font-weight: 500;
+}
+
+.deleteModalBtn:hover {
+  background: rgba(var(--error-color-rgb), 0.8);
+  transform: translateY(-1px);
+}
+
+.closeModalBtn {
+  padding: 0.75rem 1rem;
+  background: rgba(var(--text-color-rgb), 0.1);
+  color: var(--text-color);
+  border: 1px solid rgba(var(--primary-color-rgb), 0.3);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: var(--transition);
+  font-weight: 500;
+}
+
+.closeModalBtn:hover {
+  background: rgba(var(--text-color-rgb), 0.2);
+  transform: translateY(-1px);
+}
+
+/* Confirm Modal */
+.confirmModal {
+  background: var(--secondary-color);
+  border-radius: 12px;
+  max-width: 400px;
+  width: 100%;
+  padding: 2rem;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(var(--gradient-start-rgb), 0.5);
+  border: 1px solid rgba(var(--primary-color-rgb), 0.2);
+}
+
+.confirmHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.confirmHeader i {
+  font-size: 3rem;
+  color: var(--warning-color);
+  margin-bottom: 0.5rem;
+}
+
+.confirmHeader h3 {
+  margin: 0;
+  color: var(--text-color);
+}
+
+.confirmModal p {
+  color: rgba(var(--text-color-rgb), 0.8);
+  line-height: 1.5;
+  margin-bottom: 2rem;
+}
+
+.confirmActions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.confirmDeleteBtn {
+  padding: 0.75rem 1.5rem;
+  background: var(--error-color);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: var(--transition);
+}
+
+.confirmDeleteBtn:hover {
+  background: rgba(var(--error-color-rgb), 0.8);
+  transform: translateY(-1px);
+}
+
+.cancelBtn {
+  padding: 0.75rem 1.5rem;
+  background: rgba(var(--text-color-rgb), 0.1);
+  color: var(--text-color);
+  border: 1px solid rgba(var(--primary-color-rgb), 0.3);
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: var(--transition);
+}
+
+.cancelBtn:hover {
+  background: rgba(var(--text-color-rgb), 0.2);
+  transform: translateY(-1px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .manageContactMessages {
+    padding: 1rem;
+  }
+
+  .controls {
+    justify-content: center;
+  }
+
+  .statsContainer {
+    grid-template-columns: 1fr;
+  }
+
+  .messageHeader {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .messageActions {
+    align-self: flex-end;
+  }
+
+  .modal {
+    margin: 1rem;
+    max-height: calc(100vh - 2rem);
+  }
+
+  .modalActions {
+    flex-direction: column;
+  }
+
+  .confirmActions {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .manageContactMessages {
+    padding: 0.5rem;
+  }
+
+  .header h2 {
+    font-size: 1.5rem;
+  }
+
+  .statCard {
+    padding: 1rem;
+  }
+
+  .statCard h3 {
+    font-size: 1.5rem;
+  }
+
+  .messageCard {
+    padding: 1rem;
+  }
+}

@@ -10,6 +10,7 @@ import ManageInstructors from '../../components/Admin/ManageInstructors/ManageIn
 import ManageStudents from '../../components/Admin/ManageStudents/ManageStudents';
 import ManageNews from '../../components/Admin/ManageNews/ManageNews';
 import ManageGroups from '../../components/Admin/ManageGroups/ManageGroups';
+import ManageContactMessages from '../../components/Admin/ManageContactMessages/ManageContactMessages';
 
 const AdminDashboard = () => {
   const [activeSection, setActiveSection] = useState('overview');
@@ -42,7 +43,8 @@ const AdminDashboard = () => {
     { id: 'categories', label: 'Manage Categories', icon: '📂' },
     { id: 'instructors', label: 'Manage Instructors', icon: '👨‍🏫' },
     { id: 'students', label: 'Manage Students', icon: '👨‍🎓' },
-    { id: 'news', label: 'Manage News', icon: '📰' }
+    { id: 'news', label: 'Manage News', icon: '📰' },
+    { id: 'contact-messages', label: 'Contact Messages', icon: '📧' }
   ];
 
   // Toggle mobile menu
@@ -95,6 +97,8 @@ const AdminDashboard = () => {
         return <ManageStudents />;
       case 'news':
         return <ManageNews />;
+      case 'contact-messages':
+        return <ManageContactMessages />;
       default:
         return <DashboardOverview />;
     }

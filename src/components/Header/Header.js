@@ -173,7 +173,7 @@ const Header = () => {
                 About <i className={`fas fa-chevron-down ${styles.dropdownIcon}`}></i>
               </div>
               <ul className={`${styles.dropdownMenu} ${activeDropdown === 'about' ? styles.show : ''}`}>
-                <li><Link to="/who-we-are" className={styles.dropdownItem} onClick={handleLinkClick}>Who we are</Link></li>
+                <li><Link to="/who-we-are" className={styles.dropdownItem} onClick={handleLinkClick}>Message from the Chairman</Link></li>
                 <li><Link to="/about/history" className={styles.dropdownItem} onClick={handleLinkClick}>History</Link></li>
                 <li><Link to="/about/mission" className={styles.dropdownItem} onClick={handleLinkClick}>Mission</Link></li>
                 <li><Link to="/about/founder" className={styles.dropdownItem} onClick={handleLinkClick}>Founder</Link></li>

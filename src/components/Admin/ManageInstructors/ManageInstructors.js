@@ -8,6 +8,7 @@ import {
   clearError,
   toggleInstructorBlockOptimistic
 } from '../../../store/slices/instructorManagementSlice';
+import { setInstructorAvailability, getAllInstructors } from '../../../services/instructorService';
 import styles from './ManageInstructors.module.css';
 
 const ManageInstructors = () => {
@@ -16,6 +17,20 @@ const ManageInstructors = () => {
   const [instructorToDelete, setInstructorToDelete] = useState(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [selectedInstructor, setSelectedInstructor] = useState(null);
+  const [showAvailabilityModal, setShowAvailabilityModal] = useState(false);
+  const [availabilityInstructor, setAvailabilityInstructor] = useState(null);
+  const [availabilityData, setAvailabilityData] = useState({
+    sunday: { enabled: false, from: 9, to: 17 },
+    monday: { enabled: false, from: 9, to: 17 },
+    tuesday: { enabled: false, from: 9, to: 17 },
+    wednesday: { enabled: false, from: 9, to: 17 },
+    thursday: { enabled: false, from: 9, to: 17 },
+    friday: { enabled: false, from: 9, to: 17 },
+    saturday: { enabled: false, from: 9, to: 17 }
+  });
+  const [isSettingAvailability, setIsSettingAvailability] = useState(false);
+  const [showInstructorCalendar, setShowInstructorCalendar] = useState(false);
+  const [calendarInstructor, setCalendarInstructor] = useState(null);
 
   const { 
     instructors,
@@ -132,6 +147,158 @@ const ManageInstructors = () => {
     setSelectedInstructor(null);
   };
 
+  const handleSetAvailability = async (instructor) => {
+    setAvailabilityInstructor(instructor);
+    
+    // Load existing availability data
+    try {
+      const response = await getAllInstructors();
+      const instructorData = response.data?.find(inst => inst._id === instructor.id);
+      
+      if (instructorData?.availableTime) {
+        const newAvailabilityData = {
+          sunday: { enabled: false, from: 9, to: 17 },
+          monday: { enabled: false, from: 9, to: 17 },
+          tuesday: { enabled: false, from: 9, to: 17 },
+          wednesday: { enabled: false, from: 9, to: 17 },
+          thursday: { enabled: false, from: 9, to: 17 },
+          friday: { enabled: false, from: 9, to: 17 },
+          saturday: { enabled: false, from: 9, to: 17 }
+        };
+        
+        // Populate existing availability
+        Object.entries(instructorData.availableTime).forEach(([day, timeData]) => {
+          if (newAvailabilityData[day.toLowerCase()]) {
+            newAvailabilityData[day.toLowerCase()] = {
+              enabled: true,
+              from: timeData.from,
+              to: timeData.to
+            };
+          }
+        });
+        
+        setAvailabilityData(newAvailabilityData);
+      } else {
+        // Reset to default if no existing data
+        setAvailabilityData({
+          sunday: { enabled: false, from: 9, to: 17 },
+          monday: { enabled: false, from: 9, to: 17 },
+          tuesday: { enabled: false, from: 9, to: 17 },
+          wednesday: { enabled: false, from: 9, to: 17 },
+          thursday: { enabled: false, from: 9, to: 17 },
+          friday: { enabled: false, from: 9, to: 17 },
+          saturday: { enabled: false, from: 9, to: 17 }
+        });
+      }
+    } catch (error) {
+      console.error('Error loading instructor availability:', error);
+      // Reset to default on error
+      setAvailabilityData({
+        sunday: { enabled: false, from: 9, to: 17 },
+        monday: { enabled: false, from: 9, to: 17 },
+        tuesday: { enabled: false, from: 9, to: 17 },
+        wednesday: { enabled: false, from: 9, to: 17 },
+        thursday: { enabled: false, from: 9, to: 17 },
+        friday: { enabled: false, from: 9, to: 17 },
+        saturday: { enabled: false, from: 9, to: 17 }
+      });
+    }
+    
+    setShowAvailabilityModal(true);
+  };
+
+  const handleCloseAvailability = () => {
+    setShowAvailabilityModal(false);
+    setAvailabilityInstructor(null);
+    setAvailabilityData({
+      sunday: { enabled: false, from: 9, to: 17 },
+      monday: { enabled: false, from: 9, to: 17 },
+      tuesday: { enabled: false, from: 9, to: 17 },
+      wednesday: { enabled: false, from: 9, to: 17 },
+      thursday: { enabled: false, from: 9, to: 17 },
+      friday: { enabled: false, from: 9, to: 17 },
+      saturday: { enabled: false, from: 9, to: 17 }
+    });
+  };
+
+  const handleAvailabilitySubmit = async () => {
+    if (!availabilityInstructor) return;
+
+    try {
+      setIsSettingAvailability(true);
+      
+      // Build availableTime object from enabled days
+      const availableTime = {};
+      let hasEnabledDays = false;
+      
+      Object.entries(availabilityData).forEach(([day, dayData]) => {
+        if (dayData.enabled) {
+          // Validate time range
+          if (dayData.from >= dayData.to) {
+            throw new Error(`Invalid time range for ${day}: 'from' time must be less than 'to' time`);
+          }
+          
+          availableTime[day] = {
+            from: dayData.from,
+            to: dayData.to
+          };
+          hasEnabledDays = true;
+        }
+      });
+      
+      if (!hasEnabledDays) {
+        throw new Error('Please select at least one day with availability');
+      }
+      
+      console.log('Submitting availability:', availableTime);
+      
+      await setInstructorAvailability(
+        availabilityInstructor.id,
+        availableTime
+      );
+      
+      // Refresh the instructors list to show updated availability
+      dispatch(fetchInstructors());
+      
+      handleCloseAvailability();
+    } catch (error) {
+      console.error('Error setting availability:', error);
+      // The error will be shown via toast from the service
+    } finally {
+      setIsSettingAvailability(false);
+    }
+  };
+
+  // Helper function to update day availability
+  const updateDayAvailability = (day, field, value) => {
+    setAvailabilityData(prev => ({
+      ...prev,
+      [day]: {
+        ...prev[day],
+        [field]: value
+      }
+    }));
+  };
+
+  const handleShowInstructorCalendar = async (instructor) => {
+    try {
+      const response = await getAllInstructors();
+      const instructorData = response.data?.find(inst => inst._id === instructor.id);
+      setCalendarInstructor({
+        ...instructor,
+        availableTime: instructorData?.availableTime || {}
+      });
+      setShowInstructorCalendar(true);
+    } catch (error) {
+      console.error('Error fetching instructor calendar data:', error);
+    }
+  };
+
+  const handleCloseInstructorCalendar = () => {
+    setShowInstructorCalendar(false);
+    setCalendarInstructor(null);
+  };
+
   const getStatusBadge = (status) => {
     const statusClasses = {
       active: styles.statusActive,
@@ -223,7 +390,7 @@ const ManageInstructors = () => {
         </div>
         
         <div className={styles.headerActions}>
-          <input
+        <input
             type="text"
             placeholder="Search instructors..."
             value={searchTerm}
@@ -286,6 +453,20 @@ const ManageInstructors = () => {
               <div className={styles.badges}>
                 {getStatusBadge(instructor.status)}
                 {getRoleBadge(instructor.role)}
+                <button
+                  className={`${styles.btn} ${styles.availabilityBtn}`}
+                  onClick={() => handleSetAvailability(instructor)}
+                  title={`Set availability for ${instructor.name}`}
+                >
+                  📅 Set Availability
+                </button>
+                <button
+                  className={`${styles.btn} ${styles.calendarBtn}`}
+                  onClick={() => handleShowInstructorCalendar(instructor)}
+                  title={`View ${instructor.name}'s availability calendar`}
+                >
+                  📆 View Calendar
+                </button>
               </div>
             </div>
 
@@ -450,6 +631,252 @@ const ManageInstructors = () => {
                 onClick={handleConfirmDelete}
               >
                 🗑 Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Set Availability Modal */}
+      {showAvailabilityModal && availabilityInstructor && (
+        <div className={styles.modalOverlay} onClick={handleCloseAvailability}>
+          <div className={styles.availabilityModal} onClick={(e) => e.stopPropagation()}>
+            <div className={styles.modalHeader}>
+              <h3>Set Weekly Availability for {availabilityInstructor.name}</h3>
+              <button className={styles.closeBtn} onClick={handleCloseAvailability}>✕</button>
+            </div>
+            <div className={styles.modalBody}>
+              <div className={styles.availabilityForm}>
+                <p className={styles.formDescription}>
+                  Select the days and time ranges when this instructor is available. 
+                  You can set multiple days at once.
+                </p>
+                
+                <div className={styles.daysGrid}>
+                  {Object.entries(availabilityData).map(([day, dayData]) => (
+                    <div key={day} className={styles.dayCard}>
+                      <div className={styles.dayHeader}>
+                        <label className={styles.dayCheckbox}>
+                          <input
+                            type="checkbox"
+                            checked={dayData.enabled}
+                            onChange={(e) => updateDayAvailability(day, 'enabled', e.target.checked)}
+                          />
+                          <span className={styles.dayName}>
+                            {day.charAt(0).toUpperCase() + day.slice(1)}
+                          </span>
+                        </label>
+                      </div>
+                      
+                      {dayData.enabled && (
+                        <div className={styles.timeInputs}>
+                          <div className={styles.timeGroup}>
+                            <label>From:</label>
+                            <input
+                              type="number"
+                              min="0"
+                              max="23"
+                              value={dayData.from}
+                              onChange={(e) => updateDayAvailability(day, 'from', parseInt(e.target.value))}
+                              className={styles.timeInput}
+                            />
+                            <span>:00</span>
+                          </div>
+                          
+                          <div className={styles.timeGroup}>
+                            <label>To:</label>
+                            <input
+                              type="number"
+                              min="0"
+                              max="23"
+                              value={dayData.to}
+                              onChange={(e) => updateDayAvailability(day, 'to', parseInt(e.target.value))}
+                              className={styles.timeInput}
+                            />
+                            <span>:00</span>
+                          </div>
+                          
+                          <div className={styles.timePreview}>
+                            {dayData.from}:00 - {dayData.to}:00
+                            {dayData.from >= dayData.to && (
+                              <span className={styles.timeError}>⚠️ Invalid range</span>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+                
+                <div className={styles.availabilitySummary}>
+                  <h4>Summary:</h4>
+                  {Object.entries(availabilityData).filter(([_, dayData]) => dayData.enabled).length === 0 ? (
+                    <p className={styles.noSelection}>No days selected</p>
+                  ) : (
+                    <div className={styles.selectedDays}>
+                      {Object.entries(availabilityData)
+                        .filter(([_, dayData]) => dayData.enabled)
+                        .map(([day, dayData]) => (
+                          <div key={day} className={styles.summaryDay}>
+                            <strong>{day.charAt(0).toUpperCase() + day.slice(1)}:</strong> 
+                            {dayData.from}:00 - {dayData.to}:00
+                          </div>
+                        ))
+                      }
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+            <div className={styles.modalActions}>
+              <button
+                className={`${styles.btn} ${styles.cancelBtn}`}
+                onClick={handleCloseAvailability}
+              >
+                Cancel
+              </button>
+              <button
+                className={`${styles.btn} ${styles.saveBtn}`}
+                onClick={handleAvailabilitySubmit}
+                disabled={isSettingAvailability || Object.entries(availabilityData).filter(([_, dayData]) => dayData.enabled).length === 0}
+              >
+                {isSettingAvailability ? '⏳ Saving...' : '💾 Save Availability'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Individual Instructor Calendar Modal */}
+      {showInstructorCalendar && calendarInstructor && (
+        <div className={styles.modalOverlay} onClick={handleCloseInstructorCalendar}>
+          <div className={styles.calendarModal} onClick={(e) => e.stopPropagation()}>
+            <div className={styles.modalHeader}>
+              <h3>📅 {calendarInstructor.name}'s Availability Calendar</h3>
+              <button className={styles.closeBtn} onClick={handleCloseInstructorCalendar}>✕</button>
+            </div>
+            <div className={styles.modalBody}>
+              <div className={styles.instructorCalendarContainer}>
+                <div className={styles.calendarHeader}>
+                  <div className={styles.instructorInfo}>
+                    <div className={styles.instructorAvatar}>
+                      {calendarInstructor.avatar && calendarInstructor.avatar !== 'default-avatar.jpg' ? (
+                        <img src={calendarInstructor.avatar} alt={calendarInstructor.name} />
+                      ) : (
+                        <div className={styles.avatarText}>
+                          {calendarInstructor.name.split(' ').map(n => n[0]).join('')}
+                        </div>
+                      )}
+                    </div>
+                    <div className={styles.instructorDetails}>
+                      <h4>{calendarInstructor.name}</h4>
+                      <p>{calendarInstructor.email}</p>
+                      <p>{calendarInstructor.specialization}</p>
+                    </div>
+                  </div>
+                  <div className={styles.calendarStats}>
+                    <div className={styles.statItem}>
+                      <span className={styles.statValue}>
+                        {Object.keys(calendarInstructor.availableTime || {}).length}
+                      </span>
+                      <span className={styles.statLabel}>Available Days</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className={styles.weeklyCalendar}>
+                  <h4>📅 Weekly Availability Schedule</h4>
+                  <div className={styles.calendarGrid}>
+                    {['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].map((day) => {
+                      const dayKey = day.toLowerCase();
+                      const dayData = calendarInstructor.availableTime?.[dayKey];
+                      const isAvailable = dayData && dayData.from !== undefined && dayData.to !== undefined;
+                      
+                      return (
+                        <div key={day} className={`${styles.calendarDay} ${isAvailable ? styles.availableDay : styles.unavailableDay}`}>
+                          <div className={styles.dayHeader}>
+                            <span className={styles.dayName}>{day}</span>
+                            <span className={styles.dayStatus}>
+                              {isAvailable ? '✅' : '❌'}
+                            </span>
+                          </div>
+                          <div className={styles.dayContent}>
+                            {isAvailable ? (
+                              <div className={styles.timeSlot}>
+                                <div className={styles.timeRange}>
+                                  🕐 {dayData.from}:00 - {dayData.to}:00
+                                </div>
+                                <div className={styles.duration}>
+                                  ⏱️ {dayData.to - dayData.from} hours
+                                </div>
+                              </div>
+                            ) : (
+                              <div className={styles.noTimeSlot}>
+                                <span>Not Available</span>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {Object.keys(calendarInstructor.availableTime || {}).length === 0 && (
+                  <div className={styles.noAvailabilityMessage}>
+                    <div className={styles.noAvailabilityIcon}>📅</div>
+                    <h4>No Availability Set</h4>
+                    <p>This instructor hasn't set their availability schedule yet.</p>
+                    <button
+                      className={`${styles.btn} ${styles.setAvailabilityBtn}`}
+                      onClick={() => {
+                        handleCloseInstructorCalendar();
+                        handleSetAvailability(calendarInstructor);
+                      }}
+                    >
+                      📅 Set Availability
+                    </button>
+                  </div>
+                )}
+
+                {Object.keys(calendarInstructor.availableTime || {}).length > 0 && (
+                  <div className={styles.availabilitySummarySection}>
+                    <h4>📊 Availability Summary</h4>
+                    <div className={styles.summaryStats}>
+                      <div className={styles.summaryItem}>
+                        <span className={styles.summaryLabel}>Total Available Days:</span>
+                        <span className={styles.summaryValue}>
+                          {Object.keys(calendarInstructor.availableTime || {}).length} days
+                        </span>
+                      </div>
+                      <div className={styles.summaryItem}>
+                        <span className={styles.summaryLabel}>Total Weekly Hours:</span>
+                        <span className={styles.summaryValue}>
+                          {Object.values(calendarInstructor.availableTime || {}).reduce((total, day) => {
+                            return total + (day.to - day.from);
+                          }, 0)} hours
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+            <div className={styles.modalActions}>
+              <button
+                className={`${styles.btn} ${styles.editAvailabilityBtn}`}
+                onClick={() => {
+                  handleCloseInstructorCalendar();
+                  handleSetAvailability(calendarInstructor);
+                }}
+              >
+                ✏️ Edit Availability
+              </button>
+              <button
+                className={`${styles.btn} ${styles.cancelBtn}`}
+                onClick={handleCloseInstructorCalendar}
+              >
+                Close
               </button>
             </div>
           </div>

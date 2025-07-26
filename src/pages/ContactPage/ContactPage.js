@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import styles from './ContactPage.module.css';
+import { sendContactMessage } from '../../services/contactService';
 
 const ContactPage = () => {
   const [formData, setFormData] = useState({
@@ -112,15 +113,18 @@ const ContactPage = () => {
     setIsSubmitting(true);
 
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Prepare data for API call
+      const contactData = {
+        fullName: formData.name,
+        phoneNumber: formData.phone || '',
+        subject: formData.subject,
+        message: formData.message
+      };
       
-      // Here you would typically send the data to your backend
-      console.log('Contact form submitted:', formData);
+      // Send contact message to API
+      await sendContactMessage(contactData);
       
-      toast.success('Thank you for your message! We\'ll get back to you soon.');
-      
-      // Reset form
+      // Reset form on success
       setFormData({
         name: '',
         email: '',
@@ -132,7 +136,7 @@ const ContactPage = () => {
       
     } catch (error) {
       console.error('Error submitting contact form:', error);
-      toast.error('Failed to send message. Please try again.');
+      // Error handling is done in the service
     } finally {
       setIsSubmitting(false);
     }
