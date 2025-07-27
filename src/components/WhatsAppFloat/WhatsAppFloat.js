@@ -4,7 +4,7 @@ import styles from './WhatsAppFloat.module.css';
 const WhatsAppFloat = () => {
   return (
     <a 
-      href="https://wa.me/01155624668" 
+      href="https://wa.me/+201155624668" 
       className={styles.whatsappFloat} 
       target="_blank" 
       rel="noopener noreferrer"
