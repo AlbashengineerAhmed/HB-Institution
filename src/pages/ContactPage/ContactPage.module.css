@@ -915,3 +915,344 @@
     font-size: 0.85rem;
   }
 }
+
+
+/* Info Section - Restructured */
+.infoSection {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+/* Quick Contact Cards */
+.quickContactGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 15px;
+}
+
+.quickContactCard {
+  background: var(--secondary-color);
+  border: 1px solid rgba(253, 198, 44, 0.2);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.quickContactCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  border-color: rgba(253, 198, 44, 0.4);
+}
+
+.quickContactIcon {
+  background: linear-gradient(135deg, var(--primary-color), #ffdb4d);
+  color: var(--secondary-color);
+  width: 45px;
+  height: 45px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.quickContactContent h3 {
+  color: var(--text-color);
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.quickContactContent p {
+  color: var(--primary-color);
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.quickContactContent span {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.85rem;
+}
+
+/* Institution Overview */
+.institutionOverview {
+  background: linear-gradient(135deg, rgba(253, 198, 44, 0.08), rgba(253, 198, 44, 0.03));
+  border: 2px solid rgba(253, 198, 44, 0.2);
+  border-radius: 16px;
+  padding: 25px;
+  position: relative;
+  overflow: hidden;
+}
+
+.institutionOverview::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary-color), var(--hover-color));
+}
+
+.overviewHeader {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.institutionLogo {
+  background: linear-gradient(135deg, var(--primary-color), #ffdb4d);
+  color: var(--secondary-color);
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+}
+
+.overviewHeader h3 {
+  color: var(--text-color);
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+
+.overviewHeader p {
+  color: var(--primary-color);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.overviewStats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.statItem {
+  text-align: center;
+  padding: 15px 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  border: 1px solid rgba(253, 198, 44, 0.1);
+}
+
+.statNumber {
+  display: block;
+  color: var(--primary-color);
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.statLabel {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.overviewMission h4 {
+  color: var(--text-color);
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.overviewMission p {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* Social & Support Section */
+.socialSupportSection {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.socialPart,
+.supportPart {
+  background: var(--secondary-color);
+  border: 1px solid rgba(253, 198, 44, 0.2);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.socialPart h4,
+.supportPart h4 {
+  color: var(--text-color);
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.socialLinks {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.socialLink {
+  background: rgba(253, 198, 44, 0.1);
+  color: var(--primary-color);
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.socialLink:hover {
+  background: var(--primary-color);
+  color: var(--secondary-color);
+  transform: translateY(-2px);
+  border-color: var(--primary-color);
+  box-shadow: 0 4px 12px rgba(253, 198, 44, 0.3);
+}
+
+.supportHours {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.hourItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.85rem;
+}
+
+.hourItem i {
+  color: var(--primary-color);
+  font-size: 0.8rem;
+  width: 12px;
+}
+
+/* Quick Actions */
+.quickActions {
+  background: var(--secondary-color);
+  border: 1px solid rgba(253, 198, 44, 0.2);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.quickActions h4 {
+  color: var(--text-color);
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.actionButtons {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.actionBtn {
+  background: rgba(253, 198, 44, 0.1);
+  border: 1px solid rgba(253, 198, 44, 0.2);
+  color: var(--text-color);
+  padding: 12px 15px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.actionBtn:hover {
+  background: rgba(253, 198, 44, 0.2);
+  border-color: rgba(253, 198, 44, 0.4);
+  transform: translateY(-1px);
+}
+
+.actionBtn i {
+  color: var(--primary-color);
+  font-size: 0.9rem;
+}
+
+/* Responsive updates for new structure */
+@media (max-width: 768px) {
+  .socialSupportSection {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .overviewStats {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  
+  .statItem {
+    padding: 12px 8px;
+  }
+  
+  .statNumber {
+    font-size: 1.3rem;
+  }
+  
+  .statLabel {
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .overviewHeader {
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
+  }
+  
+  .overviewStats {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  
+  .socialSupportSection {
+    grid-template-columns: 1fr;
+  }
+  
+  .quickContactCard {
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
+  }
+  
+  .institutionOverview {
+    padding: 20px;
+  }
+  
+  .socialPart,
+  .supportPart {
+    padding: 15px;
+  }
+  
+  .quickActions {
+    padding: 15px;
+  }
+}

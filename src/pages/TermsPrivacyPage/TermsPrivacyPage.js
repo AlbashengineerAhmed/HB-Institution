@@ -469,7 +469,7 @@ const TermsPrivacyPage = () => {
         <div className={styles.header}>
           <h1>Legal & Information Center</h1>
           <p>Everything you need to know about HB Institution's policies, leadership, and mission</p>
-          <Link to="/auth/register" className={styles.backToRegister}>
+          <Link to="/register" className={styles.backToRegister}>
             ← Back to Registration
           </Link>
         </div>

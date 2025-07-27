@@ -185,6 +185,7 @@ const Header = () => {
                 <li><Link to="/about/disclaimer" className={styles.dropdownItem} onClick={handleLinkClick}>Disclaimer</Link></li>
               </ul>
             </li>
+            <li className={styles.navItem}><Link to="/team" className={styles.navLink}>Team</Link></li>
             <li 
               className={`${styles.navItem} ${styles.dropdown} ${activeDropdown === 'faculty' ? styles.active : ''}`}
               onMouseLeave={handleDropdownMouseLeave}

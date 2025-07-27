@@ -281,7 +281,7 @@ const RegisterPage = () => {
                 className={validationErrors.agreeTerms ? styles.errorInput : ''}
               />
               <label htmlFor="terms" className={styles.checkboxLabel}>
-                I have <strong>read</strong> and agree to the <Link to="/terms-privacy" target="_blank" rel="noopener noreferrer">Terms <Link to="/terms" target="_blank" rel="noopener noreferrer">Terms & Conditions</Link> and <Link to="/privacy" target="_blank" rel="noopener noreferrer">Privacy Policy</Link> Conditions and Privacy Policy</Link>
+                I have <strong>read</strong> and agree to the <Link to="/terms-privacy" target="_blank" rel="noopener noreferrer">Terms <Link to="/terms-privacy" target="_blank" rel="noopener noreferrer">Terms & Conditions</Link> and <Link to="/terms-privacy" target="_blank" rel="noopener noreferrer">Privacy Policy</Link> Conditions and Privacy Policy</Link>
               </label>
               {validationErrors.agreeTerms && (
                 <span className={styles.fieldError}>{validationErrors.agreeTerms}</span>

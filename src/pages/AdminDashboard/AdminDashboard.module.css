@@ -2,11 +2,12 @@
   display: flex;
   min-height: 100vh;
   background-color: var(--gradient-start);
+  position: relative;
 }
 
-/* Sidebar Styles */
+/* Sidebar Styles - Responsive to display scaling */
 .sidebar {
-  width: 280px;
+  width: clamp(250px, 25vw, 350px);
   background: linear-gradient(180deg, var(--secondary-color), var(--gradient-end));
   border-right: 1px solid rgba(var(--border-color-rgb), 0.2);
   position: fixed;
@@ -16,6 +17,8 @@
   z-index: 1000;
   display: flex;
   flex-direction: column;
+  transition: transform 0.3s ease, width 0.3s ease;
+  box-sizing: border-box;
 }
 
 .sidebarHeader {
@@ -75,6 +78,30 @@
 
 .sidebarNav {
   padding: 1rem 0;
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: calc(100vh - 180px);
+  min-height: 0;
+}
+
+/* Custom scrollbar for sidebar navigation */
+.sidebarNav::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebarNav::-webkit-scrollbar-track {
+  background: rgba(var(--primary-color-rgb), 0.1);
+  border-radius: 3px;
+}
+
+.sidebarNav::-webkit-scrollbar-thumb {
+  background: rgba(var(--primary-color-rgb), 0.3);
+  border-radius: 3px;
+}
+
+.sidebarNav::-webkit-scrollbar-thumb:hover {
+  background: rgba(var(--primary-color-rgb), 0.5);
 }
 
 .sidebarItem {
@@ -113,11 +140,14 @@
   font-weight: 500;
 }
 
-/* Main Content Styles */
+/* Main Content Styles - Responsive to match sidebar */
 .mainContent {
   flex: 1;
-  margin-left: 280px;
+  margin-left: clamp(250px, 25vw, 350px);
   background-color: var(--gradient-start);
+  min-width: 0;
+  transition: margin-left 0.3s ease;
+  box-sizing: border-box;
 }
 
 .mainHeader {
@@ -412,5 +442,82 @@
   .contentArea select,
   .contentArea textarea {
     font-size: 0.875rem;
+  }
+}
+
+/* Zoom level optimizations for better sidebar visibility */
+@media screen and (min-resolution: 120dpi) and (max-resolution: 144dpi) {
+  /* 125% zoom level adjustments */
+  .sidebarNav {
+    padding: 0.75rem 0;
+  }
+  
+  .sidebarHeader {
+    padding: 1.25rem 1.25rem;
+  }
+  
+  .sidebarItem {
+    padding: 0.5rem 1.25rem;
+    font-size: 0.85rem;
+  }
+  
+  .adminInfo {
+    gap: 0.5rem;
+  }
+  
+  .adminAvatar {
+    width: 50px;
+    height: 50px;
+    font-size: 1.1rem;
+  }
+  
+  .adminName {
+    font-size: 1.1rem;
+  }
+  
+  .adminTitle {
+    font-size: 0.8rem;
+  }
+  
+  .adminEmail {
+    font-size: 0.75rem;
+  }
+}
+
+@media screen and (min-resolution: 144dpi) {
+  /* 150% zoom and higher adjustments */
+  .sidebarNav {
+    padding: 0.5rem 0;
+  }
+  
+  .sidebarHeader {
+    padding: 1rem 1rem;
+  }
+  
+  .sidebarItem {
+    padding: 0.4rem 1rem;
+    font-size: 0.8rem;
+  }
+  
+  .adminInfo {
+    gap: 0.4rem;
+  }
+  
+  .adminAvatar {
+    width: 45px;
+    height: 45px;
+    font-size: 1rem;
+  }
+  
+  .adminName {
+    font-size: 1rem;
+  }
+  
+  .adminTitle {
+    font-size: 0.75rem;
+  }
+  
+  .adminEmail {
+    font-size: 0.7rem;
   }
 }

@@ -24,24 +24,6 @@ const ContactPage = () => {
     { value: 'feedback', label: 'Feedback & Suggestions' }
   ];
 
-  const contactInfo = [
-    {
-      icon: 'fas fa-phone',
-      title: 'Phone Numbers',
-      details: ['+1 (555) 123-4567', '+1 (555) 987-6543']
-    },
-    {
-      icon: 'fas fa-envelope',
-      title: 'Email Addresses',
-      details: ['support@hbinstitution.com', 'info@hbinstitution.com']
-    },
-    {
-      icon: 'fas fa-clock',
-      title: 'Business Hours',
-      details: ['Monday - Friday: 9:00 AM - 6:00 PM', 'Saturday: 10:00 AM - 4:00 PM', 'Sunday: Closed']
-    }
-  ];
-
   const socialLinks = [
     { icon: 'fab fa-facebook-f', url: '#', name: 'Facebook' },
     { icon: 'fab fa-twitter', url: '#', name: 'Twitter' },
@@ -272,81 +254,105 @@ const ContactPage = () => {
             </form>
           </div>
 
-          {/* Contact Information */}
+          {/* Contact Information - Restructured */}
           <div className={styles.infoSection}>
-            <div className={styles.infoHeader}>
-              <h2>Contact Information</h2>
-              <p>Reach out to us through any of these channels.</p>
-            </div>
-
-            <div className={styles.contactInfoGrid}>
-              {contactInfo.map((info, index) => (
-                <div key={index} className={styles.infoCard}>
-                  <div className={styles.infoIcon}>
-                    <i className={info.icon}></i>
-                  </div>
-                  <div className={styles.infoContent}>
-                    <h3>{info.title}</h3>
-                    {info.details.map((detail, idx) => (
-                      <p key={idx}>{detail}</p>
-                    ))}
-                  </div>
+            {/* Quick Contact Cards */}
+            <div className={styles.quickContactGrid}>
+              <div className={styles.quickContactCard}>
+                <div className={styles.quickContactIcon}>
+                  <i className="fas fa-phone"></i>
                 </div>
-              ))}
-            </div>
+                <div className={styles.quickContactContent}>
+                  <h3>Call Us</h3>
+                  <p>+1 (555) 123-4567</p>
+                  <span>Mon-Fri 9AM-6PM</span>
+                </div>
+              </div>
 
-            {/* Social Media */}
-            <div className={styles.socialSection}>
-              <h3>Follow Us</h3>
-              <div className={styles.socialLinks}>
-                {socialLinks.map((social, index) => (
-                  <a 
-                    key={index}
-                    href={social.url}
-                    className={styles.socialLink}
-                    aria-label={social.name}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <i className={social.icon}></i>
-                  </a>
-                ))}
+              <div className={styles.quickContactCard}>
+                <div className={styles.quickContactIcon}>
+                  <i className="fas fa-envelope"></i>
+                </div>
+                <div className={styles.quickContactContent}>
+                  <h3>Email Us</h3>
+                  <p>support@hbinstitution.com</p>
+                  <span>24/7 Response</span>
+                </div>
               </div>
             </div>
 
-            {/* Mission & Vision Section */}
-            <div className={styles.missionSection}>
-              <div className={styles.missionCard}>
-                <h3>🔹 Mission</h3>
-                <p>At <strong>HB Institution</strong>, our mission is to make <strong>high-quality Islamic and academic education freely accessible to every soul</strong> no matter their background, location, or circumstance.</p>
-                <p>We are here to teach with sincerity, lead with purpose, and serve with integrity empowering individuals to grow in knowledge, faith, and contribution.</p>
-              </div>
-
-              <div className={styles.visionCard}>
-                <h3>🔹 Vision</h3>
-                <p>We envision a world where <strong>authentic knowledge is no longer a privilege, but a right.</strong></p>
-                <p>A world where young minds are nurtured, hearts are enlightened, and a new generation rises equipped with faith, wisdom, and the courage to lead.</p>
-                <p>Our vision is to build a <strong>global legacy</strong> of learners and leaders who carry light wherever they go.</p>
-              </div>
-            </div>
-
-            {/* Quick Response */}
-            <div className={styles.responseInfo}>
-              <div className={styles.responseCard}>
-                <i className="fas fa-clock"></i>
+            {/* Institution Overview */}
+            <div className={styles.institutionOverview}>
+              <div className={styles.overviewHeader}>
+                <div className={styles.institutionLogo}>
+                  <i className="fas fa-graduation-cap"></i>
+                </div>
                 <div>
-                  <h4>Quick Response</h4>
-                  <p>We typically respond within 2-4 hours during business hours.</p>
+                  <h3>HB Institution</h3>
+                  <p>Premier Islamic Education Platform</p>
                 </div>
               </div>
-              <div className={styles.responseCard}>
-                <i className="fas fa-headset"></i>
-                <div>
-                  <h4>24/7 Support</h4>
-                  <p>For urgent matters, our support team is available around the clock.</p>
+              
+              <div className={styles.overviewStats}>
+                <div className={styles.statItem}>
+                  <span className={styles.statNumber}>10K+</span>
+                  <span className={styles.statLabel}>Students</span>
+                </div>
+                <div className={styles.statItem}>
+                  <span className={styles.statNumber}>500+</span>
+                  <span className={styles.statLabel}>Courses</span>
+                </div>
+                <div className={styles.statItem}>
+                  <span className={styles.statNumber}>50+</span>
+                  <span className={styles.statLabel}>Countries</span>
+                </div>
+              </div>
+
+              <div className={styles.overviewMission}>
+                <h4>Our Mission</h4>
+                <p>Making high-quality Islamic and academic education freely accessible to every soul, regardless of background or location.</p>
+              </div>
+            </div>
+
+            {/* Social & Support */}
+            <div className={styles.socialSupportSection}>
+              <div className={styles.socialPart}>
+                <h4>Connect With Us</h4>
+                <div className={styles.socialLinks}>
+                  {socialLinks.map((social, index) => (
+                    <a 
+                      key={index}
+                      href={social.url}
+                      className={styles.socialLink}
+                      aria-label={social.name}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <i className={social.icon}></i>
+                    </a>
+                  ))}
+                </div>
+              </div>
+
+              <div className={styles.supportPart}>
+                <h4>Support Hours</h4>
+                <div className={styles.supportHours}>
+                  <div className={styles.hourItem}>
+                    <i className="fas fa-clock"></i>
+                    <span>Mon-Fri: 9AM-6PM</span>
+                  </div>
+                  <div className={styles.hourItem}>
+                    <i className="fas fa-calendar"></i>
+                    <span>Sat: 10AM-4PM</span>
+                  </div>
+                  <div className={styles.hourItem}>
+                    <i className="fas fa-moon"></i>
+                    <span>24/7 Emergency Support</span>
+                  </div>
                 </div>
               </div>
             </div>
+
           </div>
         </div>
       </div>
