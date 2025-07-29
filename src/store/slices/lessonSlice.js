@@ -86,12 +86,46 @@ export const createLesson = createAsyncThunk(
     try {
       console.log('🚀 Creating lesson - Request data:', lessonData);
       console.log('🚀 API endpoint:', `${API_BASE_URL}/lesson/`);
-      console.log('🚀 Request headers will include:', {
-        'Content-Type': 'application/json',
-        'Authorization': localStorage.getItem('authToken')?.substring(0, 27) + '...'
+      
+      // Create FormData for multipart/form-data request
+      const formData = new FormData();
+      
+      // Add text fields to FormData
+      formData.append('title', lessonData.title);
+      formData.append('description', lessonData.description);
+      formData.append('content', lessonData.content);
+      formData.append('unitId', lessonData.unitId);
+      
+      // Add resource file if provided
+      if (lessonData.resource) {
+        formData.append('resource', lessonData.resource);
+      }
+      
+      console.log('🚀 FormData entries:');
+      for (let [key, value] of formData.entries()) {
+        console.log(`🚀 ${key}:`, value instanceof File ? `File: ${value.name} (${value.type})` : value);
+      }
+      
+      // Create custom axios instance for FormData (without Content-Type header)
+      const formDataApi = axios.create({
+        baseURL: API_BASE_URL,
+        // Don't set Content-Type header - let browser set it with boundary for FormData
       });
       
-      const response = await api.post('/lesson/', lessonData);
+      // Add auth token to FormData request
+      const token = localStorage.getItem('authToken');
+      const headers = {};
+      if (token) {
+        const bearerToken = token.startsWith('Bearer ') ? token : `Bearer ${token}`;
+        headers.authorization = bearerToken;
+      }
+      
+      console.log('🚀 Request headers will include:', {
+        'authorization': headers.authorization?.substring(0, 27) + '...',
+        'Content-Type': 'multipart/form-data (auto-set by browser)'
+      });
+      
+      const response = await formDataApi.post('/lesson/', formData, { headers });
       console.log('✅ Create lesson - Success response:', response);
       console.log('✅ Response data:', response.data);
       console.log('✅ Response status:', response.status);

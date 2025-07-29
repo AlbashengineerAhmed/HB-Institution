@@ -615,3 +615,116 @@
   color: rgba(var(--text-color-rgb), 0.5);
   cursor: not-allowed;
 }
+
+
+/* File Input Styles */
+.fileInput {
+  position: relative;
+}
+
+.fileInput:hover {
+}
+
+.fileInput:focus {
+}
+
+.fileInput::file-selector-button {
+  background: var(--primary-color);
+  color: var(--secondary-color);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  margin-right: 12px;
+  transition: var(--transition);
+}
+
+.fileInput::file-selector-button:hover {
+  background: var(--hover-color);
+  transform: translateY(-1px);
+}
+
+/* File Info Display */
+.fileInfo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 12px;
+  padding: 12px 16px;
+  background: rgba(var(--primary-color-rgb), 0.1);
+  border: 1px solid rgba(var(--primary-color-rgb), 0.3);
+  border-radius: 8px;
+  transition: var(--transition);
+}
+
+.fileName {
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+}
+
+.removeFileBtn {
+  background: var(--error-color);
+  color: var(--secondary-color);
+  border: none;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.removeFileBtn:hover {
+  background: rgba(var(--error-color-rgb), 0.8);
+  transform: translateY(-1px);
+}
+
+.removeFileBtn:active {
+  transform: translateY(0);
+}
+
+/* Warning styles for validation */
+.warning {
+}
+
+/* Enhanced help text for file input */
+.formGroup .helpText {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 8px 12px;
+  background: rgba(var(--info-color-rgb), 0.1);
+  border-left: 3px solid var(--info-color);
+  border-radius: 4px;
+}
+
+/* Responsive adjustments for file input */
+@media (max-width: 768px) {
+  .fileInfo {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  
+  .fileName {
+    text-align: center;
+  }
+  
+  .removeFileBtn {
+    align-self: center;
+    width: fit-content;
+  }
+  
+  .fileInput::file-selector-button {
+    margin-right: 8px;
+    padding: 6px 12px;
+    font-size: 0.85rem;
+  }
+}

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import styles from './StudentDashboard.module.css';
 import ErrorBoundary from '../../components/ErrorBoundary';
 import { fetchStudentDashboard } from '../../store/slices/studentDashboardSlice';
+import SendNote from '../../components/SendNote/SendNote';
 
 // Lazy load components to identify loading issues
 const MyCourses = React.lazy(() => import('../../components/Student/MyCourses/MyCourses'));
@@ -131,6 +132,18 @@ const StudentDashboard = () => {
       </div>
     );
 
+    // Show send note when send-note section is active
+    if (activeSection === 'send-note') {
+      return (
+        <SendNote 
+          onSuccess={() => {
+            // Optionally navigate back to courses after successful send
+            handleSectionChange('courses');
+          }}
+        />
+      );
+    }
+
     // Show calendar when calendar section is active
     if (activeSection === 'calendar') {
       return (
@@ -242,6 +255,9 @@ const StudentDashboard = () => {
   };
 
   const getPageTitle = () => {
+    if (activeSection === 'send-note') {
+      return 'Send Note to Admin';
+    }
     if (activeSection === 'calendar') {
       return 'Calendar';
     }
@@ -378,6 +394,13 @@ const StudentDashboard = () => {
             >
               <span className={styles.sidebarIcon}>📅</span>
               <span className={styles.sidebarLabel}>Calendar</span>
+            </button>
+            <button
+              className={`${styles.sidebarItem} ${activeSection === 'send-note' ? styles.active : ''}`}
+              onClick={() => handleSectionChange('send-note')}
+            >
+              <span className={styles.sidebarIcon}>📝</span>
+              <span className={styles.sidebarLabel}>Send Note</span>
             </button>
           </nav>
         </aside>

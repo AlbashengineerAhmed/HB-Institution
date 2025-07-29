@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { formatPrice } from '../../utils/priceUtils';
 import styles from './InstructorDashboard.module.css';
 import ErrorBoundary from '../../components/ErrorBoundary';
+import SendNote from '../../components/SendNote/SendNote';
 import { 
   fetchInstructorDashboard,
   fetchCourseUnits,

@@ -35,7 +35,8 @@ const ManageLessons = () => {
     title: '',
     description: '',
     content: '',
-    unitId: ''
+    unitId: '',
+    resource: null
   });
 
   // Validation constants based on backend requirements
@@ -62,6 +63,22 @@ const ManageLessons = () => {
     
     if (!lessonForm.unitId) {
       errors.push('Please select a unit');
+    }
+    
+    // Validate resource file (PDF only)
+    if (lessonForm.resource) {
+      const file = lessonForm.resource;
+      
+      // Check file type
+      if (file.type !== 'application/pdf') {
+        errors.push('Resource file must be a PDF document');
+      }
+      
+      // Check file size (max 10MB)
+      const maxSize = 10 * 1024 * 1024; // 10MB in bytes
+      if (file.size > maxSize) {
+        errors.push(`Resource file size must be less than 10MB (current: ${(file.size / 1024 / 1024).toFixed(2)}MB)`);
+      }
     }
     
     return errors;
@@ -338,7 +355,8 @@ const ManageLessons = () => {
       title: '',
       description: '',
       content: '',
-      unitId: ''
+      unitId: '',
+      resource: null
     });
     setSelectedCourse('');
   };
@@ -382,7 +400,8 @@ const ManageLessons = () => {
         title: lessonForm.title.trim(),
         description: lessonForm.description.trim(),
         content: lessonForm.content.trim(),
-        unitId: lessonForm.unitId
+        unitId: lessonForm.unitId,
+        resource: lessonForm.resource
       };
 
       console.log('Creating lesson with validated data:', lessonData);
@@ -469,7 +488,8 @@ const ManageLessons = () => {
       title: lesson.title || '',
       description: lesson.description || '',
       content: lesson.content || '',
-      unitId: lesson.unitId || ''
+      unitId: lesson.unitId || '',
+      resource: null // Don't pre-populate file input
     });
 
     // Find the course that contains this unit
@@ -745,6 +765,36 @@ const ManageLessons = () => {
               <small className={`${styles.charCount} ${lessonForm.content.trim() && lessonForm.content.trim().length < CONTENT_MIN_LENGTH ? styles.warning : ''}`}>
                 {lessonForm.content.length}/2000 characters 
                 {lessonForm.content.trim() && `(minimum ${CONTENT_MIN_LENGTH} required)`}
+              </small>
+            </div>
+            
+            <div className={styles.formGroup}>
+              <label>Resource File (PDF only, max 10MB)</label>
+              <input
+                type="file"
+                accept=".pdf,application/pdf"
+                onChange={(e) => {
+                  const file = e.target.files[0];
+                  setLessonForm({...lessonForm, resource: file || null});
+                }}
+                className={styles.fileInput}
+              />
+              {lessonForm.resource && (
+                <div className={styles.fileInfo}>
+                  <small className={styles.fileName}>
+                    📄 {lessonForm.resource.name} ({(lessonForm.resource.size / 1024 / 1024).toFixed(2)}MB)
+                  </small>
+                  <button
+                    type="button"
+                    onClick={() => setLessonForm({...lessonForm, resource: null})}
+                    className={styles.removeFileBtn}
+                  >
+                    ✕ Remove
+                  </button>
+                </div>
+              )}
+              <small className={styles.helpText}>
+                Optional: Upload a PDF resource file for this lesson (max 10MB)
               </small>
             </div>
             
