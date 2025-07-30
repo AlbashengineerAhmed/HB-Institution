@@ -312,202 +312,6 @@
   font-weight: 500;
 }
 
-/* All Lessons View */
-.allLessonsView {
-  padding: 2rem;
-}
-
-.allLessonsHeader {
-  margin-bottom: 2rem;
-  text-align: center;
-}
-
-.allLessonsHeader h2 {
-  color: var(--text-color);
-  font-size: 2rem;
-  font-weight: 600;
-  margin: 0 0 0.5rem 0;
-}
-
-.allLessonsHeader p {
-  color: rgba(var(--text-color-rgb), 0.7);
-  font-size: 1.1rem;
-  margin: 0;
-}
-
-.allLessonsContent {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-}
-
-.unitSection {
-  background: linear-gradient(135deg, var(--secondary-color), var(--gradient-end));
-  border-radius: 16px;
-  padding: 2rem;
-  border: 1px solid rgba(var(--primary-color-rgb), 0.1);
-  box-shadow: var(--box-shadow);
-}
-
-.unitHeader {
-  margin-bottom: 1.5rem;
-}
-
-.unitHeader h3 {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin: 0 0 0.5rem 0;
-  color: var(--text-color);
-  font-size: 1.5rem;
-  font-weight: 600;
-}
-
-.unitNumber {
-  background: linear-gradient(135deg, var(--primary-color), var(--hover-color));
-  color: var(--secondary-color);
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  font-size: 0.875rem;
-  font-weight: 700;
-}
-
-.unitName {
-  flex: 1;
-}
-
-.unitStatus {
-  font-size: 1.25rem;
-  display: flex;
-  gap: 0.5rem;
-}
-
-.unitDescription {
-  color: rgba(var(--text-color-rgb), 0.8);
-  font-size: 1rem;
-  margin: 0;
-  line-height: 1.5;
-}
-
-.lessonsGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1.5rem;
-}
-
-.lessonCard {
-  background: rgba(var(--gradient-start-rgb), 0.3);
-  border: 1px solid rgba(var(--primary-color-rgb), 0.1);
-  border-radius: 12px;
-  padding: 1.5rem;
-  transition: var(--transition);
-  display: flex;
-  gap: 1rem;
-  cursor: pointer;
-}
-
-.lessonCard:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(var(--primary-color-rgb), 0.2);
-}
-
-.lessonCard:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 8px rgba(var(--primary-color-rgb), 0.15);
-}
-
-.lessonCard.locked {
-  opacity: 0.7;
-  background: rgba(var(--text-color-rgb), 0.05);
-  cursor: not-allowed;
-}
-
-.lessonCard.completed {
-  border-color: var(--success-color);
-  background: rgba(var(--success-color-rgb), 0.1);
-}
-
-.lessonNumber {
-  width: 40px;
-  height: 40px;
-  background: linear-gradient(135deg, var(--primary-color), var(--hover-color));
-  color: var(--secondary-color);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  font-size: 1rem;
-  flex-shrink: 0;
-}
-
-.lessonCard.locked .lessonNumber {
-  background: rgba(var(--text-color-rgb), 0.3);
-  color: rgba(var(--text-color-rgb), 0.7);
-}
-
-.lessonCard.completed .lessonNumber {
-  background: var(--success-color);
-}
-
-.lessonContent {
-  flex: 1;
-  min-width: 0;
-}
-
-.lessonTitle {
-  color: var(--text-color);
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin: 0 0 0.5rem 0;
-  line-height: 1.3;
-}
-
-.lessonCard.locked .lessonTitle {
-  color: rgba(var(--text-color-rgb), 0.5);
-}
-
-.lessonDescription {
-  color: rgba(var(--text-color-rgb), 0.8);
-  font-size: 0.9rem;
-  margin: 0 0 1rem 0;
-  line-height: 1.4;
-}
-
-.lessonCard.locked .lessonDescription {
-  color: rgba(var(--text-color-rgb), 0.4);
-}
-
-.lessonStatus {
-  display: flex;
-  gap: 1rem;
-  font-size: 0.8rem;
-}
-
-.lockStatus,
-.completionStatus {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  font-weight: 500;
-}
-
-.lockStatus {
-  color: var(--warning-color);
-}
-
-.completionStatus {
-  color: var(--success-color);
-}
-
-.lessonCard.locked .lockStatus {
-  color: rgba(var(--text-color-rgb), 0.6);
-}
-
-.lessonCard.completed .completionStatus {
-  color: var(--success-color);
-}
-
 /* Mobile Close Button */
 .mobileCloseBtn {
   display: none;
@@ -528,6 +332,427 @@
 .mobileCloseBtn:hover {
   background-color: rgba(var(--primary-color-rgb), 0.1);
   color: var(--primary-color);
+}
+
+/* Course Details View - New Compact Design */
+.courseDetailsView {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1rem;
+}
+
+/* Compact Course Header */
+.compactCourseHeader {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  background: linear-gradient(135deg, var(--secondary-color), var(--gradient-end));
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: var(--box-shadow);
+  border: 1px solid rgba(var(--primary-color-rgb), 0.1);
+}
+
+.courseImageSmall {
+  width: 120px;
+  height: 80px;
+  border-radius: 8px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background-color: rgba(var(--gradient-start-rgb), 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.courseImageSmall img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.courseHeaderInfo {
+  flex: 1;
+}
+
+.courseTitle {
+  color: var(--text-color);
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0 0 1rem 0;
+  line-height: 1.3;
+}
+
+.courseMeta {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.courseGroup,
+.courseLevel,
+.courseDuration,
+.coursePrice {
+  color: rgba(var(--text-color-rgb), 0.8);
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+}
+
+/* Section Titles */
+.sectionTitle {
+  color: var(--text-color);
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Schedule Section */
+.scheduleSection {
+  background: var(--secondary-color);
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 1px solid rgba(var(--primary-color-rgb), 0.1);
+}
+
+.scheduleGrid {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.scheduleCard {
+  background: rgba(var(--info-color-rgb), 0.1);
+  border: 1px solid rgba(var(--info-color-rgb), 0.2);
+  border-radius: 8px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 150px;
+}
+
+.scheduleDay {
+  color: var(--info-color);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.scheduleTime {
+  color: var(--text-color);
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.scheduleTimezone {
+  color: rgba(var(--text-color-rgb), 0.6);
+  font-size: 0.8rem;
+}
+
+/* Course Content Section */
+.courseContentSection {
+  background: var(--secondary-color);
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 1px solid rgba(var(--primary-color-rgb), 0.1);
+}
+
+/* Units Dropdown List */
+.unitsDropdownList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.unitDropdownItem {
+  border: 1px solid rgba(var(--primary-color-rgb), 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+  background: rgba(var(--gradient-start-rgb), 0.1);
+}
+
+/* Unit Dropdown Header */
+.unitDropdownHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  cursor: pointer;
+  transition: var(--transition);
+  background: rgba(var(--gradient-start-rgb), 0.2);
+}
+
+.unitDropdownHeader:hover:not(.disabled) {
+  background: rgba(var(--gradient-start-rgb), 0.4);
+}
+
+.unitDropdownHeader.disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.unitHeaderLeft {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+}
+
+.expandIcon {
+  color: var(--primary-color);
+  font-size: 1rem;
+  font-weight: 600;
+  min-width: 20px;
+}
+
+.unitInfo {
+  flex: 1;
+}
+
+.unitTitle {
+  color: var(--text-color);
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+}
+
+.unitMeta {
+  color: rgba(var(--text-color-rgb), 0.7);
+  font-size: 0.85rem;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.unitHeaderRight {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Status Badges */
+.statusBadge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.statusBadge.completed {
+  background-color: rgba(var(--success-color-rgb), 0.2);
+  color: var(--success-color);
+}
+
+.statusBadge.incomplete {
+  background-color: rgba(var(--warning-color-rgb), 0.2);
+  color: var(--warning-color);
+}
+
+.statusBadge.unlocked {
+  background-color: rgba(var(--success-color-rgb), 0.2);
+  color: var(--success-color);
+}
+
+.statusBadge.locked {
+  background-color: rgba(var(--error-color-rgb), 0.2);
+  color: var(--error-color);
+}
+
+/* Lessons Dropdown */
+.lessonsDropdown {
+  border-top: 1px solid rgba(var(--primary-color-rgb), 0.1);
+  background: var(--secondary-color);
+  padding: 0.75rem;
+}
+
+.lessonsList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.lessonDropdownItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  background: rgba(var(--gradient-start-rgb), 0.1);
+  border: 1px solid rgba(var(--primary-color-rgb), 0.1);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.lessonDropdownItem:hover:not(.disabled) {
+  background: rgba(var(--gradient-start-rgb), 0.2);
+  border-color: rgba(var(--primary-color-rgb), 0.2);
+}
+
+.lessonDropdownItem.disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.lessonInfo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+}
+
+.lessonOrder {
+  background: linear-gradient(135deg, var(--primary-color), var(--hover-color));
+  color: var(--secondary-color);
+  padding: 0.25rem 0.75rem;
+  border-radius: 50%;
+  font-size: 0.8rem;
+  font-weight: 600;
+  min-width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lessonDetails {
+  flex: 1;
+}
+
+.lessonTitle {
+  color: var(--text-color);
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin: 0 0 0.25rem 0;
+}
+
+.lessonUnit {
+  color: rgba(var(--text-color-rgb), 0.6);
+  font-size: 0.8rem;
+  margin: 0;
+}
+
+.lessonActions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.playButton {
+  background: linear-gradient(135deg, var(--primary-color), var(--hover-color));
+  color: var(--secondary-color);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.playButton:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(var(--primary-color-rgb), 0.3);
+}
+
+/* Loading and Error States */
+.loadingState,
+.errorState {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 2rem;
+  color: rgba(var(--text-color-rgb), 0.7);
+  font-size: 0.9rem;
+}
+
+.errorIcon {
+  font-size: 1.2rem;
+}
+
+/* Empty States */
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2rem;
+  text-align: center;
+  color: rgba(var(--text-color-rgb), 0.6);
+}
+
+.emptyIcon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  opacity: 0.7;
+}
+
+.emptyState h4 {
+  color: var(--text-color);
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+}
+
+.emptyState p {
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.emptyLessons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  color: rgba(var(--text-color-rgb), 0.6);
+  font-size: 0.85rem;
+  background: rgba(var(--gradient-start-rgb), 0.1);
+  border-radius: 6px;
+  border: 1px dashed rgba(var(--primary-color-rgb), 0.2);
+}
+
+/* Course Actions Section */
+.courseActionsSection {
+  display: flex;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: var(--secondary-color);
+  border-radius: 12px;
+  border: 1px solid rgba(var(--primary-color-rgb), 0.1);
+}
+
+.actionButton {
+  flex: 1;
+  padding: 1rem 1.5rem;
+  background: linear-gradient(135deg, var(--primary-color), var(--hover-color));
+  color: var(--secondary-color);
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.actionButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(var(--primary-color-rgb), 0.3);
 }
 
 /* Responsive Design */
@@ -641,13 +866,85 @@
   .sidebarHeader {
     padding: 1.5rem 1rem;
   }
-  
-  .lessonsGrid {
-    grid-template-columns: 1fr;
+
+  /* Course Details View Mobile */
+  .courseDetailsView {
+    padding: 0.5rem;
+    gap: 1rem;
+  }
+
+  .compactCourseHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .courseImageSmall {
+    width: 100%;
+    height: 120px;
+  }
+
+  .courseMeta {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .courseTitle {
+    font-size: 1.25rem;
+  }
+
+  .scheduleSection,
+  .courseContentSection,
+  .courseActionsSection {
+    padding: 1rem;
+  }
+
+  .unitDropdownHeader {
+    padding: 0.75rem;
+  }
+
+  .unitHeaderLeft {
+    gap: 0.75rem;
+  }
+
+  .unitTitle {
+    font-size: 0.9rem;
+  }
+
+  .unitMeta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .lessonDropdownItem {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.5rem;
+  }
+
+  .lessonInfo {
+    width: 100%;
+  }
+
+  .lessonActions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .playButton {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.75rem;
+  }
+
+  .actionButton {
+    padding: 0.875rem 1.25rem;
+    font-size: 0.85rem;
   }
 }
 
-/* Additional mobile fixes */
 @media (max-width: 480px) {
   .mainHeader {
     padding: 0.75rem 1rem;
@@ -696,16 +993,67 @@
     padding: 0.375rem 0.75rem;
     font-size: 0.8rem;
   }
-  
-  .allLessonsView {
-    padding: 1rem;
+
+  /* Course Details View Mobile Small */
+  .courseDetailsView {
+    padding: 0.25rem;
   }
-  
-  .unitSection {
-    padding: 1rem;
+
+  .compactCourseHeader {
+    padding: 0.75rem;
   }
-  
-  .lessonCard {
-    padding: 1rem;
+
+  .courseImageSmall {
+    height: 100px;
+  }
+
+  .courseTitle {
+    font-size: 1.1rem;
+  }
+
+  .courseMeta span {
+    font-size: 0.8rem;
+  }
+
+  .sectionTitle {
+    font-size: 1rem;
+  }
+
+  .scheduleSection,
+  .courseContentSection,
+  .courseActionsSection {
+    padding: 0.75rem;
+  }
+
+  .unitDropdownHeader {
+    padding: 0.625rem;
+  }
+
+  .unitTitle {
+    font-size: 0.85rem;
+  }
+
+  .lessonOrder {
+    min-width: 28px;
+    height: 28px;
+    font-size: 0.7rem;
+  }
+
+  .lessonTitle {
+    font-size: 0.85rem;
+  }
+
+  .lessonUnit {
+    font-size: 0.75rem;
+  }
+
+  .playButton {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.7rem;
+  }
+
+  .statusBadge {
+    padding: 0.2rem 0.5rem;
+    font-size: 0.7rem;
   }
 }

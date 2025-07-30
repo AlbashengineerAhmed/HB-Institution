@@ -87,38 +87,38 @@ export const fetchStudentDashboard = createAsyncThunk(
   }
 );
 
-// Mark lesson as completed
-export const markLessonCompleted = createAsyncThunk(
-  'studentDashboard/markLessonCompleted',
-  async ({ lessonId }, { rejectWithValue }) => {
+// Fetch units data using group ID and course ID
+export const fetchUnitsData = createAsyncThunk(
+  'studentDashboard/fetchUnitsData',
+  async ({ groupId, courseId }, { rejectWithValue }) => {
     try {
-      console.log(`🔄 Marking lesson as completed: ${lessonId}`);
-      const response = await api.patch(`/lesson/${lessonId}/complete`);
-      console.log('✅ Lesson marked as completed:', response.data);
-      toast.success('Lesson completed successfully!');
-      return { lessonId, data: response.data };
+      console.log(`🔍 Fetching units data for group: ${groupId}, course: ${courseId}`);
+      console.log(`🌐 Using endpoint: https://hb-institution.vercel.app/api/v1/unit/${groupId}/Units_Status/${courseId}`);
+      const response = await api.get(`/unit/${groupId}/Units_Status/${courseId}`);
+      console.log('✅ Units data:', response.data);
+      return { groupId, courseId, data: response.data };
     } catch (error) {
-      const errorMessage = getErrorMessage(error, 'Failed to mark lesson as completed');
-      console.error('❌ Failed to mark lesson as completed:', error);
+      const errorMessage = getErrorMessage(error, 'Failed to fetch units data');
+      console.error('❌ Failed to fetch units data:', error);
       toast.error(errorMessage);
       return rejectWithValue(errorMessage);
     }
   }
 );
 
-// Mark unit as completed
-export const markUnitCompleted = createAsyncThunk(
-  'studentDashboard/markUnitCompleted',
-  async ({ unitId }, { rejectWithValue }) => {
+// Fetch lessons data using group ID and unit ID
+export const fetchLessonsData = createAsyncThunk(
+  'studentDashboard/fetchLessonsData',
+  async ({ groupId, unitId }, { rejectWithValue }) => {
     try {
-      console.log(`🔄 Marking unit as completed: ${unitId}`);
-      const response = await api.patch(`/unit/${unitId}/complete`);
-      console.log('✅ Unit marked as completed:', response.data);
-      toast.success('Unit completed successfully!');
-      return { unitId, data: response.data };
+      console.log(`🔍 Fetching lessons data for group: ${groupId}, unit: ${unitId}`);
+      console.log(`🌐 Using endpoint: https://hb-institution.vercel.app/api/v1/lesson/${groupId}/status/${unitId}`);
+      const response = await api.get(`/lesson/${groupId}/status/${unitId}`);
+      console.log('✅ Lessons data:', response.data);
+      return { groupId, unitId, data: response.data };
     } catch (error) {
-      const errorMessage = getErrorMessage(error, 'Failed to mark unit as completed');
-      console.error('❌ Failed to mark unit as completed:', error);
+      const errorMessage = getErrorMessage(error, 'Failed to fetch lessons data');
+      console.error('❌ Failed to fetch lessons data:', error);
       toast.error(errorMessage);
       return rejectWithValue(errorMessage);
     }
@@ -148,6 +148,16 @@ const initialState = {
   // Dashboard data
   courses: [],
   
+  // Units data
+  units: [],
+  isLoadingUnits: false,
+  unitsError: null,
+  
+  // Lessons data
+  lessons: [],
+  isLoadingLessons: false,
+  lessonsError: null,
+  
   // Lesson details
   selectedLessonDetails: null,
   isLoadingLessonDetails: false,
@@ -155,11 +165,9 @@ const initialState = {
   
   // Loading states
   isLoading: false,
-  isMarkingComplete: false,
   
   // Error states
   error: null,
-  completeError: null,
   
   // UI state
   expandedCourses: {},
@@ -176,7 +184,6 @@ const studentDashboardSlice = createSlice({
   reducers: {
     clearError: (state) => {
       state.error = null;
-      state.completeError = null;
       state.lessonDetailsError = null;
     },
     
@@ -206,37 +213,6 @@ const studentDashboardSlice = createSlice({
     setSelectedLesson: (state, action) => {
       state.selectedLesson = action.payload;
     },
-    
-    // Optimistic update for lesson completion
-    markLessonCompletedOptimistic: (state, action) => {
-      const { courseId, unitId, lessonId } = action.payload;
-      const course = state.courses.find(c => c._id === courseId);
-      if (course) {
-        const unit = course.units.find(u => u._id === unitId);
-        if (unit) {
-          const lesson = unit.lessons.find(l => l._id === lessonId);
-          if (lesson) {
-            lesson.completed = true;
-          }
-        }
-      }
-    },
-    
-    // Optimistic update for unit completion
-    markUnitCompletedOptimistic: (state, action) => {
-      const { courseId, unitId } = action.payload;
-      const course = state.courses.find(c => c._id === courseId);
-      if (course) {
-        const unit = course.units.find(u => u._id === unitId);
-        if (unit) {
-          unit.completed = true;
-          // Mark all lessons in the unit as completed
-          unit.lessons.forEach(lesson => {
-            lesson.completed = true;
-          });
-        }
-      }
-    },
   },
   extraReducers: (builder) => {
     builder
@@ -256,38 +232,6 @@ const studentDashboardSlice = createSlice({
         state.courses = [];
       })
       
-      // Mark Lesson Completed
-      .addCase(markLessonCompleted.pending, (state) => {
-        state.isMarkingComplete = true;
-        state.completeError = null;
-      })
-      .addCase(markLessonCompleted.fulfilled, (state, action) => {
-        state.isMarkingComplete = false;
-        state.completeError = null;
-        // The optimistic update already handled the UI change
-      })
-      .addCase(markLessonCompleted.rejected, (state, action) => {
-        state.isMarkingComplete = false;
-        state.completeError = action.payload;
-        // Revert optimistic update on error would go here if needed
-      })
-      
-      // Mark Unit Completed
-      .addCase(markUnitCompleted.pending, (state) => {
-        state.isMarkingComplete = true;
-        state.completeError = null;
-      })
-      .addCase(markUnitCompleted.fulfilled, (state, action) => {
-        state.isMarkingComplete = false;
-        state.completeError = null;
-        // The optimistic update already handled the UI change
-      })
-      .addCase(markUnitCompleted.rejected, (state, action) => {
-        state.isMarkingComplete = false;
-        state.completeError = action.payload;
-        // Revert optimistic update on error would go here if needed
-      })
-      
       // Get Lesson Details
       .addCase(getLessonDetails.pending, (state) => {
         state.isLoadingLessonDetails = true;
@@ -302,6 +246,38 @@ const studentDashboardSlice = createSlice({
         state.isLoadingLessonDetails = false;
         state.lessonDetailsError = action.payload;
         state.selectedLessonDetails = null;
+      })
+      
+      // Fetch Units Data
+      .addCase(fetchUnitsData.pending, (state) => {
+        state.isLoadingUnits = true;
+        state.unitsError = null;
+      })
+      .addCase(fetchUnitsData.fulfilled, (state, action) => {
+        state.isLoadingUnits = false;
+        state.units = action.payload.data.units || [];
+        state.unitsError = null;
+      })
+      .addCase(fetchUnitsData.rejected, (state, action) => {
+        state.isLoadingUnits = false;
+        state.unitsError = action.payload;
+        state.units = [];
+      })
+      
+      // Fetch Lessons Data
+      .addCase(fetchLessonsData.pending, (state) => {
+        state.isLoadingLessons = true;
+        state.lessonsError = null;
+      })
+      .addCase(fetchLessonsData.fulfilled, (state, action) => {
+        state.isLoadingLessons = false;
+        state.lessons = action.payload.data.lessons || [];
+        state.lessonsError = null;
+      })
+      .addCase(fetchLessonsData.rejected, (state, action) => {
+        state.isLoadingLessons = false;
+        state.lessonsError = action.payload;
+        state.lessons = [];
       });
   },
 });
@@ -313,9 +289,7 @@ export const {
   toggleUnitExpansion,
   setSelectedCourse,
   setSelectedUnit,
-  setSelectedLesson,
-  markLessonCompletedOptimistic,
-  markUnitCompletedOptimistic
+  setSelectedLesson
 } = studentDashboardSlice.actions;
 
 export default studentDashboardSlice.reducer;

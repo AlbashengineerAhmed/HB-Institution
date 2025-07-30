@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getLessonDetails, clearLessonDetails, markLessonCompleted, markLessonCompletedOptimistic } from '../../../store/slices/studentDashboardSlice';
+import { getLessonDetails, clearLessonDetails } from '../../../store/slices/studentDashboardSlice';
 import styles from './LessonDetails.module.css';
 
 const LessonDetails = ({ lessonId, courseId, unitId, onBack }) => {
@@ -8,8 +8,7 @@ const LessonDetails = ({ lessonId, courseId, unitId, onBack }) => {
   const { 
     selectedLessonDetails, 
     isLoadingLessonDetails, 
-    lessonDetailsError,
-    isMarkingComplete 
+    lessonDetailsError
   } = useSelector((state) => state.studentDashboard);
 
   useEffect(() => {
@@ -22,15 +21,6 @@ const LessonDetails = ({ lessonId, courseId, unitId, onBack }) => {
       dispatch(clearLessonDetails());
     };
   }, [dispatch, lessonId]);
-
-  const handleMarkComplete = () => {
-    if (lessonId && courseId && unitId) {
-      // Optimistic update first
-      dispatch(markLessonCompletedOptimistic({ courseId, unitId, lessonId }));
-      // Then make API call
-      dispatch(markLessonCompleted({ lessonId }));
-    }
-  };
 
   const handleBackClick = () => {
     dispatch(clearLessonDetails());
@@ -116,15 +106,6 @@ const LessonDetails = ({ lessonId, courseId, unitId, onBack }) => {
             </span>
           </div>
         </div>
-        {!lesson.completed && !lesson.islocked && (
-          <button 
-            className={styles.completeBtn}
-            onClick={handleMarkComplete}
-            disabled={isMarkingComplete}
-          >
-            {isMarkingComplete ? '🔄 Marking...' : '✅ Mark Complete'}
-          </button>
-        )}
       </div>
 
       <div className={styles.content}>

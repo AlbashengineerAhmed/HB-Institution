@@ -66,12 +66,6 @@ const CourseDetailsPage = () => {
     return Object.values(unitLessons).reduce((total, lessons) => total + lessons.length, 0);
   };
 
-  const getCompletedLessons = () => {
-    return Object.values(unitLessons).reduce((total, lessons) => {
-      return total + lessons.filter(lesson => lesson.completed).length;
-    }, 0);
-  };
-
   // Only show page loading for initial course and units load
   if (isLoading || (unitsLoading && !units.length)) {
     return (

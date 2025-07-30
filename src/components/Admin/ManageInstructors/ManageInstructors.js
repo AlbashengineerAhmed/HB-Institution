@@ -61,26 +61,23 @@ const ManageInstructors = () => {
       id: instructor._id,
       name: `${instructor.firstName} ${instructor.lastName}`,
       email: instructor.email,
-      specialization: instructor.specialization?.join(', ') || 'Not specified',
       status: status,
-      role: instructor.role,
       joinDate: instructor.createdAt,
       lastLogin: instructor.lastLogin,
       phone: instructor.phone || 'Not provided',
       qualifications: instructor.qualifications || 'Not provided',
       avatar: instructor.avatar,
       confirmed: instructor.confirmed,
-      isActive: instructor.isActive,
       isBlocked: instructor.isBlocked,
       firstName: instructor.firstName,
-      lastName: instructor.lastName
+      lastName: instructor.lastName,
+      availableTime: instructor.availableTime || {}
     };
   });
 
   const filteredInstructors = transformedInstructors.filter(instructor => {
     const matchesSearch = instructor.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         instructor.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         instructor.specialization.toLowerCase().includes(searchTerm.toLowerCase());
+                         instructor.email.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === 'all' || instructor.status === statusFilter;
     
     return matchesSearch && matchesStatus;
@@ -151,48 +148,31 @@ const ManageInstructors = () => {
     setAvailabilityInstructor(instructor);
     
     // Load existing availability data
-    try {
-      const response = await getAllInstructors();
-      const instructorData = response.data?.find(inst => inst._id === instructor.id);
+    if (instructor.availableTime && Object.keys(instructor.availableTime).length > 0) {
+      const newAvailabilityData = {
+        sunday: { enabled: false, from: 9, to: 17 },
+        monday: { enabled: false, from: 9, to: 17 },
+        tuesday: { enabled: false, from: 9, to: 17 },
+        wednesday: { enabled: false, from: 9, to: 17 },
+        thursday: { enabled: false, from: 9, to: 17 },
+        friday: { enabled: false, from: 9, to: 17 },
+        saturday: { enabled: false, from: 9, to: 17 }
+      };
       
-      if (instructorData?.availableTime) {
-        const newAvailabilityData = {
-          sunday: { enabled: false, from: 9, to: 17 },
-          monday: { enabled: false, from: 9, to: 17 },
-          tuesday: { enabled: false, from: 9, to: 17 },
-          wednesday: { enabled: false, from: 9, to: 17 },
-          thursday: { enabled: false, from: 9, to: 17 },
-          friday: { enabled: false, from: 9, to: 17 },
-          saturday: { enabled: false, from: 9, to: 17 }
-        };
-        
-        // Populate existing availability
-        Object.entries(instructorData.availableTime).forEach(([day, timeData]) => {
-          if (newAvailabilityData[day.toLowerCase()]) {
-            newAvailabilityData[day.toLowerCase()] = {
-              enabled: true,
-              from: timeData.from,
-              to: timeData.to
-            };
-          }
-        });
-        
-        setAvailabilityData(newAvailabilityData);
-      } else {
-        // Reset to default if no existing data
-        setAvailabilityData({
-          sunday: { enabled: false, from: 9, to: 17 },
-          monday: { enabled: false, from: 9, to: 17 },
-          tuesday: { enabled: false, from: 9, to: 17 },
-          wednesday: { enabled: false, from: 9, to: 17 },
-          thursday: { enabled: false, from: 9, to: 17 },
-          friday: { enabled: false, from: 9, to: 17 },
-          saturday: { enabled: false, from: 9, to: 17 }
-        });
-      }
-    } catch (error) {
-      console.error('Error loading instructor availability:', error);
-      // Reset to default on error
+      // Populate existing availability
+      Object.entries(instructor.availableTime).forEach(([day, timeData]) => {
+        if (newAvailabilityData[day.toLowerCase()]) {
+          newAvailabilityData[day.toLowerCase()] = {
+            enabled: true,
+            from: timeData.from,
+            to: timeData.to
+          };
+        }
+      });
+      
+      setAvailabilityData(newAvailabilityData);
+    } else {
+      // Reset to default if no existing data
       setAvailabilityData({
         sunday: { enabled: false, from: 9, to: 17 },
         monday: { enabled: false, from: 9, to: 17 },
@@ -281,17 +261,11 @@ const ManageInstructors = () => {
   };
 
   const handleShowInstructorCalendar = async (instructor) => {
-    try {
-      const response = await getAllInstructors();
-      const instructorData = response.data?.find(inst => inst._id === instructor.id);
-      setCalendarInstructor({
-        ...instructor,
-        availableTime: instructorData?.availableTime || {}
-      });
-      setShowInstructorCalendar(true);
-    } catch (error) {
-      console.error('Error fetching instructor calendar data:', error);
-    }
+    setCalendarInstructor({
+      ...instructor,
+      availableTime: instructor.availableTime || {}
+    });
+    setShowInstructorCalendar(true);
   };
 
   const handleCloseInstructorCalendar = () => {
@@ -317,24 +291,6 @@ const ManageInstructors = () => {
     );
   };
 
-  const getRoleBadge = (role) => {
-    const roleClasses = {
-      instructor: styles.roleInstructor,
-      admin: styles.roleAdmin
-    };
-    
-    const roleIcons = {
-      instructor: '����‍🏫',
-      admin: '👑'
-    };
-    
-    return (
-      <span className={`${styles.roleBadge} ${roleClasses[role]}`}>
-        {roleIcons[role]} {role.charAt(0).toUpperCase() + role.slice(1)}
-      </span>
-    );
-  };
-
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -353,6 +309,15 @@ const ManageInstructors = () => {
     if (diffInHours < 24) return `${diffInHours}h ago`;
     if (diffInHours < 168) return `${Math.floor(diffInHours / 24)}d ago`;
     return formatDate(lastLogin);
+  };
+
+  const getAvailabilityText = (availableTime) => {
+    if (!availableTime || Object.keys(availableTime).length === 0) {
+      return 'No availability set';
+    }
+    
+    const days = Object.keys(availableTime).length;
+    return `${days} day${days > 1 ? 's' : ''} available`;
   };
 
   if (isLoading) {
@@ -448,11 +413,8 @@ const ManageInstructors = () => {
               <div className={styles.info}>
                 <h3 className={styles.name}>{instructor.name}</h3>
                 <p className={styles.email}>{instructor.email}</p>
-                <p className={styles.specialization}>{instructor.specialization}</p>
               </div>
               <div className={styles.badges}>
-                {getStatusBadge(instructor.status)}
-                {getRoleBadge(instructor.role)}
                 <button
                   className={`${styles.btn} ${styles.availabilityBtn}`}
                   onClick={() => handleSetAvailability(instructor)}
@@ -481,8 +443,8 @@ const ManageInstructors = () => {
                 <span className={styles.detailValue}>{getLastLoginText(instructor.lastLogin)}</span>
               </div>
               <div className={styles.detail}>
-                <span className={styles.detailLabel}>isBlocked:</span>
-                <span className={styles.detailValue}>{instructor.isBlocked ? 'true' : 'false'}</span>
+                <span className={styles.detailLabel}>Availability:</span>
+                <span className={styles.detailValue}>{getAvailabilityText(instructor.availableTime)}</span>
               </div>
             </div>
 
@@ -568,18 +530,6 @@ const ManageInstructors = () => {
                     <span>Phone:</span>
                     <span>{selectedInstructor.phone}</span>
                   </div>
-                  <div className={styles.modalRow}>
-                    <span>Role:</span>
-                    <span>{selectedInstructor.role}</span>
-                  </div>
-                </div>
-
-                <div className={styles.modalSection}>
-                  <h4>Professional Information</h4>
-                  <div className={styles.modalRow}>
-                    <span>Specialization:</span>
-                    <span>{selectedInstructor.specialization}</span>
-                  </div>
                 </div>
 
                 <div className={styles.modalSection}>
@@ -589,10 +539,6 @@ const ManageInstructors = () => {
                     <span>{getStatusBadge(selectedInstructor.status)}</span>
                   </div>
                   <div className={styles.modalRow}>
-                    <span>Is Blocked:</span>
-                    <span>{selectedInstructor.isBlocked ? 'Yes (true)' : 'No (false)'}</span>
-                  </div>
-                  <div className={styles.modalRow}>
                     <span>Join Date:</span>
                     <span>{formatDate(selectedInstructor.joinDate)}</span>
                   </div>
@@ -600,6 +546,28 @@ const ManageInstructors = () => {
                     <span>Last Login:</span>
                     <span>{getLastLoginText(selectedInstructor.lastLogin)}</span>
                   </div>
+                  <div className={styles.modalRow}>
+                    <span>Confirmed:</span>
+                    <span>{selectedInstructor.confirmed ? 'Yes' : 'No'}</span>
+                  </div>
+                </div>
+
+                <div className={styles.modalSection}>
+                  <h4>Availability Information</h4>
+                  <div className={styles.modalRow}>
+                    <span>Available Days:</span>
+                    <span>{Object.keys(selectedInstructor.availableTime || {}).length} days</span>
+                  </div>
+                  {selectedInstructor.availableTime && Object.keys(selectedInstructor.availableTime).length > 0 && (
+                    <div className={styles.availabilityDetails}>
+                      {Object.entries(selectedInstructor.availableTime).map(([day, timeData]) => (
+                        <div key={day} className={styles.availabilityDay}>
+                          <strong>{day.charAt(0).toUpperCase() + day.slice(1)}:</strong> 
+                          {timeData.from}:00 - {timeData.to}:00
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -771,7 +739,6 @@ const ManageInstructors = () => {
                     <div className={styles.instructorDetails}>
                       <h4>{calendarInstructor.name}</h4>
                       <p>{calendarInstructor.email}</p>
-                      <p>{calendarInstructor.specialization}</p>
                     </div>
                   </div>
                   <div className={styles.calendarStats}>

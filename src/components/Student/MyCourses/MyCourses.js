@@ -3,9 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { 
   toggleCourseExpansion, 
-  toggleUnitExpansion,
-  markLessonCompletedOptimistic,
-  markLessonCompleted
+  toggleUnitExpansion
 } from '../../../store/slices/studentDashboardSlice';
 import styles from './MyCourses.module.css';
 
@@ -19,51 +17,27 @@ const MyCourses = ({ onViewCourse, onViewAllLessons, onEvaluateCourse }) => {
     isLoading, 
     error, 
     expandedCourses, 
-    expandedUnits,
-    isMarkingComplete 
+    expandedUnits
   } = useSelector((state) => state.studentDashboard);
 
-  // Transform API data based on actual backend response
+  // Transform API data based on new backend response structure
   const enrolledCourses = courses.map(course => {
-    const totalUnits = course.units.length;
-    const totalLessons = course.units.reduce((sum, unit) => sum + unit.lessons.length, 0);
-    const completedLessons = course.units.reduce((sum, unit) => 
-      sum + unit.lessons.filter(lesson => lesson.completed).length, 0
-    );
-    const unlockedLessons = course.units.reduce((sum, unit) => 
-      sum + unit.lessons.filter(lesson => !lesson.islocked).length, 0
-    );
-
     return {
-      id: course._id,
+      id: course.courseId,
       title: course.courseTitle,
-      description: `${totalUnits} units • ${totalLessons} lessons`,
+      description: course.duration,
       duration: course.duration,
       price: course.price,
       thumbnail: course.courseImage,
-      totalUnits: totalUnits,
-      totalLessons: totalLessons,
-      completedLessons: completedLessons,
-      unlockedLessons: unlockedLessons,
-      units: course.units,
-      // Show first 3 units for preview
-      unitsPreview: course.units.slice(0, 3).map((unit) => ({
-        id: unit._id,
-        title: unit.title,
-        description: unit.description,
-        completed: unit.completed,
-        locked: unit.lock,
-        lessonsCount: unit.lessons.length,
-        unlockedLessonsCount: unit.lessons.filter(lesson => !lesson.islocked).length,
-        completedLessonsCount: unit.lessons.filter(lesson => lesson.completed).length,
-        lessons: unit.lessons.map(lesson => ({
-          id: lesson._id,
-          title: lesson.title,
-          completed: lesson.completed,
-          locked: lesson.islocked,
-          order: lesson.order
-        }))
-      }))
+      group: course.group,
+      // Since the new API doesn't provide detailed unit/lesson data,
+      // we'll show basic course information
+      totalUnits: 0, // Will be updated when detailed course data is available
+      totalLessons: 0,
+      completedLessons: 0,
+      unlockedLessons: 0,
+      units: [], // Empty for now, will be populated when course details are fetched
+      unitsPreview: [] // Empty for now
     };
   });
 
@@ -135,73 +109,38 @@ const MyCourses = ({ onViewCourse, onViewAllLessons, onEvaluateCourse }) => {
                   <span className={styles.statText}>{course.duration}</span>
                 </div>
                 <div className={styles.statItem}>
-                  <span className={styles.statIcon}>📚</span>
-                  <span className={styles.statText}>{course.totalUnits} units</span>
+                  <span className={styles.statIcon}>👥</span>
+                  <span className={styles.statText}>{course.group?.name || 'No Group'}</span>
                 </div>
                 <div className={styles.statItem}>
-                  <span className={styles.statIcon}>📖</span>
-                  <span className={styles.statText}>{course.totalLessons} lessons</span>
-                </div>
-                <div className={styles.statItem}>
-                  <span className={styles.statIcon}>🔓</span>
-                  <span className={styles.statText}>{course.unlockedLessons} unlocked</span>
-                </div>
-                <div className={styles.statItem}>
-                  <span className={styles.statIcon}>✅</span>
-                  <span className={styles.statText}>{course.completedLessons} completed</span>
+                  <span className={styles.statIcon}>📊</span>
+                  <span className={styles.statText}>{course.group?.level || 'N/A'}</span>
                 </div>
               </div>
               
-              <div className={styles.unitsSection}>
-                <h4 className={styles.unitsTitle}>Course Units</h4>
-                {course.unitsPreview.map((unit) => (
-                  <div key={unit.id} className={styles.unitItem}>
-                    <div 
-                      className={styles.unitHeader}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        toggleUnitDetails(course.id, unit.id);
-                      }}
-                    >
-                      <div className={styles.unitInfo}>
-                        <span className={styles.unitStatus}>
-                          {getLockIcon(unit.locked)} {getCompletionIcon(unit.completed)}
-                        </span>
-                        <span className={styles.unitTitle}>{unit.title}</span>
-                      </div>
-                      <div className={styles.unitStats}>
-                        <span className={styles.unitLessons}>
-                          {unit.completedLessonsCount}/{unit.lessonsCount} lessons
-                        </span>
-                        <span className={styles.expandIcon}>
-                          {expandedUnits[unit.id] ? '▼' : '▶'}
-                        </span>
+              {course.group?.schedule && course.group.schedule.length > 0 && (
+                <div className={styles.unitsSection}>
+                  <h4 className={styles.unitsTitle}>Class Schedule</h4>
+                  {course.group.schedule.map((schedule, index) => (
+                    <div key={index} className={styles.unitItem}>
+                      <div className={styles.unitHeader}>
+                        <div className={styles.unitInfo}>
+                          <span className={styles.unitStatus}>📅</span>
+                          <span className={styles.unitTitle}>{schedule.dayOfWeek}</span>
+                        </div>
+                        <div className={styles.unitStats}>
+                          <span className={styles.unitLessons}>
+                            {schedule.startTime} - {schedule.endTime}
+                          </span>
+                          <span className={styles.expandIcon}>
+                            {schedule.timezone}
+                          </span>
+                        </div>
                       </div>
                     </div>
-                    
-                    {expandedUnits[unit.id] && (
-                      <div className={styles.lessonsContainer}>
-                        {unit.lessons.map((lesson) => (
-                          <div key={lesson.id} className={styles.lessonItem}>
-                            <span className={styles.lessonOrder}>{lesson.order}</span>
-                            <span className={styles.lessonStatus}>
-                              {getLockIcon(lesson.locked)} {getCompletionIcon(lesson.completed)}
-                            </span>
-                            <span className={`${styles.lessonTitle} ${lesson.locked ? styles.locked : ''}`}>
-                              {lesson.title}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                ))}
-                {course.units.length > 3 && (
-                  <div className={styles.moreUnits}>
-                    +{course.units.length - 3} more units
-                  </div>
-                )}
-              </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         ))}

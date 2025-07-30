@@ -972,6 +972,30 @@
   cursor: not-allowed;
 }
 
+.completeButton {
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  border: none;
+  background-color: rgba(76, 175, 80, 0.2);
+  color: #4caf50;
+  margin-left: 0.5rem;
+}
+
+.completeButton:hover {
+  background-color: rgba(76, 175, 80, 0.3);
+  transform: translateY(-1px);
+}
+
+.completeButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
 .noLessons {
   text-align: center;
   padding: 1rem;
@@ -1105,6 +1129,18 @@
   
   .courseActions {
     flex-direction: column;
+  }
+
+  .lessonControls {
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+  }
+  
+  .completeButton {
+    margin-left: 0;
+    width: 100%;
+    text-align: center;
   }
 }
 
@@ -1680,4 +1716,32 @@
     padding: 0.5rem 1rem;
     font-size: 0.8rem;
   }
+}
+
+
+/* Locked Unit Styles */
+.lockedUnit {
+  opacity: 0.7;
+  background: rgba(var(--text-color-rgb), 0.02);
+}
+
+.lockedHeader {
+}
+
+.lockedHeader:hover {
+}
+
+.lockedMessage {
+  color: var(--warning-color);
+  font-size: 0.8rem;
+  font-style: italic;
+  margin: 0.5rem 0 0 0;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.expandIcon.disabled {
+  color: rgba(var(--text-color-rgb), 0.4);
+  cursor: not-allowed;
 }

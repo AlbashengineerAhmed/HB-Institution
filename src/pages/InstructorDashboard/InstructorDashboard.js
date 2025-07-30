@@ -10,6 +10,7 @@ import {
   fetchUnitLessons,
   toggleLessonLock,
   toggleUnitLock,
+  markLessonAsCompleted,
   toggleCourseExpansion,
   toggleUnitExpansion,
   updateLessonLockStatusOptimistic,
@@ -78,39 +79,46 @@ const InstructorDashboard = () => {
     
     // Fetch course units if not already loaded and expanding
     if (!expandedCourses[groupId] && !courseDetails[courseId]) {
-      dispatch(fetchCourseUnits(courseId));
+      dispatch(fetchCourseUnits({ groupId, courseId }));
     }
   };
 
   // Handle unit expansion and fetch lessons
-  const handleUnitToggle = async (unitId) => {
-    dispatch(toggleUnitExpansion(unitId));
+  const handleUnitToggle = async (unitId, isLocked, groupId) => {
+    // Prevent expansion if unit is locked
+    if (isLocked) {
+      console.log('🔒 Unit is locked, preventing expansion:', unitId);
+      return;
+    }
     
+    dispatch(toggleUnitExpansion(unitId));
+
     // Fetch unit lessons if not already loaded and expanding
     if (!expandedUnits[unitId] && !unitLessons[unitId]) {
-      dispatch(fetchUnitLessons(unitId));
+      dispatch(fetchUnitLessons({ groupId, unitId }));
     }
   };
 
   // Handle lesson lock/unlock toggle
-  const handleLessonLockToggle = async (lessonId, currentLockStatus, unitId) => {
+  const handleLessonLockToggle = async (lessonId, currentUnlockedStatus, unitId, groupId) => {
     console.log('🔄 Lesson lock toggle clicked:', {
       lessonId,
-      currentLockStatus,
+      currentUnlockedStatus,
       unitId,
-      newStatus: !currentLockStatus
+      groupId,
+      newStatus: !currentUnlockedStatus
     });
     
     // Optimistic update
     dispatch(updateLessonLockStatusOptimistic({
       unitId,
       lessonId,
-      isLocked: !currentLockStatus
+      isUnlocked: !currentUnlockedStatus
     }));
     
     // API call
     try {
-      const result = await dispatch(toggleLessonLock({ lessonId })).unwrap();
+      const result = await dispatch(toggleLessonLock({ lessonId, groupId })).unwrap();
       console.log('✅ Lesson lock toggle API success:', result);
     } catch (error) {
       console.log('❌ Lesson lock toggle API failed:', error);
@@ -118,30 +126,31 @@ const InstructorDashboard = () => {
       dispatch(updateLessonLockStatusOptimistic({
         unitId,
         lessonId,
-        isLocked: currentLockStatus
+        isUnlocked: currentUnlockedStatus
       }));
     }
   };
 
   // Handle unit lock/unlock toggle
-  const handleUnitLockToggle = async (unitId, currentLockStatus, courseId) => {
+  const handleUnitLockToggle = async (unitId, currentUnlockedStatus, courseId, groupId) => {
     console.log('🔄 Unit lock toggle clicked:', {
       unitId,
-      currentLockStatus,
+      currentUnlockedStatus,
       courseId,
-      newStatus: !currentLockStatus
+      groupId,
+      newStatus: !currentUnlockedStatus
     });
     
     // Optimistic update
     dispatch(updateUnitLockStatusOptimistic({
       courseId,
       unitId,
-      isLocked: !currentLockStatus
+      isUnlocked: !currentUnlockedStatus
     }));
     
     // API call
     try {
-      const result = await dispatch(toggleUnitLock({ unitId })).unwrap();
+      const result = await dispatch(toggleUnitLock({ unitId, groupId })).unwrap();
       console.log('✅ Unit lock toggle API success:', result);
     } catch (error) {
       console.log('❌ Unit lock toggle API failed:', error);
@@ -149,8 +158,23 @@ const InstructorDashboard = () => {
       dispatch(updateUnitLockStatusOptimistic({
         courseId,
         unitId,
-        isLocked: currentLockStatus
+        isUnlocked: currentUnlockedStatus
       }));
+    }
+  };
+
+  // Handle mark lesson as completed
+  const handleMarkLessonAsCompleted = async (lessonId, groupId) => {
+    console.log('🔄 Mark lesson as completed clicked:', {
+      lessonId,
+      groupId
+    });
+    
+    try {
+      const result = await dispatch(markLessonAsCompleted({ lessonId, groupId })).unwrap();
+      console.log('✅ Lesson marked as completed successfully:', result);
+    } catch (error) {
+      console.log('❌ Failed to mark lesson as completed:', error);
     }
   };
 
@@ -260,38 +284,44 @@ const InstructorDashboard = () => {
                       <h5>Course Units ({courseDetails[group.course._id].length || 0})</h5>
                       <div className={styles.unitsList}>
                         {courseDetails[group.course._id]?.map((unit) => {
-                          console.log('🔍 Rendering unit:', unit._id, 'lock status:', unit.lock);
+                          console.log('🔍 Rendering unit:', unit.id, 'unlocked status:', unit.unlocked);
                           return (
-                            <div key={unit._id} className={styles.unitCard}>
+                            <div key={unit.id} className={`${styles.unitCard} ${!unit.unlocked ? styles.lockedUnit : ''}`}>
                               {/* Unit Header */}
                               <div 
-                                className={styles.unitHeader}
-                                onClick={() => handleUnitToggle(unit._id)}
+                                className={`${styles.unitHeader} ${!unit.unlocked ? styles.lockedHeader : ''}`}
+                                onClick={() => handleUnitToggle(unit.id, !unit.unlocked, group._id)}
+                                style={{ cursor: !unit.unlocked ? 'not-allowed' : 'pointer' }}
                               >
                                 <div className={styles.unitInfo}>
                                   <h6>{unit.title}</h6>
-                                  <p>{unit.description}</p>
+                                  <p>{unit.course}</p>
+                                  {!unit.unlocked && (
+                                    <p className={styles.lockedMessage}>
+                                      🔒 This unit is locked. Unlock it to view lessons.
+                                    </p>
+                                  )}
                                 </div>
                                 <div className={styles.unitControls}>
                                   <button
-                                    className={`${styles.lockButton} ${unit.lock ? styles.locked : styles.unlocked}`}
+                                    className={`${styles.lockButton} ${!unit.unlocked ? styles.locked : styles.unlocked}`}
                                     onClick={(e) => {
                                       e.stopPropagation();
-                                      handleUnitLockToggle(unit._id, unit.lock, group.course._id);
+                                      handleUnitLockToggle(unit.id, unit.unlocked, group.course._id, group._id);
                                     }}
                                     disabled={isUpdatingLock}
-                                    title={`${unit.lock ? 'Unlock' : 'Lock'} unit for group ${group.code}`}
+                                    title={`${!unit.unlocked ? 'Unlock' : 'Lock'} unit for group ${group.code}`}
                                   >
-                                    {unit.lock ? '🔒 Locked' : '🔓 Unlocked'}
+                                    {!unit.unlocked ? '🔒 Locked' : '🔓 Unlocked'}
                                   </button>
-                                  <div className={styles.expandIcon}>
-                                    {expandedUnits[unit._id] ? '▼' : '▶'}
+                                  <div className={`${styles.expandIcon} ${!unit.unlocked ? styles.disabled : ''}`}>
+                                    {!unit.unlocked ? '🔒' : (expandedUnits[unit.id] ? '▼' : '▶')}
                                   </div>
                                 </div>
                               </div>
 
-                              {/* Unit Lessons */}
-                              {expandedUnits[unit._id] && (
+                              {/* Unit Lessons - Only show if unit is unlocked */}
+                              {unit.unlocked && expandedUnits[unit.id] && (
                                 <div className={styles.lessonsSection}>
                                   {isLoadingLessons ? (
                                     <div className={styles.loadingLessons}>
@@ -302,32 +332,40 @@ const InstructorDashboard = () => {
                                     <div className={styles.errorMessage}>
                                       <p>❌ Failed to load lessons</p>
                                     </div>
-                                  ) : unitLessons[unit._id] ? (
+                                  ) : unitLessons[unit.id] ? (
                                     <div className={styles.lessonsList}>
                                       <div className={styles.lessonsHeader}>
-                                        <h6>Lessons ({unitLessons[unit._id].lessons?.length || 0})</h6>
+                                        <h6>Lessons ({unitLessons[unit.id]?.length || 0})</h6>
                                         <span className={styles.groupNote}>Managing for group: {group.code}</span>
                                       </div>
-                                      {unitLessons[unit._id].lessons?.length === 0 ? (
+                                      {unitLessons[unit.id]?.length === 0 ? (
                                         <p className={styles.noLessons}>No lessons available</p>
                                       ) : (
-                                        unitLessons[unit._id].lessons?.map((lesson) => (
-                                          <div key={lesson._id} className={styles.lessonItem}>
+                                        unitLessons[unit.id]?.map((lesson) => (
+                                          <div key={lesson.id} className={styles.lessonItem}>
                                             <div className={styles.lessonInfo}>
                                               <span className={styles.lessonOrder}>#{lesson.order}</span>
                                               <div className={styles.lessonDetails}>
                                                 <h6>{lesson.title}</h6>
-                                                <p>{lesson.description}</p>
+                                                <p>{lesson.unit}</p>
                                               </div>
                                             </div>
                                             <div className={styles.lessonControls}>
                                               <button
-                                                className={`${styles.lockButton} ${lesson.islocked ? styles.locked : styles.unlocked}`}
-                                                onClick={() => handleLessonLockToggle(lesson._id, lesson.islocked, unit._id)}
+                                                className={`${styles.lockButton} ${!lesson.unlocked ? styles.locked : styles.unlocked}`}
+                                                onClick={() => handleLessonLockToggle(lesson.id, lesson.unlocked, unit.id, group._id)}
                                                 disabled={isUpdatingLock}
-                                                title={`${lesson.islocked ? 'Unlock' : 'Lock'} lesson for group ${group.code}`}
+                                                title={`${!lesson.unlocked ? 'Unlock' : 'Lock'} lesson for group ${group.code}`}
                                               >
-                                                {lesson.islocked ? '🔒 Locked' : '🔓 Unlocked'}
+                                                {!lesson.unlocked ? '🔒 Locked' : '🔓 Unlocked'}
+                                              </button>
+                                              <button
+                                                className={styles.completeButton}
+                                                onClick={() => handleMarkLessonAsCompleted(lesson.id, group._id)}
+                                                disabled={isUpdatingLock}
+                                                title={`Mark lesson as completed for group ${group.code}`}
+                                              >
+                                                ✅ Mark Complete
                                               </button>
                                             </div>
                                           </div>

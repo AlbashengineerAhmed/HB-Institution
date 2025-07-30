@@ -107,7 +107,37 @@ export const getAllInstructors = async () => {
   }
 };
 
+/**
+ * Marks a lesson as completed for a specific group
+ * @param {string} lessonId - ID of the lesson to mark as completed
+ * @param {string} groupId - ID of the group
+ * @returns {Promise} - API response with completion data
+ */
+export const markLessonAsCompleted = async (lessonId, groupId) => {
+  try {
+    console.log(`🔄 Marking lesson ${lessonId} as completed for group ${groupId}...`);
+    const response = await api.post(`/lesson/${lessonId}/complete/${groupId}`);
+    console.log('✅ Lesson marked as completed successfully:', response.data);
+    
+    if (response.data.success) {
+      const nextLesson = response.data.data?.nextLessonUnlocked;
+      const message = nextLesson 
+        ? `Lesson completed! Next lesson "${nextLesson.title}" has been unlocked.`
+        : 'Lesson marked as completed successfully!';
+      toast.success(message);
+    }
+    
+    return response.data;
+  } catch (error) {
+    const errorMessage = getErrorMessage(error, 'Failed to mark lesson as completed');
+    console.error('❌ Failed to mark lesson as completed:', error);
+    toast.error(errorMessage);
+    throw error;
+  }
+};
+
 export default {
   setInstructorAvailability,
   getAllInstructors,
+  markLessonAsCompleted,
 };

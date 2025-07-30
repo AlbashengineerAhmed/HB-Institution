@@ -31,6 +31,8 @@ const GroupForm = ({
     ]
   });
 
+  const [selectedInstructor, setSelectedInstructor] = useState(null);
+
   const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
   const levels = ['Beginner', 'Intermediate', 'Advanced'];
 
@@ -74,6 +76,16 @@ const GroupForm = ({
     }
   }, [editingGroup, preselectedCourseId]);
 
+  // Update selected instructor when instructorId changes
+  useEffect(() => {
+    if (formData.instructorId && instructors.length > 0) {
+      const instructor = instructors.find(inst => (inst._id || inst.id) === formData.instructorId);
+      setSelectedInstructor(instructor || null);
+    } else {
+      setSelectedInstructor(null);
+    }
+  }, [formData.instructorId, instructors]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -90,6 +102,17 @@ const GroupForm = ({
       onClose();
     } catch (error) {
       console.error('Error saving group:', error);
+    }
+  };
+
+  const handleInstructorChange = (instructorId) => {
+    setFormData({ ...formData, instructorId });
+    
+    if (instructorId && instructors.length > 0) {
+      const instructor = instructors.find(inst => (inst._id || inst.id) === instructorId);
+      setSelectedInstructor(instructor || null);
+    } else {
+      setSelectedInstructor(null);
     }
   };
 
@@ -117,6 +140,23 @@ const GroupForm = ({
   const removeScheduleSlot = (index) => {
     const newSchedule = formData.schedule.filter((_, i) => i !== index);
     setFormData({ ...formData, schedule: newSchedule });
+  };
+
+  const getAvailabilityForDay = (dayOfWeek) => {
+    if (!selectedInstructor?.availableTime) return null;
+    
+    const dayKey = dayOfWeek.toLowerCase();
+    return selectedInstructor.availableTime[dayKey] || null;
+  };
+
+  const isTimeSlotValid = (dayOfWeek, startTime, endTime) => {
+    const availability = getAvailabilityForDay(dayOfWeek);
+    if (!availability) return false;
+    
+    const startHour = parseInt(startTime.split(':')[0]);
+    const endHour = parseInt(endTime.split(':')[0]);
+    
+    return startHour >= availability.from && endHour <= availability.to;
   };
 
   if (!isOpen) return null;
@@ -173,7 +213,7 @@ const GroupForm = ({
             <select
               id="instructorId"
               value={formData.instructorId}
-              onChange={(e) => setFormData({ ...formData, instructorId: e.target.value })}
+              onChange={(e) => handleInstructorChange(e.target.value)}
               required
               disabled={instructorsLoading}
             >
@@ -201,6 +241,32 @@ const GroupForm = ({
               </small>
             )}
           </div>
+
+          {/* Instructor Availability Display */}
+          {selectedInstructor && (
+            <div className={styles.instructorAvailability}>
+              <h4>📅 {selectedInstructor.firstName} {selectedInstructor.lastName}'s Availability</h4>
+              {selectedInstructor.availableTime && Object.keys(selectedInstructor.availableTime).length > 0 ? (
+                <div className={styles.availabilityGrid}>
+                  {Object.entries(selectedInstructor.availableTime).map(([day, timeData]) => (
+                    <div key={day} className={styles.availabilityDay}>
+                      <div className={styles.dayName}>
+                        {day.charAt(0).toUpperCase() + day.slice(1)}
+                      </div>
+                      <div className={styles.timeRange}>
+                        🕐 {timeData.from}:00 - {timeData.to}:00
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className={styles.noAvailability}>
+                  <span className={styles.warningIcon}>⚠️</span>
+                  <span>This instructor has not set their availability yet.</span>
+                </div>
+              )}
+            </div>
+          )}
 
           <div className={styles.formRow}>
             <div className={styles.formGroup}>
@@ -243,53 +309,95 @@ const GroupForm = ({
               </button>
             </div>
 
-            {formData.schedule.map((slot, index) => (
-              <div key={index} className={styles.scheduleSlotForm}>
-                <div className={styles.scheduleRow}>
-                  <div className={styles.formGroup}>
-                    <label>Day</label>
-                    <select
-                      value={slot.dayOfWeek}
-                      onChange={(e) => handleScheduleChange(index, 'dayOfWeek', e.target.value)}
-                    >
-                      {daysOfWeek.map((day) => (
-                        <option key={day} value={day}>
-                          {day}
-                        </option>
-                      ))}
-                    </select>
+            {selectedInstructor && selectedInstructor.availableTime && Object.keys(selectedInstructor.availableTime).length > 0 && (
+              <div className={styles.scheduleHint}>
+                <span className={styles.hintIcon}>💡</span>
+                <span>Schedule times must be within the instructor's available hours shown above.</span>
+              </div>
+            )}
+
+            {formData.schedule.map((slot, index) => {
+              const availability = getAvailabilityForDay(slot.dayOfWeek);
+              const isValidSlot = selectedInstructor ? isTimeSlotValid(slot.dayOfWeek, slot.startTime, slot.endTime) : true;
+              
+              return (
+                <div key={index} className={styles.scheduleSlotForm}>
+                  <div className={styles.scheduleRow}>
+                    <div className={styles.formGroup}>
+                      <label>Day</label>
+                      <select
+                        value={slot.dayOfWeek}
+                        onChange={(e) => handleScheduleChange(index, 'dayOfWeek', e.target.value)}
+                        className={availability ? styles.availableDay : styles.unavailableDay}
+                      >
+                        {daysOfWeek.map((day) => {
+                          const dayAvailability = getAvailabilityForDay(day);
+                          return (
+                            <option key={day} value={day}>
+                              {day} {dayAvailability ? `(${dayAvailability.from}:00-${dayAvailability.to}:00)` : '(Not available)'}
+                            </option>
+                          );
+                        })}
+                      </select>
+                    </div>
+
+                    <div className={styles.formGroup}>
+                      <label>Start Time</label>
+                      <input
+                        type="time"
+                        value={slot.startTime}
+                        onChange={(e) => handleScheduleChange(index, 'startTime', e.target.value)}
+                        className={!isValidSlot ? styles.invalidTime : ''}
+                      />
+                    </div>
+
+                    <div className={styles.formGroup}>
+                      <label>End Time</label>
+                      <input
+                        type="time"
+                        value={slot.endTime}
+                        onChange={(e) => handleScheduleChange(index, 'endTime', e.target.value)}
+                        className={!isValidSlot ? styles.invalidTime : ''}
+                      />
+                    </div>
+
+                    {formData.schedule.length > 1 && (
+                      <button
+                        type="button"
+                        onClick={() => removeScheduleSlot(index)}
+                        className={styles.removeScheduleButton}
+                      >
+                        Remove
+                      </button>
+                    )}
                   </div>
 
-                  <div className={styles.formGroup}>
-                    <label>Start Time</label>
-                    <input
-                      type="time"
-                      value={slot.startTime}
-                      onChange={(e) => handleScheduleChange(index, 'startTime', e.target.value)}
-                    />
-                  </div>
-
-                  <div className={styles.formGroup}>
-                    <label>End Time</label>
-                    <input
-                      type="time"
-                      value={slot.endTime}
-                      onChange={(e) => handleScheduleChange(index, 'endTime', e.target.value)}
-                    />
-                  </div>
-
-                  {formData.schedule.length > 1 && (
-                    <button
-                      type="button"
-                      onClick={() => removeScheduleSlot(index)}
-                      className={styles.removeScheduleButton}
-                    >
-                      Remove
-                    </button>
+                  {/* Availability validation feedback */}
+                  {selectedInstructor && (
+                    <div className={styles.scheduleValidation}>
+                      {!availability ? (
+                        <div className={styles.validationError}>
+                          <span className={styles.errorIcon}>❌</span>
+                          <span>Instructor is not available on {slot.dayOfWeek}</span>
+                        </div>
+                      ) : !isValidSlot ? (
+                        <div className={styles.validationError}>
+                          <span className={styles.errorIcon}>❌</span>
+                          <span>
+                            Time slot must be within {availability.from}:00 - {availability.to}:00
+                          </span>
+                        </div>
+                      ) : (
+                        <div className={styles.validationSuccess}>
+                          <span className={styles.successIcon}>✅</span>
+                          <span>Valid time slot</span>
+                        </div>
+                      )}
+                    </div>
                   )}
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           <div className={styles.formActions}>

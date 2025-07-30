@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styles from './StudentDashboard.module.css';
 import ErrorBoundary from '../../components/ErrorBoundary';
-import { fetchStudentDashboard } from '../../store/slices/studentDashboardSlice';
+import { fetchStudentDashboard, fetchUnitsData, fetchLessonsData } from '../../store/slices/studentDashboardSlice';
 import SendNote from '../../components/SendNote/SendNote';
 
 // Lazy load components to identify loading issues
@@ -20,24 +20,17 @@ const StudentDashboard = () => {
   const [selectedLesson, setSelectedLesson] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('courses');
+  const [expandedUnits, setExpandedUnits] = useState({});
 
   // Get user data from auth state (same as Header component)
   const { user } = useSelector((state) => state.auth);
-  const { courses, isLoading, error } = useSelector((state) => state.studentDashboard);
+  const { courses, units, lessons, isLoading, isLoadingUnits, isLoadingLessons, error, unitsError, lessonsError } = useSelector((state) => state.studentDashboard);
 
-  // Calculate student stats from real data
+  // Calculate student stats from new API data structure
   const studentStats = {
     enrolledCourses: courses.length,
-    completedCourses: courses.filter(course => 
-      course.units.every(unit => unit.completed)
-    ).length,
-    totalProgress: courses.length > 0 ? Math.round(
-      courses.reduce((acc, course) => {
-        const totalUnits = course.units.length;
-        const completedUnits = course.units.filter(unit => unit.completed).length;
-        return acc + (totalUnits > 0 ? (completedUnits / totalUnits) * 100 : 0);
-      }, 0) / courses.length
-    ) : 0
+    completedCourses: 0, // Will be updated when course completion data is available
+    totalProgress: 0 // Will be updated when progress data is available
   };
 
   // Combine user data with stats (same approach as Header)
@@ -72,6 +65,7 @@ const StudentDashboard = () => {
     setShowEvaluation(false);
     setShowAllLessons(false);
     setSelectedLesson(null);
+    setExpandedUnits({});
     closeMobileMenu();
   };
 
@@ -79,6 +73,7 @@ const StudentDashboard = () => {
     setSelectedCourse(course);
     setShowAllLessons(false);
     setSelectedLesson(null);
+    setExpandedUnits({});
     closeMobileMenu(); // Close mobile menu when navigating
   };
 
@@ -87,7 +82,28 @@ const StudentDashboard = () => {
     setShowAllLessons(true);
     setShowEvaluation(false);
     setSelectedLesson(null);
+    setExpandedUnits({});
     closeMobileMenu();
+    
+    // Fetch units data using group ID and course ID
+    if (course.group && course.group._id && course.id) {
+      dispatch(fetchUnitsData({ groupId: course.group._id, courseId: course.id }));
+    }
+  };
+
+  // Handle unit click to fetch lessons and toggle expansion
+  const handleUnitClick = (unit) => {
+    const isExpanding = !expandedUnits[unit.id];
+    
+    setExpandedUnits(prev => ({
+      ...prev,
+      [unit.id]: isExpanding
+    }));
+
+    // Fetch lessons if expanding and not already loaded
+    if (isExpanding && selectedCourse && selectedCourse.group && selectedCourse.group._id) {
+      dispatch(fetchLessonsData({ groupId: selectedCourse.group._id, unitId: unit.id }));
+    }
   };
 
   const handleEvaluateCourse = (course) => {
@@ -95,6 +111,7 @@ const StudentDashboard = () => {
     setShowEvaluation(true);
     setShowAllLessons(false);
     setSelectedLesson(null);
+    setExpandedUnits({});
     closeMobileMenu(); // Close mobile menu when navigating
   };
 
@@ -102,6 +119,7 @@ const StudentDashboard = () => {
     setSelectedLesson({ lessonId, courseId, unitId });
     setShowAllLessons(false);
     setShowEvaluation(false);
+    setExpandedUnits({});
     closeMobileMenu();
   };
 
@@ -110,6 +128,7 @@ const StudentDashboard = () => {
     setShowEvaluation(false);
     setShowAllLessons(false);
     setSelectedLesson(null);
+    setExpandedUnits({});
     setActiveSection('courses');
   };
 
@@ -183,49 +202,178 @@ const StudentDashboard = () => {
 
     if (showAllLessons && selectedCourse) {
       return (
-        <div className={styles.allLessonsView}>
-          <div className={styles.allLessonsHeader}>
-            <h2>All Lessons - {selectedCourse.title}</h2>
-            <p>Complete overview of all course lessons with their status</p>
+        <div className={styles.courseDetailsView}>
+          {/* Compact Course Header */}
+          <div className={styles.compactCourseHeader}>
+            <div className={styles.courseImageSmall}>
+              <img 
+                src={selectedCourse.thumbnail} 
+                alt={selectedCourse.title}
+                onError={(e) => {
+                  e.target.src = '/images/default-course.jpg';
+                }}
+              />
+            </div>
+            <div className={styles.courseHeaderInfo}>
+              <h2 className={styles.courseTitle}>{selectedCourse.title}</h2>
+              <div className={styles.courseMeta}>
+                <span className={styles.courseGroup}>
+                  👥 {selectedCourse.group?.name || 'No Group'}
+                </span>
+                <span className={styles.courseLevel}>
+                  📊 {selectedCourse.group?.level || 'N/A'}
+                </span>
+                <span className={styles.courseDuration}>
+                  ⏱️ {selectedCourse.duration}
+                </span>
+                <span className={styles.coursePrice}>
+                  💰 {selectedCourse.price === 0 ? 'Free' : `$${selectedCourse.price}`}
+                </span>
+              </div>
+            </div>
           </div>
-          <div className={styles.allLessonsContent}>
-            {selectedCourse.units.map((unit, unitIndex) => (
-              <div key={unit.id} className={styles.unitSection}>
-                <div className={styles.unitHeader}>
-                  <h3 className={styles.unitTitle}>
-                    <span className={styles.unitNumber}>Unit {unitIndex + 1}</span>
-                    <span className={styles.unitName}>{unit.title}</span>
-                    <span className={styles.unitStatus}>
-                      {unit.locked ? '🔒' : '🔓'} {unit.completed ? '✅' : '⭕'}
-                    </span>
-                  </h3>
-                  <p className={styles.unitDescription}>{unit.description}</p>
-                </div>
-                <div className={styles.lessonsGrid}>
-                  {unit.lessons.map((lesson, lessonIndex) => (
+
+          {/* Course Schedule */}
+          {selectedCourse.group?.schedule && selectedCourse.group.schedule.length > 0 && (
+            <div className={styles.scheduleSection}>
+              <h3 className={styles.sectionTitle}>📅 Class Schedule</h3>
+              <div className={styles.scheduleGrid}>
+                {selectedCourse.group.schedule.map((schedule, index) => (
+                  <div key={index} className={styles.scheduleCard}>
+                    <div className={styles.scheduleDay}>{schedule.dayOfWeek}</div>
+                    <div className={styles.scheduleTime}>
+                      {schedule.startTime} - {schedule.endTime}
+                    </div>
+                    <div className={styles.scheduleTimezone}>{schedule.timezone}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Course Content - Units with Dropdown Lessons */}
+          <div className={styles.courseContentSection}>
+            <h3 className={styles.sectionTitle}>📚 Course Content</h3>
+            
+            {isLoadingUnits ? (
+              <div className={styles.loadingState}>
+                <div className={styles.loadingSpinner}>🔄</div>
+                <span>Loading course content...</span>
+              </div>
+            ) : unitsError ? (
+              <div className={styles.errorState}>
+                <div className={styles.errorIcon}>❌</div>
+                <p>Error loading course content: {unitsError}</p>
+              </div>
+            ) : units.length > 0 ? (
+              <div className={styles.unitsDropdownList}>
+                {units.map((unit, index) => (
+                  <div key={unit.id} className={styles.unitDropdownItem}>
+                    {/* Unit Header - Clickable */}
                     <div 
-                      key={lesson.id} 
-                      className={`${styles.lessonCard} ${lesson.locked ? styles.locked : ''} ${lesson.completed ? styles.completed : ''}`}
-                      onClick={() => handleLessonClick(lesson.id, selectedCourse.id, unit.id)}
+                      className={`${styles.unitDropdownHeader} ${!unit.unlocked ? styles.disabled : ''}`}
+                      onClick={() => unit.unlocked && handleUnitClick(unit)}
                     >
-                      <div className={styles.lessonNumber}>{lesson.order}</div>
-                      <div className={styles.lessonContent}>
-                        <h4 className={styles.lessonTitle}>{lesson.title}</h4>
-                        <p className={styles.lessonDescription}>{lesson.description}</p>
-                        <div className={styles.lessonStatus}>
-                          <span className={styles.lockStatus}>
-                            {lesson.locked ? '🔒 Locked' : '🔓 Unlocked'}
-                          </span>
-                          <span className={styles.completionStatus}>
-                            {lesson.completed ? '✅ Completed' : '⭕ Not Completed'}
-                          </span>
+                      <div className={styles.unitHeaderLeft}>
+                        <span className={styles.expandIcon}>
+                          {expandedUnits[unit.id] ? '▼' : '▶'}
+                        </span>
+                        <div className={styles.unitInfo}>
+                          <h4 className={styles.unitTitle}>
+                            Unit {index + 1}: {unit.title}
+                          </h4>
+                          <p className={styles.unitMeta}>
+                            Course: {unit.course}
+                            <span className={`${styles.statusBadge} ${unit.completed ? styles.completed : styles.incomplete}`}>
+                              {unit.completed ? '✅ Completed' : '⭕ In Progress'}
+                            </span>
+                          </p>
                         </div>
                       </div>
+                      <div className={styles.unitHeaderRight}>
+                        <span className={`${styles.statusBadge} ${unit.unlocked ? styles.unlocked : styles.locked}`}>
+                          {unit.unlocked ? '🔓 Unlocked' : '🔒 Locked'}
+                        </span>
+                      </div>
                     </div>
-                  ))}
-                </div>
+
+                    {/* Unit Lessons Dropdown */}
+                    {unit.unlocked && expandedUnits[unit.id] && (
+                      <div className={styles.lessonsDropdown}>
+                        {isLoadingLessons ? (
+                          <div className={styles.loadingState}>
+                            <div className={styles.loadingSpinner}>🔄</div>
+                            <span>Loading lessons...</span>
+                          </div>
+                        ) : lessonsError ? (
+                          <div className={styles.errorState}>
+                            <div className={styles.errorIcon}>❌</div>
+                            <p>Error loading lessons: {lessonsError}</p>
+                          </div>
+                        ) : lessons.length > 0 ? (
+                          <div className={styles.lessonsList}>
+                            {lessons.map((lesson, lessonIndex) => (
+                              <div 
+                                key={lesson.id} 
+                                className={`${styles.lessonDropdownItem} ${!lesson.unlocked ? styles.disabled : ''}`}
+                                onClick={() => lesson.unlocked && handleLessonClick(lesson.id, selectedCourse.id, lesson.unit)}
+                              >
+                                <div className={styles.lessonInfo}>
+                                  <span className={styles.lessonOrder}>
+                                    {lesson.order || lessonIndex + 1}
+                                  </span>
+                                  <div className={styles.lessonDetails}>
+                                    <h5 className={styles.lessonTitle}>{lesson.title}</h5>
+                                    <p className={styles.lessonUnit}>Unit: {lesson.unit}</p>
+                                  </div>
+                                </div>
+                                <div className={styles.lessonActions}>
+                                  <span className={`${styles.statusBadge} ${lesson.unlocked ? styles.unlocked : styles.locked}`}>
+                                    {lesson.unlocked ? '🔓 Unlocked' : '🔒 Locked'}
+                                  </span>
+                                  {lesson.unlocked && (
+                                    <button 
+                                      className={styles.playButton}
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleLessonClick(lesson.id, selectedCourse.id, lesson.unit);
+                                      }}
+                                      title="Play lesson"
+                                    >
+                                      ▶️ Play
+                                    </button>
+                                  )}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <div className={styles.emptyLessons}>
+                            <span>📝 No lessons available for this unit</span>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                ))}
               </div>
-            ))}
+            ) : (
+              <div className={styles.emptyState}>
+                <div className={styles.emptyIcon}>📚</div>
+                <h4>No Course Content Available</h4>
+                <p>This course doesn't have any units or lessons yet.</p>
+              </div>
+            )}
+          </div>
+
+          {/* Course Actions */}
+          <div className={styles.courseActionsSection}>
+            <button 
+              className={styles.actionButton}
+              onClick={() => handleEvaluateCourse(selectedCourse)}
+            >
+              ⭐ Evaluate Course
+            </button>
           </div>
         </div>
       );
@@ -268,7 +416,7 @@ const StudentDashboard = () => {
       return `Evaluate: ${selectedCourse.title}`;
     }
     if (showAllLessons && selectedCourse) {
-      return `All Lessons: ${selectedCourse.title}`;
+      return `Course Details: ${selectedCourse.title}`;
     }
     if (selectedCourse) {
       return selectedCourse.title;
@@ -420,7 +568,7 @@ const StudentDashboard = () => {
                   className={styles.backBtn}
                   onClick={selectedLesson ? handleBackToAllLessons : handleBackToCourses}
                 >
-                  ← {selectedLesson ? 'Back to Lessons' : 'Back to Courses'}
+                  ← {selectedLesson ? 'Back to Course' : 'Back to Courses'}
                 </button>
               )}
               <h1 className={styles.pageTitle}>{getPageTitle()}</h1>
