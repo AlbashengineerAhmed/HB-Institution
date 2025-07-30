@@ -7,7 +7,7 @@
 
 /* Sidebar Styles - Responsive to display scaling */
 .sidebar {
-  width: clamp(250px, 25vw, 350px);
+  width: clamp(240px, 22vw, 320px);
   background: linear-gradient(180deg, var(--secondary-color), var(--gradient-end));
   border-right: 1px solid rgba(var(--border-color-rgb), 0.2);
   position: fixed;
@@ -19,6 +19,7 @@
   flex-direction: column;
   transition: transform 0.3s ease, width 0.3s ease;
   box-sizing: border-box;
+  min-width: 240px;
 }
 
 .sidebarHeader {
@@ -143,7 +144,7 @@
 /* Main Content Styles - Responsive to match sidebar */
 .mainContent {
   flex: 1;
-  margin-left: clamp(250px, 25vw, 350px);
+  margin-left: clamp(240px, 22vw, 320px);
   background-color: var(--gradient-start);
   min-width: 0;
   transition: margin-left 0.3s ease;
@@ -446,48 +447,21 @@
 }
 
 /* Zoom level optimizations for better sidebar visibility */
-@media screen and (min-resolution: 120dpi) and (max-resolution: 144dpi) {
-  /* 125% zoom level adjustments */
+/* 125% zoom level - most common scaling issue */
+@media screen and (min-resolution: 120dpi) and (max-resolution: 144dpi),
+       screen and (-webkit-min-device-pixel-ratio: 1.25) and (-webkit-max-device-pixel-ratio: 1.44) {
+  .sidebar {
+    width: clamp(220px, 20vw, 300px);
+    min-width: 220px;
+  }
+  
+  .mainContent {
+    margin-left: clamp(220px, 20vw, 300px);
+  }
+  
   .sidebarNav {
     padding: 0.75rem 0;
-  }
-  
-  .sidebarHeader {
-    padding: 1.25rem 1.25rem;
-  }
-  
-  .sidebarItem {
-    padding: 0.5rem 1.25rem;
-    font-size: 0.85rem;
-  }
-  
-  .adminInfo {
-    gap: 0.5rem;
-  }
-  
-  .adminAvatar {
-    width: 50px;
-    height: 50px;
-    font-size: 1.1rem;
-  }
-  
-  .adminName {
-    font-size: 1.1rem;
-  }
-  
-  .adminTitle {
-    font-size: 0.8rem;
-  }
-  
-  .adminEmail {
-    font-size: 0.75rem;
-  }
-}
-
-@media screen and (min-resolution: 144dpi) {
-  /* 150% zoom and higher adjustments */
-  .sidebarNav {
-    padding: 0.5rem 0;
+    max-height: calc(100vh - 160px);
   }
   
   .sidebarHeader {
@@ -495,7 +469,18 @@
   }
   
   .sidebarItem {
-    padding: 0.4rem 1rem;
+    padding: 0.45rem 1rem;
+    font-size: 0.8rem;
+    line-height: 1.3;
+  }
+  
+  .sidebarIcon {
+    font-size: 1rem;
+    margin-right: 0.6rem;
+    width: 20px;
+  }
+  
+  .sidebarLabel {
     font-size: 0.8rem;
   }
   
@@ -511,6 +496,7 @@
   
   .adminName {
     font-size: 1rem;
+    line-height: 1.2;
   }
   
   .adminTitle {
@@ -519,5 +505,115 @@
   
   .adminEmail {
     font-size: 0.7rem;
+    word-break: break-all;
+  }
+  
+  .mainHeader {
+    padding: 1.5rem 2rem;
+  }
+  
+  .pageTitle {
+    font-size: 1.6rem;
+  }
+  
+  .contentArea {
+    padding: 2rem;
+  }
+}
+
+/* 150% zoom and higher adjustments */
+@media screen and (min-resolution: 144dpi),
+       screen and (-webkit-min-device-pixel-ratio: 1.5) {
+  .sidebar {
+    width: clamp(200px, 18vw, 280px);
+    min-width: 200px;
+  }
+  
+  .mainContent {
+    margin-left: clamp(200px, 18vw, 280px);
+  }
+  
+  .sidebarNav {
+    padding: 0.5rem 0;
+    max-height: calc(100vh - 140px);
+  }
+  
+  .sidebarHeader {
+    padding: 0.8rem 0.8rem;
+  }
+  
+  .sidebarItem {
+    padding: 0.35rem 0.8rem;
+    font-size: 0.75rem;
+    line-height: 1.2;
+  }
+  
+  .sidebarIcon {
+    font-size: 0.9rem;
+    margin-right: 0.5rem;
+    width: 18px;
+  }
+  
+  .sidebarLabel {
+    font-size: 0.75rem;
+  }
+  
+  .adminInfo {
+    gap: 0.3rem;
+  }
+  
+  .adminAvatar {
+    width: 40px;
+    height: 40px;
+    font-size: 0.9rem;
+  }
+  
+  .adminName {
+    font-size: 0.9rem;
+    line-height: 1.1;
+  }
+  
+  .adminTitle {
+    font-size: 0.7rem;
+  }
+  
+  .adminEmail {
+    font-size: 0.65rem;
+    word-break: break-all;
+  }
+  
+  .mainHeader {
+    padding: 1.2rem 1.5rem;
+  }
+  
+  .pageTitle {
+    font-size: 1.4rem;
+  }
+  
+  .contentArea {
+    padding: 1.5rem;
+  }
+}
+
+/* Additional zoom support for Windows scaling */
+@media screen and (min-width: 1200px) and (max-width: 1600px) {
+  /* Likely 125% zoom on standard monitors */
+  .sidebar {
+    width: clamp(230px, 21vw, 310px);
+  }
+  
+  .mainContent {
+    margin-left: clamp(230px, 21vw, 310px);
+  }
+}
+
+@media screen and (min-width: 1000px) and (max-width: 1200px) {
+  /* Likely 150% zoom or higher */
+  .sidebar {
+    width: clamp(210px, 19vw, 290px);
+  }
+  
+  .mainContent {
+    margin-left: clamp(210px, 19vw, 290px);
   }
 }

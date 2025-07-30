@@ -12,6 +12,7 @@ import ManageNews from '../../components/Admin/ManageNews/ManageNews';
 import ManageGroups from '../../components/Admin/ManageGroups/ManageGroups';
 import ManageContactMessages from '../../components/Admin/ManageContactMessages/ManageContactMessages';
 import ManageNotes from '../../components/Admin/ManageNotes/ManageNotes';
+import UserLogs from '../../components/Admin/UserLogs/UserLogs';
 
 const AdminDashboard = () => {
   const [activeSection, setActiveSection] = useState('overview');
@@ -44,6 +45,7 @@ const AdminDashboard = () => {
     { id: 'categories', label: 'Manage Categories', icon: '📂' },
     { id: 'instructors', label: 'Manage Instructors', icon: '👨‍🏫' },
     { id: 'students', label: 'Manage Students', icon: '👨‍🎓' },
+    { id: 'user-logs', label: 'User Logs History', icon: '📊' },
     { id: 'news', label: 'Manage News', icon: '📰' },
     { id: 'notes', label: 'Manage Notes', icon: '📝' },
     { id: 'contact-messages', label: 'Contact Messages', icon: '📧' }
@@ -97,6 +99,8 @@ const AdminDashboard = () => {
         return <ManageInstructors />;
       case 'students':
         return <ManageStudents />;
+      case 'user-logs':
+        return <UserLogs />;
       case 'news':
         return <ManageNews />;
       case 'notes':

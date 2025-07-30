@@ -242,21 +242,17 @@ const CourseDetailsPage = () => {
                               </h4>
                               <p className={styles.unitMeta}>
                                 {getUnitLessons(unit._id).length} lectures
-                                {unit.lock && (
-                                  <span className={styles.lockBadge}>
-                                    🔒 Locked
-                                  </span>
-                                )}
+                                <span className={styles.lockBadge}>
+                                  🔒 Locked
+                                </span>
                               </p>
                             </div>
                           </div>
                           <div className={styles.unitHeaderRight}>
                             {loadingUnits[unit._id] ? (
                               <div className={styles.unitLoadingSpinner}></div>
-                            ) : unit.lock ? (
-                              <span className={styles.lockIcon} title="This section is locked">🔒</span>
                             ) : (
-                              <span className={styles.unlockIcon} title="This section is available">🔓</span>
+                              <span className={styles.lockIcon} title="This section is locked">🔒</span>
                             )}
                           </div>
                         </div>
@@ -288,7 +284,7 @@ const CourseDetailsPage = () => {
                                     <div key={lesson._id} className={styles.lessonItem}>
                                       <div className={styles.lessonLeft}>
                                         <span className={styles.lessonIcon}>
-                                          {lesson.islocked ? '🔒' : '▶️'}
+                                          🔒
                                         </span>
                                         <div className={styles.lessonInfo}>
                                           <h6 className={styles.lessonTitle}>
@@ -307,9 +303,7 @@ const CourseDetailsPage = () => {
                                             {lesson.duration}
                                           </span>
                                         )}
-                                        {lesson.islocked && (
-                                          <span className={styles.lockedBadge}>Locked</span>
-                                        )}
+                                        <span className={styles.lockedBadge}>Locked</span>
                                       </div>
                                     </div>
                                   ))}
