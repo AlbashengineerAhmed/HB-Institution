@@ -122,6 +122,15 @@ const AdminDashboard = () => {
       {/* Sidebar */}
       <aside className={`${styles.sidebar} ${mobileMenuOpen ? styles.open : ''}`}>
         <div className={styles.sidebarHeader}>
+          {/* Close Button - Always visible */}
+          <button 
+            className={styles.closeBtn}
+            onClick={closeMobileMenu}
+            title="Close sidebar"
+          >
+            <i className="fas fa-times"></i>
+          </button>
+
           <div className={styles.adminInfo}>
             <div className={styles.adminAvatar}>
               {adminData.firstName?.charAt(0) || adminData.email?.charAt(0) || 'A'}

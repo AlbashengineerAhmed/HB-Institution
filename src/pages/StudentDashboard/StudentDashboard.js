@@ -481,7 +481,7 @@ const StudentDashboard = () => {
           <div className={styles.sidebarHeader}>
             {/* Mobile Close Button */}
             <button 
-              className={styles.mobileCloseBtn}
+              className={styles.closeBtn}
               onClick={closeMobileMenu}
             >
               <i className="fas fa-times"></i>

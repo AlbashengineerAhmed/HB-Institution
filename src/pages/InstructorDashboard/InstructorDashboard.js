@@ -432,6 +432,15 @@ const InstructorDashboard = () => {
         {/* Sidebar */}
         <aside className={`${styles.sidebar} ${mobileMenuOpen ? styles.open : ''}`}>
           <div className={styles.sidebarHeader}>
+            {/* Close Button - Always visible */}
+            <button 
+              className={styles.closeBtn}
+              onClick={closeMobileMenu}
+              title="Close sidebar"
+            >
+              <i className="fas fa-times"></i>
+            </button>
+
             <div className={styles.instructorInfo}>
               <div className={styles.instructorAvatar}>
                 {instructorData.firstName?.charAt(0) || instructorData.email?.charAt(0) || 'I'}

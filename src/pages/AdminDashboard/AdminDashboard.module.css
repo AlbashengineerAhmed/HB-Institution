@@ -26,6 +26,7 @@
   padding: 1.5rem 1.5rem;
   border-bottom: 1px solid rgba(var(--primary-color-rgb), 0.2);
   flex-shrink: 0;
+  position: relative;
 }
 
 .adminInfo {
@@ -270,7 +271,8 @@
   }
 
   .sidebar {
-    width: 280px;
+    width: 100%;
+    max-width: 320px;
     position: fixed;
     transform: translateX(-100%);
     transition: transform 0.3s ease;
@@ -283,45 +285,70 @@
   
   .mainContent {
     margin-left: 0;
+    width: 100%;
   }
   
   .mainHeader {
-    padding: 1rem 1.5rem;
+    padding: 1rem;
+    flex-wrap: wrap;
   }
   
   .headerLeft {
     display: flex;
     align-items: center;
     gap: 1rem;
+    width: 100%;
   }
   
   .pageTitle {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
+    line-height: 1.2;
   }
   
   .contentArea {
-    padding: 1rem;
+    padding: 0.75rem;
   }
   
   .adminInfo {
-    flex-direction: row;
-    text-align: left;
+    flex-direction: column;
+    text-align: center;
     align-items: center;
+    gap: 0.75rem;
   }
   
   .adminAvatar {
-    width: 60px;
-    height: 60px;
-    font-size: 1.25rem;
-    margin-right: 1rem;
+    width: 50px;
+    height: 50px;
+    font-size: 1rem;
+    margin-right: 0;
   }
 
   .adminDetails {
-    align-items: flex-start;
+    align-items: center;
+  }
+
+  .adminName {
+    font-size: 1rem;
+  }
+
+  .adminTitle {
+    font-size: 0.75rem;
+  }
+
+  .adminEmail {
+    font-size: 0.7rem;
+    word-break: break-all;
   }
 
   .sidebarItem {
     padding: 0.75rem 1rem;
+    font-size: 0.85rem;
+  }
+
+  .sidebarIcon {
+    font-size: 1rem;
+    margin-right: 0.5rem;
+    width: 20px;
   }
 
   .adminInfoHeader {
@@ -336,6 +363,15 @@
     width: 35px;
     height: 35px;
     font-size: 1rem;
+  }
+
+  .sidebarNav {
+    padding: 0.75rem 0;
+    max-height: calc(100vh - 140px);
+  }
+
+  .sidebarHeader {
+    padding: 1rem;
   }
 }
 
@@ -616,4 +652,362 @@
   .mainContent {
     margin-left: clamp(210px, 19vw, 290px);
   }
+}
+
+/* Ultra-wide screen optimizations */
+@media screen and (min-width: 1920px) {
+  .sidebar {
+    width: clamp(300px, 22vw, 420px);
+  }
+  
+  .mainContent {
+    margin-left: clamp(300px, 22vw, 420px);
+  }
+
+  .adminAvatar {
+    width: 80px;
+    height: 80px;
+    font-size: 1.4rem;
+  }
+
+  .adminName {
+    font-size: 1.4rem;
+  }
+
+  .adminTitle {
+    font-size: 1rem;
+  }
+
+  .adminEmail {
+    font-size: 0.9rem;
+  }
+
+  .pageTitle {
+    font-size: 2.2rem;
+  }
+
+  .sidebarItem {
+    padding: 0.8rem 2rem;
+    font-size: 1rem;
+  }
+
+  .sidebarIcon {
+    font-size: 1.4rem;
+    margin-right: 1rem;
+    width: 28px;
+  }
+
+  .contentArea {
+    padding: 3rem;
+  }
+}
+
+/* High DPI display optimizations */
+@media screen and (-webkit-min-device-pixel-ratio: 2),
+       screen and (min-resolution: 192dpi) {
+  .adminAvatar,
+  .adminAvatarHeader {
+    box-shadow: 0 2px 8px rgba(var(--primary-color-rgb), 0.2);
+  }
+
+  .sidebar {
+    border-right: 1px solid rgba(var(--border-color-rgb), 0.3);
+  }
+
+  .mainHeader {
+    box-shadow: 0 2px 12px rgba(var(--gradient-start-rgb), 0.15);
+  }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .sidebarItem {
+    padding: 1rem 1.5rem;
+    min-height: 44px;
+  }
+
+  .mobileMenuToggle {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 0.75rem;
+  }
+
+  .contentArea button {
+    min-height: 44px;
+    padding: 0.75rem 1rem;
+  }
+
+  .contentArea input,
+  .contentArea select,
+  .contentArea textarea {
+    min-height: 44px;
+    padding: 0.75rem;
+  }
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .sidebar,
+  .mainContent,
+  .sidebarItem {
+    transition: none;
+  }
+
+  .sidebarItem:hover {
+    transform: none;
+  }
+}
+
+/* Print styles */
+@media print {
+  .sidebar,
+  .mobileMenuToggle,
+  .mobileOverlay {
+    display: none;
+  }
+
+  .mainContent {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .mainHeader {
+    background: none;
+    box-shadow: none;
+    border-bottom: 2px solid #000;
+  }
+
+  .contentArea {
+    padding: 1rem;
+  }
+
+  .contentArea button {
+    display: none;
+  }
+}
+
+/* Container queries for better component-level responsiveness */
+@container (max-width: 600px) {
+  .contentArea table {
+    font-size: 0.8rem;
+  }
+
+  .contentArea .card {
+    padding: 1rem;
+  }
+
+  .contentArea .modal {
+    margin: 0.5rem;
+    max-width: calc(100% - 1rem);
+  }
+}
+
+/* Focus management for accessibility */
+.sidebar:focus-within,
+.mainContent:focus-within {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+.sidebarItem:focus {
+  outline: 2px solid var(--primary-color);
+  outline-offset: -2px;
+  background-color: rgba(var(--primary-color-rgb), 0.1);
+}
+
+/* Improved scrollbar styling for better UX */
+.sidebar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: rgba(var(--primary-color-rgb), 0.1);
+  border-radius: 4px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: rgba(var(--primary-color-rgb), 0.3);
+  border-radius: 4px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background: rgba(var(--primary-color-rgb), 0.5);
+}
+
+/* Better responsive grid for admin content */
+@media (max-width: 1200px) {
+  .contentArea .grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .contentArea .grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+/* Improved form responsiveness */
+@media (max-width: 768px) {
+  .contentArea form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .contentArea .form-row {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .contentArea .form-group {
+    width: 100%;
+  }
+
+  .contentArea label {
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  .contentArea input,
+  .contentArea select,
+  .contentArea textarea {
+    width: 100%;
+    font-size: 0.9rem;
+  }
+}
+
+/* Better table responsiveness */
+@media (max-width: 768px) {
+  .contentArea table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+    border: 1px solid rgba(var(--primary-color-rgb), 0.2);
+    border-radius: 8px;
+  }
+
+  .contentArea thead {
+    display: block;
+  }
+
+  .contentArea tbody {
+    display: block;
+  }
+
+  .contentArea tr {
+    display: block;
+    border-bottom: 1px solid rgba(var(--primary-color-rgb), 0.1);
+  }
+
+  .contentArea td,
+  .contentArea th {
+    display: inline-block;
+    padding: 0.5rem;
+    min-width: 120px;
+    text-align: left;
+    border-right: 1px solid rgba(var(--primary-color-rgb), 0.1);
+  }
+
+  .contentArea td:last-child,
+  .contentArea th:last-child {
+    border-right: none;
+  }
+}
+
+/* Card component improvements */
+@media (max-width: 768px) {
+  .contentArea .card {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border-radius: 8px;
+  }
+
+  .contentArea .card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .contentArea .card-actions {
+    flex-direction: column;
+    width: 100%;
+    gap: 0.5rem;
+  }
+
+  .contentArea .card-actions button {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+/* Modal improvements for mobile */
+@media (max-width: 768px) {
+  .contentArea .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: 0;
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 0;
+    overflow-y: auto;
+  }
+
+  .contentArea .modal-header {
+    position: sticky;
+    top: 0;
+    background: var(--secondary-color);
+    z-index: 10;
+    border-bottom: 1px solid rgba(var(--primary-color-rgb), 0.2);
+  }
+
+  .contentArea .modal-content {
+    padding: 1rem;
+    max-height: none;
+  }
+
+  .contentArea .modal-footer {
+    position: sticky;
+    bottom: 0;
+    background: var(--secondary-color);
+    border-top: 1px solid rgba(var(--primary-color-rgb), 0.2);
+    padding: 1rem;
+  }
+}
+
+
+/* Close Button - Always visible */
+.closeBtn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(var(--primary-color-rgb), 0.1);
+  border: 1px solid rgba(var(--primary-color-rgb), 0.2);
+  color: var(--primary-color);
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 50%;
+  transition: var(--transition);
+  z-index: 1002;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.closeBtn:hover {
+  background-color: rgba(var(--primary-color-rgb), 0.2);
+  color: var(--primary-color);
+  transform: scale(1.1);
+}
+
+.closeBtn:active {
+  transform: scale(0.95);
 }
