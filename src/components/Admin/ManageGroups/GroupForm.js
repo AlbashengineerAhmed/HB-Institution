@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchInstructors, createGroup, updateGroup } from '../../../store/slices/groupSlice';
 import { fetchCourses } from '../../../store/slices/courseSlice';
+import { formatInstructorAvailability, convertTimeRange } from '../../../utils/timeUtils';
 import styles from './GroupForm.module.css';
 
 const GroupForm = ({ 
@@ -254,7 +255,7 @@ const GroupForm = ({
                         {day.charAt(0).toUpperCase() + day.slice(1)}
                       </div>
                       <div className={styles.timeRange}>
-                        🕐 {timeData.from}:00 - {timeData.to}:00
+                        🕐 {convertTimeRange(timeData.from, timeData.to)}
                       </div>
                     </div>
                   ))}
@@ -334,7 +335,7 @@ const GroupForm = ({
                           const dayAvailability = getAvailabilityForDay(day);
                           return (
                             <option key={day} value={day}>
-                              {day} {dayAvailability ? `(${dayAvailability.from}:00-${dayAvailability.to}:00)` : '(Not available)'}
+                              {day} {dayAvailability ? `(${convertTimeRange(dayAvailability.from, dayAvailability.to)})` : '(Not available)'}
                             </option>
                           );
                         })}
@@ -384,7 +385,7 @@ const GroupForm = ({
                         <div className={styles.validationError}>
                           <span className={styles.errorIcon}>❌</span>
                           <span>
-                            Time slot must be within {availability.from}:00 - {availability.to}:00
+                            Time slot must be within {convertTimeRange(availability.from, availability.to)}
                           </span>
                         </div>
                       ) : (
