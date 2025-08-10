@@ -3,7 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { formatPrice } from '../../utils/priceUtils';
 import styles from './InstructorDashboard.module.css';
 import ErrorBoundary from '../../components/ErrorBoundary';
-import SendNote from '../../components/SendNote/SendNote';
+import LessonDetails from '../../components/Shared/LessonDetails/LessonDetails';
+import AttendanceDetails from '../../components/Instructor/AttendanceDetails/AttendanceDetails';
 import { 
   fetchInstructorDashboard,
   fetchCourseUnits,
@@ -15,12 +16,23 @@ import {
   toggleUnitExpansion,
   updateLessonLockStatusOptimistic,
   updateUnitLockStatusOptimistic,
-  clearError
+  clearError,
+  createMeeting
 } from '../../store/slices/instructorDashboardSlice';
 
 const InstructorDashboard = () => {
   const dispatch = useDispatch();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [selectedLessonId, setSelectedLessonId] = useState(null);
+  const [selectedGroupId, setSelectedGroupId] = useState(null);
+  const [showLessonDetails, setShowLessonDetails] = useState(false);
+  const [showAttendance, setShowAttendance] = useState(false);
+  const [showMeetingFormFor, setShowMeetingFormFor] = useState(null);
+  const [meetingForm, setMeetingForm] = useState({ 
+    duration: 60,
+    scheduledDate: new Date().toISOString().split('T')[0],
+    scheduledTime: new Date().toTimeString().slice(0, 5)
+  });
 
   // Get user data from auth state (same as Header component)
   const { user } = useSelector((state) => state.auth);
@@ -38,7 +50,9 @@ const InstructorDashboard = () => {
     error,
     courseError,
     lessonsError,
-    lockError
+    lockError,
+    isCreatingMeeting,
+    createMeetingError
   } = useSelector((state) => state.instructorDashboard);
 
   // Calculate instructor stats from real data
@@ -178,11 +192,56 @@ const InstructorDashboard = () => {
     }
   };
 
-  const formatSchedule = (schedule) => {
-    if (!schedule || schedule.length === 0) return 'No schedule';
-    return schedule.map(s => 
-      `${s.dayOfWeek} ${s.startTime}-${s.endTime}`
-    ).join(', ');
+  // Create meeting handlers
+  const handleOpenMeetingForm = (lessonId, groupId) => {
+    setShowMeetingFormFor({ lessonId, groupId });
+    setMeetingForm({ duration: 60, scheduledDate: '', scheduledTime: '' });
+  };
+
+  const handleCreateMeeting = async () => {
+    if (!showMeetingFormFor) return;
+    const { lessonId, groupId } = showMeetingFormFor;
+    
+    try {
+      // Combine date and time to create ISO string
+      const scheduledDateTime = new Date(meetingForm.scheduledDate + 'T' + meetingForm.scheduledTime);
+      
+      await dispatch(createMeeting({ 
+        lessonId, 
+        groupId, 
+        duration: meetingForm.duration,
+        scheduledStartTime: scheduledDateTime.toISOString()
+      })).unwrap();
+      setShowMeetingFormFor(null);
+    } catch (e) {
+      // Errors are handled via toast in thunk
+    }
+  };
+
+  // Handle lesson details view
+  const handleViewLessonDetails = (lessonId, groupId) => {
+    setSelectedLessonId(lessonId);
+    setSelectedGroupId(groupId);
+    setShowLessonDetails(true);
+  };
+
+  // Handle close lesson details
+  const handleCloseLessonDetails = () => {
+    setShowLessonDetails(false);
+    setSelectedLessonId(null);
+    setSelectedGroupId(null);
+  };
+
+  // Handle view attendance details
+  const handleViewAttendance = (lessonId) => {
+    setSelectedLessonId(lessonId);
+    setShowAttendance(true);
+  };
+
+  // Handle close attendance details
+  const handleCloseAttendance = () => {
+    setShowAttendance(false);
+    setSelectedLessonId(null);
   };
 
   const getLevelBadgeClass = (level) => {
@@ -352,6 +411,14 @@ const InstructorDashboard = () => {
                                             </div>
                                             <div className={styles.lessonControls}>
                                               <button
+                                                className={styles.detailsButton}
+                                                onClick={() => lesson.unlocked && handleViewLessonDetails(lesson.id, group._id)}
+                                                title={lesson.unlocked ? `View lesson details for ${lesson.title}` : 'Lesson is locked'}
+                                                disabled={!lesson.unlocked}
+                                              >
+                                                📖 Study Lesson
+                                              </button>
+                                              <button
                                                 className={`${styles.lockButton} ${!lesson.unlocked ? styles.locked : styles.unlocked}`}
                                                 onClick={() => handleLessonLockToggle(lesson.id, lesson.unlocked, unit.id, group._id)}
                                                 disabled={isUpdatingLock}
@@ -366,6 +433,20 @@ const InstructorDashboard = () => {
                                                 title={`Mark lesson as completed for group ${group.code}`}
                                               >
                                                 ✅ Mark Complete
+                                              </button>
+                                              <button
+                                                className={styles.attendanceButton}
+                                                onClick={() => handleViewAttendance(lesson.id)}
+                                                title={`View attendance for ${lesson.title}`}
+                                              >
+                                                📊 Attendance
+                                              </button>
+                                              <button
+                                                className={styles.newCourseBtn}
+                                                onClick={() => handleOpenMeetingForm(lesson.id, group._id)}
+                                                title={`Create meeting for ${lesson.title}`}
+                                              >
+                                                🧑‍🏫 Create Meeting
                                               </button>
                                             </div>
                                           </div>
@@ -498,6 +579,121 @@ const InstructorDashboard = () => {
             </ErrorBoundary>
           </div>
         </main>
+
+        {/* Lesson Details Modal */}
+        {showLessonDetails && selectedLessonId && selectedGroupId && (
+          <div className={styles.modalOverlay} onClick={handleCloseLessonDetails}>
+            <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+              <div className={styles.modalHeader}>
+                <h3>Lesson Details</h3>
+                <button 
+                  className={styles.closeModalBtn}
+                  onClick={handleCloseLessonDetails}
+                  title="Close lesson details"
+                >
+                  ✕
+                </button>
+              </div>
+              <div className={styles.modalBody}>
+                <LessonDetails 
+                  lessonId={selectedLessonId}
+                  groupId={selectedGroupId}
+                  userRole="instructor"
+                />
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Create Meeting Modal */}
+        {showMeetingFormFor && (
+          <div className={styles.modalOverlay} onClick={() => setShowMeetingFormFor(null)}>
+            <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+              <div className={styles.modalHeader}>
+                <h3>Create Meeting</h3>
+                <button 
+                  className={styles.closeModalBtn}
+                  onClick={() => setShowMeetingFormFor(null)}
+                  title="Close meeting form"
+                >
+                  ✕
+                </button>
+              </div>
+              <div className={styles.modalBody}>
+                <div className={styles.formRow}>
+                  <label>Scheduled Date</label>
+                  <input
+                    type="date"
+                    value={meetingForm.scheduledDate}
+                    onChange={(e) => setMeetingForm(prev => ({ ...prev, scheduledDate: e.target.value }))}
+                    className={styles.formInput}
+                    min={new Date().toISOString().split('T')[0]}
+                  />
+                </div>
+                <div className={styles.formRow}>
+                  <label>Scheduled Time</label>
+                  <input
+                    type="time"
+                    value={meetingForm.scheduledTime}
+                    onChange={(e) => setMeetingForm(prev => ({ ...prev, scheduledTime: e.target.value }))}
+                    className={styles.formInput}
+                  />
+                </div>
+                <div className={styles.formRow}>
+                  <label>Meeting Duration</label>
+                  <input
+                    type="number"
+                    min="15"
+                    max="180"
+                    value={meetingForm.duration}
+                    onChange={(e) => setMeetingForm(prev => ({ ...prev, duration: Number(e.target.value) }))}
+                    className={styles.formInput}
+                    placeholder="Duration in minutes"
+                  />
+                </div>
+                {createMeetingError && (
+                  <div className={styles.errorMessage}>
+                    <p>❌ {createMeetingError}</p>
+                  </div>
+                )}
+              </div>
+              <div className={styles.modalFooter}>
+                <button 
+                  className={styles.newCourseBtn} 
+                  onClick={handleCreateMeeting} 
+                  disabled={isCreatingMeeting}
+                  style={{ padding: '0.75rem 1.5rem', fontWeight: 600, fontSize: '0.95rem', borderRadius: '8px' }}
+                >
+                  {isCreatingMeeting ? '🔄 Creating...' : '✅ Create Meeting'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Attendance Modal */}
+        {showAttendance && selectedLessonId && (
+          <div className={styles.modalOverlay} onClick={handleCloseAttendance}>
+            <div className={styles.modalContent} onClick={(e) => e.stopPropagation()} style={{ width: '90%', maxWidth: '1000px' }}>
+              <div className={styles.modalHeader}>
+                <h3>Lesson Attendance</h3>
+                <button 
+                  className={styles.closeModalBtn}
+                  onClick={handleCloseAttendance}
+                  title="Close attendance details"
+                >
+                  ✕
+                </button>
+              </div>
+              <div className={styles.modalBody}>
+                <AttendanceDetails 
+                  lessonId={selectedLessonId}
+                  onClose={handleCloseAttendance}
+                />
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </ErrorBoundary>
   );

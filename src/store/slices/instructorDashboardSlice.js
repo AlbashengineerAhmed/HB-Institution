@@ -167,6 +167,73 @@ export const toggleUnitLock = createAsyncThunk(
   }
 );
 
+// Create meeting for a lesson and group
+export const createMeeting = createAsyncThunk(
+  'instructorDashboard/createMeeting',
+  async ({ lessonId, groupId, duration, scheduledDate, scheduledTime, timezone }, { rejectWithValue }) => {
+    try {
+      console.log('🧑‍🏫 Creating meeting for lesson:', lessonId, 'group:', groupId);
+      console.log('🌐 Using endpoint: https://hb-institution.vercel.app/api/v1/meeting/create');
+      console.log('📅 Meeting details:', { scheduledDate, scheduledTime, timezone });
+      
+      const response = await api.post('/meeting/create', {
+        lessonId,
+        groupId,
+        duration,
+        scheduledDate,
+        scheduledTime,
+        timezone
+      });
+      console.log('✅ Meeting created:', response.data);
+      
+      const { success, message, data } = response.data;
+      
+      if (success) {
+        const { meeting, joinURLs, attendanceTracking } = data;
+        
+        // Show success message with number of students notified
+        toast.success(message || 'Meeting created successfully');
+        
+        // Return structured data
+        return {
+          meeting: {
+            ...meeting,
+            meetingUrl: joinURLs.instructor, // Add instructor's join URL to meeting data
+            studentUrls: joinURLs.students,  // Add student URLs
+            tracking: attendanceTracking     // Add tracking info
+          }
+        };
+      } else {
+        throw new Error(message || 'Failed to create meeting');
+      }
+    } catch (error) {
+      const errorMessage = getErrorMessage(error, 'Failed to create meeting');
+      console.error('❌ Failed to create meeting:', error);
+      toast.error(errorMessage);
+      return rejectWithValue(errorMessage);
+    }
+  }
+);
+
+// Fetch lesson attendance
+export const fetchLessonAttendance = createAsyncThunk(
+  'instructorDashboard/fetchLessonAttendance',
+  async ({ lessonId }, { rejectWithValue }) => {
+    try {
+      console.log(`🔍 Fetching attendance for lesson: ${lessonId}`);
+      console.log(`🌐 Using endpoint: https://hb-institution.vercel.app/api/v1/attendance/lesson/${lessonId}`);
+      const response = await api.get(`/attendance/lesson/${lessonId}`);
+      console.log('✅ Lesson attendance:', response.data);
+      return response.data;
+    } catch (error) {
+      const errorMessage = getErrorMessage(error, 'Failed to fetch lesson attendance');
+      console.error('❌ Failed to fetch lesson attendance:', error);
+      toast.error(errorMessage);
+      return rejectWithValue(errorMessage);
+    }
+  }
+);
+
 // Mark lesson as completed
 export const markLessonAsCompleted = createAsyncThunk(
   'instructorDashboard/markLessonAsCompleted',
@@ -245,21 +312,31 @@ const initialState = {
   // Unit lessons
   unitLessons: {},
   
+  // Attendance data
+  lessonAttendance: null,
+  
   // Loading states
   isLoading: false,
   isLoadingCourse: false,
   isLoadingLessons: false,
+  isLoadingAttendance: false,
   isUpdatingLock: false,
+  isCreatingMeeting: false,
   
   // Error states
   error: null,
   courseError: null,
   lessonsError: null,
+  attendanceError: null,
   lockError: null,
+  createMeetingError: null,
   
   // UI state
   expandedCourses: {},
   expandedUnits: {},
+
+  // Last meeting data
+  lastMeeting: null,
 };
 
 // Instructor Dashboard slice
@@ -337,6 +414,21 @@ const instructorDashboardSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      // Fetch Lesson Attendance
+      .addCase(fetchLessonAttendance.pending, (state) => {
+        state.isLoadingAttendance = true;
+        state.attendanceError = null;
+      })
+      .addCase(fetchLessonAttendance.fulfilled, (state, action) => {
+        state.isLoadingAttendance = false;
+        state.lessonAttendance = action.payload;
+        state.attendanceError = null;
+      })
+      .addCase(fetchLessonAttendance.rejected, (state, action) => {
+        state.isLoadingAttendance = false;
+        state.attendanceError = action.payload;
+      })
+      
       // Fetch Instructor Dashboard
       .addCase(fetchInstructorDashboard.pending, (state) => {
         state.isLoading = true;
@@ -452,6 +544,29 @@ const instructorDashboardSlice = createSlice({
         console.log('❌ Unit lock toggle failed:', action.payload);
       })
       
+      // Create Meeting
+      .addCase(createMeeting.pending, (state) => {
+        state.isCreatingMeeting = true;
+        state.createMeetingError = null;
+      })
+      .addCase(createMeeting.fulfilled, (state, action) => {
+        state.isCreatingMeeting = false;
+        state.createMeetingError = null;
+        state.lastMeeting = action.payload.meeting;
+        
+        // Store additional meeting details if needed
+        state.meetingDetails = {
+          ...state.meetingDetails,
+          [action.payload.meeting.id]: {
+            ...action.payload.meeting
+          }
+        };
+      })
+      .addCase(createMeeting.rejected, (state, action) => {
+        state.isCreatingMeeting = false;
+        state.createMeetingError = action.payload || 'Failed to create meeting';
+      })
+
       // Mark Lesson as Completed
       .addCase(markLessonAsCompleted.pending, (state) => {
         state.isUpdatingLock = true;

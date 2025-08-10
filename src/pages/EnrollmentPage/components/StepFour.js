@@ -116,7 +116,7 @@ const StepFour = () => {
                 >
                   <div className={styles.groupHeader}>
                     <div className={styles.groupInfo}>
-                      <h3>Group {group._id.slice(-4).toUpperCase()}</h3>
+                      <h3>{group.title}</h3>
                       <span className={`${styles.availabilityBadge} ${isAvailable ? styles.available : styles.full}`}>
                         {isAvailable ? `${spotsLeft} spots` : 'Full'}
                       </span>

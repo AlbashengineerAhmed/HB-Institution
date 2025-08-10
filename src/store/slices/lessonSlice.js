@@ -80,6 +80,20 @@ export const fetchLessonById = createAsyncThunk(
   }
 );
 
+export const fetchLessonDetails = createAsyncThunk(
+  'lessons/fetchLessonDetails',
+  async ({ lessonId, groupId }, { rejectWithValue }) => {
+    try {
+      const response = await api.get(`/lesson/${lessonId}/LessonDetails/${groupId}`);
+      return response.data;
+    } catch (error) {
+      const errorMessage = getErrorMessage(error, 'Failed to fetch lesson details');
+      toast.error(errorMessage);
+      return rejectWithValue(errorMessage);
+    }
+  }
+);
+
 export const createLesson = createAsyncThunk(
   'lessons/createLesson',
   async (lessonData, { rejectWithValue }) => {
@@ -224,6 +238,7 @@ export const deleteLesson = createAsyncThunk(
 const initialState = {
   lessons: [],
   selectedLesson: null,
+  lessonDetails: null,
   filteredLessons: [],
   isLoading: false,
   error: null,
@@ -283,6 +298,9 @@ const lessonSlice = createSlice({
       state.selectedUnit = 'all';
       state.filteredLessons = [...state.lessons];
     },
+    clearLessonDetails: (state) => {
+      state.lessonDetails = null;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -321,80 +339,20 @@ const lessonSlice = createSlice({
         state.selectedLesson = null;
       })
       
-      // Create Lesson
-      .addCase(createLesson.pending, (state) => {
+      // Fetch Lesson Details
+      .addCase(fetchLessonDetails.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(createLesson.fulfilled, (state, action) => {
+      .addCase(fetchLessonDetails.fulfilled, (state, action) => {
         state.isLoading = false;
-        const newLesson = action.payload.lesson || action.payload.data;
-        if (newLesson) {
-          state.lessons.push(newLesson);
-          state.filteredLessons.push(newLesson);
-        }
+        state.lessonDetails = action.payload.data || null;
         state.error = null;
       })
-      .addCase(createLesson.rejected, (state, action) => {
+      .addCase(fetchLessonDetails.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
-        console.error('Redux state - Create lesson rejected with payload:', action.payload);
-      })
-      
-      // Update Lesson
-      .addCase(updateLesson.pending, (state) => {
-        state.isLoading = true;
-        state.error = null;
-      })
-      .addCase(updateLesson.fulfilled, (state, action) => {
-        state.isLoading = false;
-        const { lessonId, data } = action.payload;
-        const updatedLesson = data.lesson || data.data;
-        
-        if (updatedLesson) {
-          // Update in lessons array
-          const lessonIndex = state.lessons.findIndex(lesson => 
-            (lesson.id || lesson._id) === lessonId
-          );
-          if (lessonIndex !== -1) {
-            state.lessons[lessonIndex] = updatedLesson;
-          }
-          
-          // Update in filtered lessons array
-          const filteredIndex = state.filteredLessons.findIndex(lesson => 
-            (lesson.id || lesson._id) === lessonId
-          );
-          if (filteredIndex !== -1) {
-            state.filteredLessons[filteredIndex] = updatedLesson;
-          }
-        }
-        state.error = null;
-      })
-      .addCase(updateLesson.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.payload;
-      })
-      
-      // Delete Lesson
-      .addCase(deleteLesson.pending, (state) => {
-        state.isLoading = true;
-        state.error = null;
-      })
-      .addCase(deleteLesson.fulfilled, (state, action) => {
-        state.isLoading = false;
-        const deletedLessonId = action.payload.lessonId;
-        // Remove the deleted lesson from both arrays
-        state.lessons = state.lessons.filter(lesson => 
-          (lesson.id || lesson._id) !== deletedLessonId
-        );
-        state.filteredLessons = state.filteredLessons.filter(lesson => 
-          (lesson.id || lesson._id) !== deletedLessonId
-        );
-        state.error = null;
-      })
-      .addCase(deleteLesson.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.payload;
+        state.lessonDetails = null;
       });
   },
 });
@@ -406,7 +364,8 @@ export const {
   setSearchTerm, 
   setSelectedUnit, 
   filterLessons, 
-  clearFilters 
+  clearFilters,
+  clearLessonDetails
 } = lessonSlice.actions;
 
 export default lessonSlice.reducer;

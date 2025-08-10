@@ -8,15 +8,13 @@ import SendNote from '../../components/SendNote/SendNote';
 // Lazy load components to identify loading issues
 const MyCourses = React.lazy(() => import('../../components/Student/MyCourses/MyCourses'));
 const CourseContent = React.lazy(() => import('../../components/Student/CourseContent/CourseContent'));
-const CourseEvaluation = React.lazy(() => import('../../components/Student/CourseEvaluation/CourseEvaluation'));
-const LessonDetails = React.lazy(() => import('../../components/Student/LessonDetails/LessonDetails'));
+const LessonDetails = React.lazy(() => import('../../components/Shared/LessonDetails/LessonDetails'));
 const StudentCalendar = React.lazy(() => import('../../components/Student/StudentCalendar/StudentCalendar'));
 
 const StudentDashboard = () => {
   const dispatch = useDispatch();
   const [selectedCourse, setSelectedCourse] = useState(null);
-  const [showEvaluation, setShowEvaluation] = useState(false);
-  const [showAllLessons, setShowAllLessons] = useState(false);
+    const [showAllLessons, setShowAllLessons] = useState(false);
   const [selectedLesson, setSelectedLesson] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('courses');
@@ -46,6 +44,17 @@ const StudentDashboard = () => {
 
   useEffect(() => {
     dispatch(fetchStudentDashboard());
+    
+    // Check URL parameters for lessonId and groupId to handle redirects from calendar
+    const urlParams = new URLSearchParams(window.location.search);
+    const lessonIdParam = urlParams.get('lessonId');
+    const groupIdParam = urlParams.get('groupId');
+    
+    if (lessonIdParam && groupIdParam) {
+      // Set the selected lesson and active section
+      setSelectedLesson({ lessonId: lessonIdParam, groupId: groupIdParam });
+      setActiveSection('lessons');
+    }
   }, [dispatch]);
 
   // Toggle mobile menu
@@ -62,7 +71,6 @@ const StudentDashboard = () => {
   const handleSectionChange = (section) => {
     setActiveSection(section);
     setSelectedCourse(null);
-    setShowEvaluation(false);
     setShowAllLessons(false);
     setSelectedLesson(null);
     setExpandedUnits({});
@@ -80,7 +88,6 @@ const StudentDashboard = () => {
   const handleViewAllLessons = (course) => {
     setSelectedCourse(course);
     setShowAllLessons(true);
-    setShowEvaluation(false);
     setSelectedLesson(null);
     setExpandedUnits({});
     closeMobileMenu();
@@ -106,26 +113,16 @@ const StudentDashboard = () => {
     }
   };
 
-  const handleEvaluateCourse = (course) => {
-    setSelectedCourse(course);
-    setShowEvaluation(true);
+  
+  const handleLessonClick = (lessonId, groupId) => {
+    setSelectedLesson({ lessonId, groupId });
     setShowAllLessons(false);
-    setSelectedLesson(null);
-    setExpandedUnits({});
-    closeMobileMenu(); // Close mobile menu when navigating
-  };
-
-  const handleLessonClick = (lessonId, courseId, unitId) => {
-    setSelectedLesson({ lessonId, courseId, unitId });
-    setShowAllLessons(false);
-    setShowEvaluation(false);
     setExpandedUnits({});
     closeMobileMenu();
   };
 
   const handleBackToCourses = () => {
     setSelectedCourse(null);
-    setShowEvaluation(false);
     setShowAllLessons(false);
     setSelectedLesson(null);
     setExpandedUnits({});
@@ -175,31 +172,26 @@ const StudentDashboard = () => {
     if (selectedLesson) {
       return (
         <React.Suspense fallback={<LoadingSpinner />}>
-          <LessonDetails 
-            lessonId={selectedLesson.lessonId}
-            courseId={selectedLesson.courseId}
-            unitId={selectedLesson.unitId}
-            onBack={handleBackToAllLessons}
-          />
+          <div className={styles.lessonDetailsContainer}>
+            <div className={styles.backButton}>
+              <button 
+                onClick={handleBackToAllLessons}
+                className={styles.backBtn}
+              >
+                ← Back to Lessons
+              </button>
+            </div>
+            <LessonDetails 
+              lessonId={selectedLesson.lessonId}
+              groupId={selectedLesson.groupId}
+              userRole="student"
+            />
+          </div>
         </React.Suspense>
       );
     }
 
-    if (showEvaluation && selectedCourse) {
-      return (
-        <React.Suspense fallback={<LoadingSpinner />}>
-          <CourseEvaluation 
-            course={selectedCourse}
-            onBack={handleBackToCourses}
-            onSubmit={(evaluationData) => {
-              console.log('Evaluation submitted:', evaluationData);
-              handleBackToCourses();
-            }}
-          />
-        </React.Suspense>
-      );
-    }
-
+    
     if (showAllLessons && selectedCourse) {
       return (
         <div className={styles.courseDetailsView}>
@@ -316,7 +308,7 @@ const StudentDashboard = () => {
                               <div 
                                 key={lesson.id} 
                                 className={`${styles.lessonDropdownItem} ${!lesson.unlocked ? styles.disabled : ''}`}
-                                onClick={() => lesson.unlocked && handleLessonClick(lesson.id, selectedCourse.id, lesson.unit)}
+                                onClick={() => lesson.unlocked && handleLessonClick(lesson.id, selectedCourse.group?._id)}
                               >
                                 <div className={styles.lessonInfo}>
                                   <span className={styles.lessonOrder}>
@@ -336,11 +328,11 @@ const StudentDashboard = () => {
                                       className={styles.playButton}
                                       onClick={(e) => {
                                         e.stopPropagation();
-                                        handleLessonClick(lesson.id, selectedCourse.id, lesson.unit);
+                                        handleLessonClick(lesson.id, selectedCourse.group?._id);
                                       }}
-                                      title="Play lesson"
+                                      title="Study lesson"
                                     >
-                                      ▶️ Play
+                                      📖 Study
                                     </button>
                                   )}
                                 </div>
@@ -366,16 +358,7 @@ const StudentDashboard = () => {
             )}
           </div>
 
-          {/* Course Actions */}
-          <div className={styles.courseActionsSection}>
-            <button 
-              className={styles.actionButton}
-              onClick={() => handleEvaluateCourse(selectedCourse)}
-            >
-              ⭐ Evaluate Course
-            </button>
-          </div>
-        </div>
+                  </div>
       );
     }
 
@@ -385,7 +368,6 @@ const StudentDashboard = () => {
           <CourseContent 
             course={selectedCourse}
             onBack={handleBackToCourses}
-            onEvaluate={() => handleEvaluateCourse(selectedCourse)}
           />
         </React.Suspense>
       );
@@ -396,7 +378,6 @@ const StudentDashboard = () => {
         <MyCourses 
           onViewCourse={handleViewCourse}
           onViewAllLessons={handleViewAllLessons}
-          onEvaluateCourse={handleEvaluateCourse}
         />
       </React.Suspense>
     );
@@ -412,10 +393,7 @@ const StudentDashboard = () => {
     if (selectedLesson) {
       return 'Lesson Details';
     }
-    if (showEvaluation && selectedCourse) {
-      return `Evaluate: ${selectedCourse.title}`;
-    }
-    if (showAllLessons && selectedCourse) {
+        if (showAllLessons && selectedCourse) {
       return `Course Details: ${selectedCourse.title}`;
     }
     if (selectedCourse) {
@@ -479,10 +457,11 @@ const StudentDashboard = () => {
         {/* Sidebar */}
         <aside className={`${styles.sidebar} ${mobileMenuOpen ? styles.open : ''}`}>
           <div className={styles.sidebarHeader}>
-            {/* Mobile Close Button */}
+            {/* Close Button - Always visible */}
             <button 
               className={styles.closeBtn}
               onClick={closeMobileMenu}
+              title="Close sidebar"
             >
               <i className="fas fa-times"></i>
             </button>
@@ -563,7 +542,7 @@ const StudentDashboard = () => {
               >
                 <i className={`fas ${mobileMenuOpen ? 'fa-times' : 'fa-bars'}`}></i>
               </button>
-              {(selectedCourse || showEvaluation || showAllLessons || selectedLesson) && (
+              {(selectedCourse || showAllLessons || selectedLesson) && (
                 <button 
                   className={styles.backBtn}
                   onClick={selectedLesson ? handleBackToAllLessons : handleBackToCourses}

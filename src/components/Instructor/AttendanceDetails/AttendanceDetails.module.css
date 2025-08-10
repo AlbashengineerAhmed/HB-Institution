@@ -1,0 +1,218 @@
+.attendanceContainer {
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.sectionTitle {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  color: #333;
+  border-bottom: 2px solid #f0f0f0;
+  padding-bottom: 10px;
+}
+
+/* Loading and Error States */
+.loadingContainer,
+.errorContainer,
+.emptyContainer {
+  padding: 30px;
+  text-align: center;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  margin: 20px 0;
+}
+
+.errorContainer {
+  color: #d32f2f;
+  background-color: #ffebee;
+}
+
+/* Meeting Information */
+.meetingInfo,
+.attendanceSummary,
+.attendanceList {
+  margin-bottom: 30px;
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.meetingInfo h4,
+.attendanceSummary h4,
+.attendanceList h4 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-size: 1.2rem;
+  color: #444;
+}
+
+.infoGrid,
+.summaryGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 15px;
+}
+
+.infoItem,
+.summaryItem {
+  display: flex;
+  flex-direction: column;
+}
+
+.infoLabel,
+.summaryLabel {
+  font-size: 0.85rem;
+  color: #666;
+  margin-bottom: 5px;
+}
+
+.infoValue,
+.summaryValue {
+  font-weight: 500;
+  color: #333;
+}
+
+/* Status colors */
+.active {
+  color: #4caf50;
+}
+
+.inactive {
+  color: #f44336;
+}
+
+.pending {
+  color: #ff9800;
+}
+
+/* Summary colors */
+.present {
+  color: #4caf50;
+}
+
+.late {
+  color: #ff9800;
+}
+
+.absent {
+  color: #f44336;
+}
+
+.leftEarly {
+  color: #e91e63;
+}
+
+.rate {
+  color: #2196f3;
+  font-weight: bold;
+}
+
+/* Attendance Table */
+.attendanceTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  font-size: 0.9rem;
+}
+
+.attendanceTable th,
+.attendanceTable td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.attendanceTable th {
+  background-color: #f5f5f5;
+  font-weight: 600;
+  color: #333;
+}
+
+.attendanceTable tr:hover {
+  background-color: #f9f9f9;
+}
+
+.studentInfo {
+  display: flex;
+  align-items: center;
+}
+
+.studentAvatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 10px;
+  object-fit: cover;
+}
+
+.studentName {
+  font-weight: 500;
+  margin-bottom: 2px;
+}
+
+.studentEmail {
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.statusBadge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.statusBadge.present {
+  background-color: rgba(76, 175, 80, 0.1);
+  color: #4caf50;
+}
+
+.statusBadge.late {
+  background-color: rgba(255, 152, 0, 0.1);
+  color: #ff9800;
+}
+
+.statusBadge.absent {
+  background-color: rgba(244, 67, 54, 0.1);
+  color: #f44336;
+}
+
+.statusBadge.leftEarly {
+  background-color: rgba(233, 30, 99, 0.1);
+  color: #e91e63;
+}
+
+.noAttendance {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+  font-style: italic;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .infoGrid,
+  .summaryGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .attendanceTable {
+    font-size: 0.8rem;
+  }
+  
+  .attendanceTable th,
+  .attendanceTable td {
+    padding: 8px 10px;
+  }
+  
+  .studentAvatar {
+    width: 25px;
+    height: 25px;
+  }
+}

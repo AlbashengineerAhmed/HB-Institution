@@ -29,6 +29,36 @@
   position: relative;
 }
 
+.closeBtn {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  background: rgba(var(--primary-color-rgb), 0.1);
+  border: 1px solid rgba(var(--primary-color-rgb), 0.2);
+  color: var(--primary-color);
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 50%;
+  transition: var(--transition);
+  z-index: 1002;
+  width: 36px;
+  height: 36px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.closeBtn:hover {
+  background-color: rgba(var(--primary-color-rgb), 0.2);
+  color: var(--primary-color);
+  transform: scale(1.1);
+}
+
+.closeBtn:active {
+  transform: scale(0.95);
+}
+
 .adminInfo {
   display: flex;
   flex-direction: column;
@@ -238,6 +268,37 @@
   z-index: 999;
 }
 
+/* Close Button - Hidden on mobile */
+.closeBtn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(var(--primary-color-rgb), 0.1);
+  border: 1px solid rgba(var(--primary-color-rgb), 0.2);
+  color: var(--primary-color);
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 50%;
+  transition: var(--transition);
+  z-index: 1002;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.closeBtn:hover {
+  background-color: rgba(var(--primary-color-rgb), 0.2);
+  color: var(--primary-color);
+  transform: scale(1.1);
+}
+
+.closeBtn:active {
+  transform: scale(0.95);
+}
+
 /* Responsive Design */
 @media (max-width: 1024px) {
   .sidebar {
@@ -397,30 +458,12 @@
   }
 
   .sidebarHeader {
-    padding: 3rem 1rem 1rem 1rem !important;
+    padding: 1rem !important;
     position: relative !important;
   }
   
   .closeBtn {
-    position: absolute !important;
-    top: 1rem !important;
-    right: 1rem !important;
-    background: rgba(var(--primary-color-rgb), 0.1) !important;
-    border: 1px solid rgba(var(--primary-color-rgb), 0.2) !important;
-    color: var(--primary-color) !important;
-    font-size: 1.2rem !important;
-    cursor: pointer !important;
-    padding: 0.75rem !important;
-    border-radius: 50% !important;
-    transition: var(--transition) !important;
-    z-index: 1002 !important;
-    width: 44px !important;
-    height: 44px !important;
     display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    min-height: 44px !important;
-    min-width: 44px !important;
   }
 }
 
@@ -469,594 +512,4 @@
   .headerRight {
     display: none;
   }
-}
-
-/* Additional mobile optimizations for admin components */
-@media (max-width: 768px) {
-  /* Make tables responsive */
-  .contentArea table {
-    font-size: 0.875rem;
-  }
-
-  /* Make forms responsive */
-  .contentArea form {
-    max-width: 100%;
-  }
-
-  /* Make cards responsive */
-  .contentArea .card {
-    margin-bottom: 1rem;
-  }
-
-  /* Make buttons responsive */
-  .contentArea button {
-    font-size: 0.875rem;
-    padding: 0.5rem 1rem;
-  }
-
-  /* Make modals responsive */
-  .contentArea .modal {
-    margin: 1rem;
-    max-width: calc(100% - 2rem);
-  }
-}
-
-@media (max-width: 480px) {
-  /* Extra small screens */
-  .contentArea {
-    font-size: 0.875rem;
-  }
-
-  .contentArea h1 {
-    font-size: 1.5rem;
-  }
-
-  .contentArea h2 {
-    font-size: 1.25rem;
-  }
-
-  .contentArea h3 {
-    font-size: 1.1rem;
-  }
-
-  .contentArea button {
-    font-size: 0.8rem;
-    padding: 0.4rem 0.8rem;
-  }
-
-  .contentArea input,
-  .contentArea select,
-  .contentArea textarea {
-    font-size: 0.875rem;
-  }
-}
-
-/* Zoom level optimizations for better sidebar visibility */
-/* 125% zoom level - most common scaling issue */
-@media screen and (min-resolution: 120dpi) and (max-resolution: 144dpi),
-       screen and (-webkit-min-device-pixel-ratio: 1.25) and (-webkit-max-device-pixel-ratio: 1.44) {
-  .sidebar {
-    width: clamp(220px, 20vw, 300px);
-    min-width: 220px;
-  }
-  
-  .mainContent {
-    margin-left: clamp(220px, 20vw, 300px);
-  }
-  
-  .sidebarNav {
-    padding: 0.75rem 0;
-    max-height: calc(100vh - 160px);
-  }
-  
-  .sidebarHeader {
-    padding: 1rem 1rem;
-  }
-  
-  .sidebarItem {
-    padding: 0.45rem 1rem;
-    font-size: 0.8rem;
-    line-height: 1.3;
-  }
-  
-  .sidebarIcon {
-    font-size: 1rem;
-    margin-right: 0.6rem;
-    width: 20px;
-  }
-  
-  .sidebarLabel {
-    font-size: 0.8rem;
-  }
-  
-  .adminInfo {
-    gap: 0.4rem;
-  }
-  
-  .adminAvatar {
-    width: 45px;
-    height: 45px;
-    font-size: 1rem;
-  }
-  
-  .adminName {
-    font-size: 1rem;
-    line-height: 1.2;
-  }
-  
-  .adminTitle {
-    font-size: 0.75rem;
-  }
-  
-  .adminEmail {
-    font-size: 0.7rem;
-    word-break: break-all;
-  }
-  
-  .mainHeader {
-    padding: 1.5rem 2rem;
-  }
-  
-  .pageTitle {
-    font-size: 1.6rem;
-  }
-  
-  .contentArea {
-    padding: 2rem;
-  }
-}
-
-/* 150% zoom and higher adjustments */
-@media screen and (min-resolution: 144dpi),
-       screen and (-webkit-min-device-pixel-ratio: 1.5) {
-  .sidebar {
-    width: clamp(200px, 18vw, 280px);
-    min-width: 200px;
-  }
-  
-  .mainContent {
-    margin-left: clamp(200px, 18vw, 280px);
-  }
-  
-  .sidebarNav {
-    padding: 0.5rem 0;
-    max-height: calc(100vh - 140px);
-  }
-  
-  .sidebarHeader {
-    padding: 0.8rem 0.8rem;
-  }
-  
-  .sidebarItem {
-    padding: 0.35rem 0.8rem;
-    font-size: 0.75rem;
-    line-height: 1.2;
-  }
-  
-  .sidebarIcon {
-    font-size: 0.9rem;
-    margin-right: 0.5rem;
-    width: 18px;
-  }
-  
-  .sidebarLabel {
-    font-size: 0.75rem;
-  }
-  
-  .adminInfo {
-    gap: 0.3rem;
-  }
-  
-  .adminAvatar {
-    width: 40px;
-    height: 40px;
-    font-size: 0.9rem;
-  }
-  
-  .adminName {
-    font-size: 0.9rem;
-    line-height: 1.1;
-  }
-  
-  .adminTitle {
-    font-size: 0.7rem;
-  }
-  
-  .adminEmail {
-    font-size: 0.65rem;
-    word-break: break-all;
-  }
-  
-  .mainHeader {
-    padding: 1.2rem 1.5rem;
-  }
-  
-  .pageTitle {
-    font-size: 1.4rem;
-  }
-  
-  .contentArea {
-    padding: 1.5rem;
-  }
-}
-
-/* Additional zoom support for Windows scaling */
-@media screen and (min-width: 1200px) and (max-width: 1600px) {
-  /* Likely 125% zoom on standard monitors */
-  .sidebar {
-    width: clamp(230px, 21vw, 310px);
-  }
-  
-  .mainContent {
-    margin-left: clamp(230px, 21vw, 310px);
-  }
-}
-
-@media screen and (min-width: 1000px) and (max-width: 1200px) {
-  /* Likely 150% zoom or higher */
-  .sidebar {
-    width: clamp(210px, 19vw, 290px);
-  }
-  
-  .mainContent {
-    margin-left: clamp(210px, 19vw, 290px);
-  }
-}
-
-/* Ultra-wide screen optimizations */
-@media screen and (min-width: 1920px) {
-  .sidebar {
-    width: clamp(300px, 22vw, 420px);
-  }
-  
-  .mainContent {
-    margin-left: clamp(300px, 22vw, 420px);
-  }
-
-  .adminAvatar {
-    width: 80px;
-    height: 80px;
-    font-size: 1.4rem;
-  }
-
-  .adminName {
-    font-size: 1.4rem;
-  }
-
-  .adminTitle {
-    font-size: 1rem;
-  }
-
-  .adminEmail {
-    font-size: 0.9rem;
-  }
-
-  .pageTitle {
-    font-size: 2.2rem;
-  }
-
-  .sidebarItem {
-    padding: 0.8rem 2rem;
-    font-size: 1rem;
-  }
-
-  .sidebarIcon {
-    font-size: 1.4rem;
-    margin-right: 1rem;
-    width: 28px;
-  }
-
-  .contentArea {
-    padding: 3rem;
-  }
-}
-
-/* High DPI display optimizations */
-@media screen and (-webkit-min-device-pixel-ratio: 2),
-       screen and (min-resolution: 192dpi) {
-  .adminAvatar,
-  .adminAvatarHeader {
-    box-shadow: 0 2px 8px rgba(var(--primary-color-rgb), 0.2);
-  }
-
-  .sidebar {
-    border-right: 1px solid rgba(var(--border-color-rgb), 0.3);
-  }
-
-  .mainHeader {
-    box-shadow: 0 2px 12px rgba(var(--gradient-start-rgb), 0.15);
-  }
-}
-
-/* Touch device optimizations */
-@media (hover: none) and (pointer: coarse) {
-  .sidebarItem {
-    padding: 1rem 1.5rem;
-    min-height: 44px;
-  }
-
-  .mobileMenuToggle {
-    min-height: 44px;
-    min-width: 44px;
-    padding: 0.75rem;
-  }
-
-  .contentArea button {
-    min-height: 44px;
-    padding: 0.75rem 1rem;
-  }
-
-  .contentArea input,
-  .contentArea select,
-  .contentArea textarea {
-    min-height: 44px;
-    padding: 0.75rem;
-  }
-}
-
-/* Reduced motion preferences */
-@media (prefers-reduced-motion: reduce) {
-  .sidebar,
-  .mainContent,
-  .sidebarItem {
-    transition: none;
-  }
-
-  .sidebarItem:hover {
-    transform: none;
-  }
-}
-
-/* Print styles */
-@media print {
-  .sidebar,
-  .mobileMenuToggle,
-  .mobileOverlay {
-    display: none;
-  }
-
-  .mainContent {
-    margin-left: 0;
-    width: 100%;
-  }
-
-  .mainHeader {
-    background: none;
-    box-shadow: none;
-    border-bottom: 2px solid #000;
-  }
-
-  .contentArea {
-    padding: 1rem;
-  }
-
-  .contentArea button {
-    display: none;
-  }
-}
-
-/* Container queries for better component-level responsiveness */
-@container (max-width: 600px) {
-  .contentArea table {
-    font-size: 0.8rem;
-  }
-
-  .contentArea .card {
-    padding: 1rem;
-  }
-
-  .contentArea .modal {
-    margin: 0.5rem;
-    max-width: calc(100% - 1rem);
-  }
-}
-
-/* Focus management for accessibility */
-.sidebar:focus-within,
-.mainContent:focus-within {
-  outline: 2px solid var(--primary-color);
-  outline-offset: 2px;
-}
-
-.sidebarItem:focus {
-  outline: 2px solid var(--primary-color);
-  outline-offset: -2px;
-  background-color: rgba(var(--primary-color-rgb), 0.1);
-}
-
-/* Improved scrollbar styling for better UX */
-.sidebar::-webkit-scrollbar {
-  width: 8px;
-}
-
-.sidebar::-webkit-scrollbar-track {
-  background: rgba(var(--primary-color-rgb), 0.1);
-  border-radius: 4px;
-}
-
-.sidebar::-webkit-scrollbar-thumb {
-  background: rgba(var(--primary-color-rgb), 0.3);
-  border-radius: 4px;
-}
-
-.sidebar::-webkit-scrollbar-thumb:hover {
-  background: rgba(var(--primary-color-rgb), 0.5);
-}
-
-/* Better responsive grid for admin content */
-@media (max-width: 1200px) {
-  .contentArea .grid {
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.5rem;
-  }
-}
-
-@media (max-width: 768px) {
-  .contentArea .grid {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-}
-
-/* Improved form responsiveness */
-@media (max-width: 768px) {
-  .contentArea form {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  .contentArea .form-row {
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .contentArea .form-group {
-    width: 100%;
-  }
-
-  .contentArea label {
-    font-size: 0.9rem;
-    font-weight: 600;
-  }
-
-  .contentArea input,
-  .contentArea select,
-  .contentArea textarea {
-    width: 100%;
-    font-size: 0.9rem;
-  }
-}
-
-/* Better table responsiveness */
-@media (max-width: 768px) {
-  .contentArea table {
-    display: block;
-    overflow-x: auto;
-    white-space: nowrap;
-    border: 1px solid rgba(var(--primary-color-rgb), 0.2);
-    border-radius: 8px;
-  }
-
-  .contentArea thead {
-    display: block;
-  }
-
-  .contentArea tbody {
-    display: block;
-  }
-
-  .contentArea tr {
-    display: block;
-    border-bottom: 1px solid rgba(var(--primary-color-rgb), 0.1);
-  }
-
-  .contentArea td,
-  .contentArea th {
-    display: inline-block;
-    padding: 0.5rem;
-    min-width: 120px;
-    text-align: left;
-    border-right: 1px solid rgba(var(--primary-color-rgb), 0.1);
-  }
-
-  .contentArea td:last-child,
-  .contentArea th:last-child {
-    border-right: none;
-  }
-}
-
-/* Card component improvements */
-@media (max-width: 768px) {
-  .contentArea .card {
-    margin-bottom: 1rem;
-    padding: 1rem;
-    border-radius: 8px;
-  }
-
-  .contentArea .card-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-  }
-
-  .contentArea .card-actions {
-    flex-direction: column;
-    width: 100%;
-    gap: 0.5rem;
-  }
-
-  .contentArea .card-actions button {
-    width: 100%;
-    text-align: center;
-  }
-}
-
-/* Modal improvements for mobile */
-@media (max-width: 768px) {
-  .contentArea .modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    margin: 0;
-    max-width: 100%;
-    max-height: 100%;
-    border-radius: 0;
-    overflow-y: auto;
-  }
-
-  .contentArea .modal-header {
-    position: sticky;
-    top: 0;
-    background: var(--secondary-color);
-    z-index: 10;
-    border-bottom: 1px solid rgba(var(--primary-color-rgb), 0.2);
-  }
-
-  .contentArea .modal-content {
-    padding: 1rem;
-    max-height: none;
-  }
-
-  .contentArea .modal-footer {
-    position: sticky;
-    bottom: 0;
-    background: var(--secondary-color);
-    border-top: 1px solid rgba(var(--primary-color-rgb), 0.2);
-    padding: 1rem;
-  }
-}
-
-
-/* Close Button - Always visible */
-.closeBtn {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background: rgba(var(--primary-color-rgb), 0.1);
-  border: 1px solid rgba(var(--primary-color-rgb), 0.2);
-  color: var(--primary-color);
-  font-size: 1.2rem;
-  cursor: pointer;
-  padding: 0.5rem;
-  border-radius: 50%;
-  transition: var(--transition);
-  z-index: 1002;
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.closeBtn:hover {
-  background-color: rgba(var(--primary-color-rgb), 0.2);
-  color: var(--primary-color);
-  transform: scale(1.1);
-}
-
-.closeBtn:active {
-  transform: scale(0.95);
 }

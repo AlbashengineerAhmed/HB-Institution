@@ -82,6 +82,9 @@ const StudentCalendar = () => {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [showEventModal, setShowEventModal] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [selectedLesson, setSelectedLesson] = useState(null);
+  const [selectedLessonDetails, setSelectedLessonDetails] = useState(null);
+  const [isLoadingLessonDetails, setIsLoadingLessonDetails] = useState(false);
 
   useEffect(() => {
     fetchCalendarEvents();
@@ -134,6 +137,9 @@ const StudentCalendar = () => {
           const startDateTime = moment(`${event.date} ${startTime}`, 'YYYY-MM-DD HH:mm').toDate();
           const endDateTime = moment(`${event.date} ${endTime}`, 'YYYY-MM-DD HH:mm').toDate();
 
+          const lessonId = event.lessonId || event.lesson_id || event.lesson?._id || event.lessonId?._id;
+          const groupId = event.groupId || event.group_id || event.group?._id;
+
           return {
             id: index,
             title: event.course,
@@ -144,7 +150,9 @@ const StudentCalendar = () => {
               day: event.day,
               time: event.time,
               timezone: event.timezone,
-              date: event.date
+              date: event.date,
+              lessonId,
+              groupId
             }
           };
         });
@@ -199,11 +207,82 @@ const StudentCalendar = () => {
   const closeEventModal = () => {
     setShowEventModal(false);
     setSelectedEvent(null);
+    setSelectedLesson(null);
+    setSelectedLessonDetails(null);
+    setIsLoadingLessonDetails(false);
   };
 
-  const openEventModal = (event) => {
+  const openEventModal = async (event) => {
     setSelectedEvent(event);
     setShowEventModal(true);
+    const lessonId = event?.resource?.lessonId;
+    const groupId = event?.resource?.groupId;
+    if (lessonId && groupId) {
+      setSelectedLesson({ lessonId, groupId });
+      fetchSelectedLessonDetails(lessonId, groupId);
+    } else if (groupId) {
+      try {
+        const resolved = await fetchNearestIncompleteLesson(groupId);
+        if (resolved?.lessonId) {
+          setSelectedLesson({ lessonId: resolved.lessonId, groupId });
+          fetchSelectedLessonDetails(resolved.lessonId, groupId);
+        } else {
+          setSelectedLesson(null);
+          setSelectedLessonDetails(null);
+        }
+      } catch (e) {
+        setSelectedLesson(null);
+        setSelectedLessonDetails(null);
+      }
+    } else {
+      setSelectedLesson(null);
+      setSelectedLessonDetails(null);
+    }
+  };
+
+  // Attempt to resolve nearest incomplete lesson for a group
+  const fetchNearestIncompleteLesson = async (groupId) => {
+    try {
+      const token = localStorage.getItem('authToken');
+      // Backend should provide this endpoint to return nearest incomplete lesson for the group
+      const res = await axios.get(
+        `https://hb-institution.vercel.app/api/v1/lesson/nearest-incomplete/${groupId}`,
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+      const lesson = res.data?.data?.lesson || res.data?.data;
+      return lesson ? { lessonId: lesson.id || lesson._id } : null;
+    } catch (e) {
+      console.warn('No nearest-incomplete endpoint or failed to resolve nearest lesson:', e?.response?.data || e.message);
+      return null;
+    }
+  };
+
+  const fetchSelectedLessonDetails = async (lessonId, groupId) => {
+    try {
+      setIsLoadingLessonDetails(true);
+      setSelectedLessonDetails(null);
+      const token = localStorage.getItem('authToken');
+      const res = await axios.get(
+        `https://hb-institution.vercel.app/api/v1/lesson/${lessonId}/LessonDetails/${groupId}`,
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+      setSelectedLessonDetails(res.data?.data || null);
+    } catch (e) {
+      console.error('Failed to load lesson details for calendar modal:', e);
+      setSelectedLessonDetails(null);
+    } finally {
+      setIsLoadingLessonDetails(false);
+    }
   };
 
   const eventStyleGetter = () => ({
@@ -451,82 +530,156 @@ const StudentCalendar = () => {
         <div className={styles.modalOverlay} onClick={closeEventModal}>
           <div className={styles.eventModal} onClick={(e) => e.stopPropagation()}>
             <div className={styles.modalHeader}>
-              <h3>📚 Course Details</h3>
+              <h3>{selectedLessonDetails ? '📘 Lesson Details' : '📚 Course Details'}</h3>
               <button className={styles.closeBtn} onClick={closeEventModal}>
                 ✕
               </button>
             </div>
             
             <div className={styles.modalContent}>
-              <div className={styles.courseInfo}>
-                <div className={styles.courseTitle}>
-                  <span className={styles.courseIcon}>🎓</span>
-                  <h4>{selectedEvent.resource.course}</h4>
-                </div>
-                
-                <div className={styles.eventDetails}>
-                  <div className={styles.detailRow}>
-                    <span className={styles.detailIcon}>📅</span>
-                    <div className={styles.detailContent}>
-                      <span className={styles.detailLabel}>Date</span>
-                      <span className={styles.detailValue}>{moment(selectedEvent.start).format('MMMM Do, YYYY')}</span>
-                    </div>
+              {selectedLessonDetails ? (
+                <div className={styles.courseInfo}>
+                  <div className={styles.courseTitle}>
+                    <span className={styles.courseIcon}>📘</span>
+                    <h4>{selectedLessonDetails.lesson?.title || selectedEvent.resource.course}</h4>
                   </div>
-                  
-                  <div className={styles.detailRow}>
-                    <span className={styles.detailIcon}>🕐</span>
-                    <div className={styles.detailContent}>
-                      <span className={styles.detailLabel}>Time</span>
-                      <span className={styles.detailValue}>{selectedEvent.resource.time}</span>
+                  <div className={styles.eventDetails}>
+                    <div className={styles.detailRow}>
+                      <span className={styles.detailIcon}>📚</span>
+                      <div className={styles.detailContent}>
+                        <span className={styles.detailLabel}>Course</span>
+                        <span className={styles.detailValue}>{selectedLessonDetails.lesson?.unitId?.courseId?.title || selectedEvent.resource.course}</span>
+                      </div>
                     </div>
-                  </div>
-                  
-                  <div className={styles.detailRow}>
-                    <span className={styles.detailIcon}>⏱️</span>
-                    <div className={styles.detailContent}>
-                      <span className={styles.detailLabel}>Duration</span>
-                      <span className={styles.detailValue}>{moment(selectedEvent.end).diff(moment(selectedEvent.start), 'minutes')} minutes</span>
+                    <div className={styles.detailRow}>
+                      <span className={styles.detailIcon}>📦</span>
+                      <div className={styles.detailContent}>
+                        <span className={styles.detailLabel}>Unit</span>
+                        <span className={styles.detailValue}>{selectedLessonDetails.lesson?.unitId?.title || '—'}</span>
+                      </div>
                     </div>
-                  </div>
-                  
-                  <div className={styles.detailRow}>
-                    <span className={styles.detailIcon}>🌍</span>
-                    <div className={styles.detailContent}>
-                      <span className={styles.detailLabel}>Timezone</span>
-                      <span className={styles.detailValue}>{selectedEvent.resource.timezone}</span>
-                    </div>
-                  </div>
-                  
-                  <div className={styles.detailRow}>
-                    <span className={styles.detailIcon}>📆</span>
-                    <div className={styles.detailContent}>
-                      <span className={styles.detailLabel}>Day of Week</span>
-                      <span className={styles.detailValue}>{moment(selectedEvent.start).format('dddd')}</span>
+                    <div className={styles.detailRow}>
+                      <span className={styles.detailIcon}>🕐</span>
+                      <div className={styles.detailContent}>
+                        <span className={styles.detailLabel}>Time</span>
+                        <span className={styles.detailValue}>{selectedEvent.resource.time}</span>
+                      </div>
                     </div>
                   </div>
                 </div>
-                
-                <div className={styles.eventStatusModal}>
-                  {moment(selectedEvent.start).isSame(moment(), 'day') && (
-                    <div className={styles.statusBadge + ' ' + styles.today}>
-                      🔥 Today's Class
+              ) : (
+                <div className={styles.courseInfo}>
+                  <div className={styles.courseTitle}>
+                    <span className={styles.courseIcon}>🎓</span>
+                    <h4>{selectedEvent.resource.course}</h4>
+                  </div>
+                  
+                  <div className={styles.eventDetails}>
+                    <div className={styles.detailRow}>
+                      <span className={styles.detailIcon}>📅</span>
+                      <div className={styles.detailContent}>
+                        <span className={styles.detailLabel}>Date</span>
+                        <span className={styles.detailValue}>{moment(selectedEvent.start).format('MMMM Do, YYYY')}</span>
+                      </div>
                     </div>
-                  )}
-                  {moment(selectedEvent.start).isAfter(moment()) && !moment(selectedEvent.start).isSame(moment(), 'day') && (
-                    <div className={styles.statusBadge + ' ' + styles.upcoming}>
-                      ⏰ Upcoming
+                    
+                    <div className={styles.detailRow}>
+                      <span className={styles.detailIcon}>🕐</span>
+                      <div className={styles.detailContent}>
+                        <span className={styles.detailLabel}>Time</span>
+                        <span className={styles.detailValue}>{selectedEvent.resource.time}</span>
+                      </div>
                     </div>
-                  )}
-                  {moment(selectedEvent.start).isBefore(moment()) && (
-                    <div className={styles.statusBadge + ' ' + styles.past}>
-                      ✅ Completed
+                    
+                    <div className={styles.detailRow}>
+                      <span className={styles.detailIcon}>⏱️</span>
+                      <div className={styles.detailContent}>
+                        <span className={styles.detailLabel}>Duration</span>
+                        <span className={styles.detailValue}>{moment(selectedEvent.end).diff(moment(selectedEvent.start), 'minutes')} minutes</span>
+                      </div>
                     </div>
-                  )}
+                    
+                    <div className={styles.detailRow}>
+                      <span className={styles.detailIcon}>🌍</span>
+                      <div className={styles.detailContent}>
+                        <span className={styles.detailLabel}>Timezone</span>
+                        <span className={styles.detailValue}>{selectedEvent.resource.timezone}</span>
+                      </div>
+                    </div>
+                    
+                    <div className={styles.detailRow}>
+                      <span className={styles.detailIcon}>📆</span>
+                      <div className={styles.detailContent}>
+                        <span className={styles.detailLabel}>Day of Week</span>
+                        <span className={styles.detailValue}>{moment(selectedEvent.start).format('dddd')}</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className={styles.eventStatusModal}>
+                    {moment(selectedEvent.start).isSame(moment(), 'day') && (
+                      <div className={styles.statusBadge + ' ' + styles.today}>
+                        🔥 Today's Class
+                      </div>
+                    )}
+                    {moment(selectedEvent.start).isAfter(moment()) && !moment(selectedEvent.start).isSame(moment(), 'day') && (
+                      <div className={styles.statusBadge + ' ' + styles.upcoming}>
+                        ⏰ Upcoming
+                      </div>
+                    )}
+                    {moment(selectedEvent.start).isBefore(moment()) && (
+                      <div className={styles.statusBadge + ' ' + styles.past}>
+                        ✅ Completed
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
             
             <div className={styles.modalFooter}>
+              {selectedLesson && (
+                () => {
+                  const details = selectedLessonDetails;
+                  const groupId = selectedLesson.groupId;
+                  const locked = details ? !(Array.isArray(details?.lesson?.unlockedForGroups) && details.lesson.unlockedForGroups.includes(groupId)) : false;
+                  const canJoin = details ? Boolean(details.meeting?.meetingUrl && (details.meeting?.canJoin || details.meeting?.canStart)) : false;
+                  const disabled = isLoadingLessonDetails || !details || locked || !canJoin;
+                  const label = isLoadingLessonDetails ? 'Loading...' : (locked ? 'Locked' : (!canJoin ? 'View Lesson Details' : 'Join Meeting'));
+                  const title = isLoadingLessonDetails ? 'Loading meeting...' : (locked ? 'Lesson is locked' : (!canJoin ? 'View lesson details' : 'Join meeting'));
+                  return (
+                    <>
+                      <button
+                        className={styles.closeModalBtn}
+                        disabled={isLoadingLessonDetails || !details}
+                        onClick={() => {
+                          if (details && selectedLesson) {
+                            // Redirect to lesson details page
+                            window.location.href = `/student-dashboard?lessonId=${selectedLesson.lessonId}&groupId=${selectedLesson.groupId}`;
+                          }
+                        }}
+                        title="View full lesson details"
+                        style={{ marginRight: '8px', background: '#6c757d' }}
+                      >
+                        📖 View Details
+                      </button>
+                      <button
+                        className={styles.closeModalBtn}
+                        disabled={disabled}
+                        onClick={() => {
+                          if (details?.meeting?.meetingUrl && !disabled) {
+                            window.open(details.meeting.meetingUrl, '_blank');
+                          }
+                        }}
+                        title={title}
+                        style={{ marginRight: '8px', background: canJoin ? 'var(--primary-color)' : '#6c757d' }}
+                      >
+                        🎥 {label}
+                      </button>
+                    </>
+                  );
+                }
+              )()}
               <button className={styles.closeModalBtn} onClick={closeEventModal}>
                 Close
               </button>

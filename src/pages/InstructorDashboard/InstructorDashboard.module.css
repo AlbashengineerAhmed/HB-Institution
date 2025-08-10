@@ -27,7 +27,7 @@
 /* Close Button - Always visible */
 .closeBtn {
   position: absolute;
-  top: 1rem;
+  bottom: 1rem;
   right: 1rem;
   background: rgba(var(--primary-color-rgb), 0.1);
   border: 1px solid rgba(var(--primary-color-rgb), 0.2);
@@ -40,7 +40,7 @@
   z-index: 1002;
   width: 36px;
   height: 36px;
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
 }
@@ -775,6 +775,30 @@
   transform: none;
 }
 
+.attendanceButton {
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  border: none;
+  background-color: rgba(33, 150, 243, 0.2);
+  color: #2196f3;
+  margin-left: 0.5rem;
+}
+
+.attendanceButton:hover {
+  background-color: rgba(33, 150, 243, 0.3);
+  transform: translateY(-1px);
+}
+
+.attendanceButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
 .noLessons {
   text-align: center;
   padding: 1rem;
@@ -1003,6 +1027,10 @@
 }
 
 @media (max-width: 768px) {
+  .closeBtn {
+    display: flex !important;
+  }
+
   .mobileMenuToggle {
     display: block !important;
     background: none !important;
@@ -1073,25 +1101,7 @@
   }
   
   .closeBtn {
-    position: absolute !important;
-    top: 1rem !important;
-    right: 1rem !important;
-    background: rgba(var(--primary-color-rgb), 0.1) !important;
-    border: 1px solid rgba(var(--primary-color-rgb), 0.2) !important;
-    color: var(--primary-color) !important;
-    font-size: 1.2rem !important;
-    cursor: pointer !important;
-    padding: 0.75rem !important;
-    border-radius: 50% !important;
-    transition: var(--transition) !important;
-    z-index: 1002 !important;
-    width: 44px !important;
-    height: 44px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    min-height: 44px !important;
-    min-width: 44px !important;
+    display: none !important;
   }
   
   .pageTitle {
@@ -1450,4 +1460,156 @@
     padding: 0.5rem 1rem;
     font-size: 0.8rem;
   }
+}
+
+/* Modal Styles */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 1rem;
+}
+
+.modalContent {
+  background: var(--secondary-color);
+  border-radius: 12px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  max-width: 90vw;
+  max-height: 90vh;
+  width: 800px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid rgba(var(--border-color-rgb), 0.2);
+  background: linear-gradient(135deg, var(--primary-color), var(--hover-color));
+  color: var(--secondary-color);
+}
+
+.modalHeader h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.closeModalBtn {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: var(--secondary-color);
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 50%;
+  transition: var(--transition);
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.closeModalBtn:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+.modalBody {
+  padding: 1.5rem;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* Details Button */
+.detailsButton {
+  background: linear-gradient(135deg, #4CAF50, #45a049);
+  color: var(--secondary-color);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+}
+
+.detailsButton:hover {
+  background: linear-gradient(135deg, #45a049, #3d8b40);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+
+.detailsButton:active {
+  transform: translateY(0);
+}
+
+/* Responsive Modal */
+@media (max-width: 768px) {
+  .modalContent {
+    width: 95vw;
+    max-height: 85vh;
+  }
+}
+
+
+/* Form Styles for Meeting Creation Modal */
+.formRow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.formRow label {
+  color: var(--text-color);
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.formRow input {
+  padding: 0.75rem;
+  border: 1px solid rgba(var(--primary-color-rgb), 0.3);
+  border-radius: 8px;
+  background: var(--secondary-color);
+  color: var(--text-color);
+  font-size: 0.9rem;
+  transition: var(--transition);
+  width: 100%;
+}
+
+.formRow input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(var(--primary-color-rgb), 0.2);
+}
+
+.formInput {
+  font-weight: 500;
+  height: 45px;
+}
+
+.modalFooter {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding-top: 1rem;
+  padding-bottom: 0.5rem;
+  border-top: 1px solid rgba(var(--primary-color-rgb), 0.1);
+  margin-top: 1rem;
 }
