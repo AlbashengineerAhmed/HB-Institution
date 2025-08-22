@@ -4,12 +4,13 @@
   padding: 6rem 0;
   position: relative;
   overflow: hidden;
+  z-index: 0;
 }
 
 /* Decorative shapes */
 .shape {
   position: absolute;
-  z-index: 1;
+  z-index: 0;
   opacity: 0.6;
   pointer-events: none;
 }
@@ -88,6 +89,8 @@
 .heroContent {
   flex: 1;
   max-width: 600px;
+  position: relative;
+  z-index: 2;
 }
 
 .heroBadge {
@@ -149,21 +152,23 @@
 
 .heroDescription {
   font-size: 1.25rem;
-  color: var(--text-color); /* Silver Fox */
+  color: var(--text-color);
   margin-bottom: 2.5rem;
   line-height: 1.7;
   font-weight: 400;
   max-width: 90%;
-  text-shadow: 0 1px 5px rgba(29, 30, 34, 0.2); /* Dark Slate with opacity */
+  text-shadow: 0 1px 5px rgba(var(--text-color-rgb), 0.2);
   position: relative;
   padding-left: 1rem;
-  border-left: 3px solid var(--primary-color); /* Are ya yellow?! */
+  border-left: 3px solid var(--primary-color);
 }
 
 .heroButtons {
   display: flex;
   gap: 1rem;
   margin-bottom: 2rem;
+  position: relative;
+  z-index: 2;
 }
 
 .ctaButton {
@@ -182,7 +187,7 @@
 
 .primaryBtn {
   background: linear-gradient(135deg, var(--primary-color) 0%, rgba(var(--primary-color-rgb), 0.7) 100%);
-  color: var(--primary-color);
+  color: var(--secondary-color);
   box-shadow: 0 8px 20px rgba(var(--primary-color-rgb), 0.4);
   border: 2px solid rgba(var(--primary-color-rgb), 0.1);
   font-family: 'Poppins', sans-serif;

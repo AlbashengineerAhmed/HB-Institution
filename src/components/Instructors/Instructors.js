@@ -1,81 +1,56 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
 import Slider from 'react-slick';
 import AuthGuard, { useAuthGuard } from '../AuthGuard/AuthGuard';
 import styles from './Instructors.module.css';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import imageDefault from '../../assets/images/team2.png'
 
 const Instructors = () => {
   const { requireAuth } = useAuthGuard();
 
-  // Sample instructor data
-  const instructors = [
-    {
-      id: 1,
-      name: 'Sarah Clark',
-      role: 'Senior Instructor',
-      image: '/images/team-2-thumb-1.png',
-      courses: 12,
-      students: 3500,
-      bio: 'Experienced educator with over 10 years in teaching advanced programming concepts and software development.',
-      socialLinks: {
-        twitter: '#',
-        linkedin: '#',
-        facebook: '#',
-        instagram: '#'
-      },
-      expertise: ['JavaScript', 'React', 'Node.js']
-    },
-    {
-      id: 2,
-      name: 'Michael Johnson',
-      role: 'Web Development Expert',
-      image: '/images/team-2-thumb-2.png',
-      courses: 8,
-      students: 2800,
-      bio: 'Full-stack developer specializing in modern web technologies and responsive design principles.',
-      socialLinks: {
-        twitter: '#',
-        linkedin: '#',
-        facebook: '#',
-        github: '#'
-      },
-      expertise: ['HTML/CSS', 'JavaScript', 'PHP']
-    },
-    {
-      id: 3,
-      name: 'Emily Rodriguez',
-      role: 'Design Specialist',
-      image: '/images/team-2-thumb-3.png',
-      courses: 10,
-      students: 3200,
-      bio: 'Creative designer with a passion for user experience and interface design across multiple platforms.',
-      socialLinks: {
-        twitter: '#',
-        linkedin: '#',
-        dribbble: '#',
-        behance: '#'
-      },
-      expertise: ['UI/UX', 'Adobe XD', 'Figma']
-    },
-    {
-      id: 4,
-      name: 'David Wilson',
-      role: 'Data Science Instructor',
-      image: '/images/team-2-thumb-4.png',
-      courses: 6,
-      students: 1800,
-      bio: 'Data scientist with expertise in machine learning algorithms and statistical analysis for business applications.',
-      socialLinks: {
-        twitter: '#',
-        linkedin: '#',
-        github: '#',
-        kaggle: '#'
-      },
-      expertise: ['Python', 'Machine Learning', 'Data Analysis']
-    }
-  ];
+  const [instructors, setInstructors] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchInstructors = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get('https://hb-institution.vercel.app/api/v1/user/instructors');
+        if (response.data.success) {
+          // Only take the first 4 instructors for the slider
+          setInstructors(response.data.data.slice(0, 4).map(instructor => ({
+            id: instructor._id,
+            name: `${instructor.firstName} ${instructor.lastName}`,
+            role: instructor.specialization?.[0] || 'Instructor',
+            image: `/images/${instructor.avatar}`,
+            courses: instructor.courses?.length || 0,
+            students: instructor.students?.length || 0,
+            bio: instructor.bio || 'Experienced educator dedicated to student success.',
+            socialLinks: {
+              twitter: '#',
+              linkedin: '#',
+              facebook: '#',
+              instagram: '#'
+            },
+            expertise: instructor.specialization || ['Teaching']
+          })));
+        } else {
+          setError('Failed to fetch instructors');
+        }
+      } catch (err) {
+        setError('Error connecting to the server');
+        console.error('Error fetching instructors:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchInstructors();
+  }, []);
 
   const settings = {
     dots: true,
@@ -115,7 +90,7 @@ const Instructors = () => {
 
   const handleViewProfile = (instructorId) => {
     requireAuth(() => {
-      window.location.href = `/instructor/${instructorId}`;
+      window.location.href = `/faculty/${instructorId}`;
     }, "Please login to view instructor profiles");
   };
 
@@ -150,7 +125,7 @@ const Instructors = () => {
               <div className={styles.instructorSlide} key={instructor.id}>
                 <div className={styles.instructorCard}>
                   <div className={styles.instructorImageContainer}>
-                    <img src={instructor.image} alt={instructor.name} className={styles.instructorImage} />
+                    <img src={instructor.image? instructor.image: imageDefault} alt={instructor.name} className={styles.instructorImage} />
                     <div className={styles.instructorSocial}>
                       {Object.entries(instructor.socialLinks).map(([platform, link]) => (
                         <a href={link} key={platform} className={`social-icon ${platform}`} target="_blank" rel="noopener noreferrer">
@@ -187,7 +162,7 @@ const Instructors = () => {
                         </button>
                       }
                     >
-                      <Link to={`/instructor/${instructor.id}`} className={styles.viewProfileButton}>
+                      <Link to={`/faculty/${instructor.id}`} className={styles.viewProfileButton}>
                         View Profile
                       </Link>
                     </AuthGuard>
@@ -196,6 +171,9 @@ const Instructors = () => {
               </div>
             ))}
           </Slider>
+        </div>
+        <div className={styles.viewAllLink}>
+          <Link to="/faculty" className={styles.viewAllButton}>View All Faculty Members</Link>
         </div>
       </div>
     </section>

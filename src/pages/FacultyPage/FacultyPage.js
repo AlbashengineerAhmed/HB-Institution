@@ -1,30 +1,77 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import styles from './FacultyPage.module.css';
-
+import hero from '../../assets/images/faculty.jpg'
+import imageDefault from '../../assets/images/team.jpg'
 const FacultyPage = () => {
+  const [instructors, setInstructors] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [selectedDepartment, setSelectedDepartment] = useState('all');
+
+  useEffect(() => {
+    const fetchInstructors = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get('https://hb-institution.vercel.app/api/v1/user/instructors');
+        if (response.data.success) {
+          setInstructors(response.data.data);
+        } else {
+          setError('Failed to fetch instructors');
+        }
+      } catch (err) {
+        setError('Error connecting to the server');
+        console.error('Error fetching instructors:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchInstructors();
+  }, []);
+
+  // Filter instructors by department
+  const filteredInstructors = selectedDepartment === 'all'
+    ? instructors
+    : instructors.filter(instructor => {
+        const specializationToDepartment = {
+          'Quran, Classical Arabic and islamic Studies': 'islamic-studies',
+          'Computer Science': 'computer-science',
+          'Business Studies': 'business',
+          'Languages': 'languages',
+          'Sciences': 'sciences',
+          'Arts & Humanities': 'arts'
+        };
+        
+        return instructor.specialization?.some(spec => 
+          specializationToDepartment[spec] === selectedDepartment
+        ) || false;
+      });
   return (
     <div className={styles.facultyPage}>
       {/* Faculty Banner Section */}
       <section className={styles.facultyBanner}>
-        <div className={container}>
+        <div className="container">
           <div className={styles.bannerContent}>
-            <h1 className={styles.bannerTitle}>Our Faculty</h1>
-            <p className={styles.bannerDescription}>
-              Meet our distinguished faculty members who are dedicated to excellence in teaching, research, and mentoring.
-            </p>
+            <div className={styles.bannerText}>
+              <h1 className={styles.bannerTitle}>Our Faculty</h1>
+              <p className={styles.bannerDescription}>
+                Meet our distinguished faculty members who are dedicated to excellence in teaching, research, and mentoring.
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Faculty Overview Section */}
       <section className={styles.facultyOverviewSection}>
-        <div className={container}>
+        <div className="container">
           <div className="section-header">
             <h2 className="section-title">Faculty Overview</h2>
           </div>
           <div className={styles.overviewContent}>
             <div className={styles.overviewImage}>
-              <img src="/images/teacher-1.png" alt="Faculty Overview" />
+              <img src={hero} alt="Faculty Overview" />
             </div>
             <div className={styles.overviewText}>
               <p>
@@ -40,7 +87,7 @@ const FacultyPage = () => {
 
       {/* Departments Section */}
       <section className={styles.departmentsSection}>
-        <div className={container}>
+        <div className="container">
           <div className="section-header">
             <h2 className="section-title">Academic Departments</h2>
           </div>
@@ -81,65 +128,82 @@ const FacultyPage = () => {
 
       {/* Faculty Members Section */}
       <section className={styles.facultyMembersSection}>
-        <div className={container}>
+        <div className="container">
           <div className="section-header">
             <h2 className="section-title">Meet Our Faculty</h2>
           </div>
-          <div className={styles.facultyMembersGrid}>
-            <div className={styles.facultyCard}>
-              <div className={styles.facultyImageContainer}>
-                <img src="/images/teacher-1.png" alt="Faculty Member" className={styles.facultyImage} />
-              </div>
-              <div className={styles.facultyDetails}>
-                <h3 className={styles.facultyName}>Dr. Ahmed Khan</h3>
-                <p className={styles.facultyPosition}>Professor of Islamic Studies</p>
-                <p className={styles.facultyCredentials}>Ph.D. in Islamic Theology, Al-Azhar University</p>
-                <p className={styles.facultyDescription}>Specializes in Quranic exegesis and contemporary Islamic thought with over 15 years of teaching experience.</p>
-              </div>
-            </div>
-            <div className={styles.facultyCard}>
-              <div className={styles.facultyImageContainer}>
-                <img src="/images/teacher-2.png" alt="Faculty Member" className={styles.facultyImage} />
-              </div>
-              <div className={styles.facultyDetails}>
-                <h3 className={styles.facultyName}>Dr. Sarah Johnson</h3>
-                <p className={styles.facultyPosition}>Associate Professor of Computer Science</p>
-                <p className={styles.facultyCredentials}>Ph.D. in Computer Science, MIT</p>
-                <p className={styles.facultyDescription}>Expert in artificial intelligence and machine learning with significant industry experience at leading tech companies.</p>
-              </div>
-            </div>
-            <div className={styles.facultyCard}>
-              <div className={styles.facultyImageContainer}>
-                <img src="/images/teacher-3.png" alt="Faculty Member" className={styles.facultyImage} />
-              </div>
-              <div className={styles.facultyDetails}>
-                <h3 className={styles.facultyName}>Prof. Muhammad Ali</h3>
-                <p className={styles.facultyPosition}>Head of Arabic Language Department</p>
-                <p className={styles.facultyCredentials}>Ph.D. in Arabic Literature, University of Jordan</p>
-                <p className={styles.facultyDescription}>Renowned linguist with expertise in classical and modern Arabic literature and language teaching methodologies.</p>
-              </div>
-            </div>
-            <div className={styles.facultyCard}>
-              <div className={styles.facultyImageContainer}>
-                <img src="/images/teacher-4.png" alt="Faculty Member" className={styles.facultyImage} />
-              </div>
-              <div className={styles.facultyDetails}>
-                <h3 className={styles.facultyName}>Dr. Fatima Rahman</h3>
-                <p className={styles.facultyPosition}>Professor of Sciences</p>
-                <p className={styles.facultyCredentials}>Ph.D. in Physics, Stanford University</p>
-                <p className={styles.facultyDescription}>Leading researcher in theoretical physics with numerous publications in prestigious scientific journals.</p>
-              </div>
-            </div>
+
+          {/* Department Filter */}
+          <div className={styles.departmentFilter}>
+            {[
+              { id: 'all', name: 'All Departments' },
+              { id: 'islamic-studies', name: 'Islamic Studies' },
+              { id: 'computer-science', name: 'Computer Science' },
+              { id: 'business', name: 'Business Studies' },
+              { id: 'languages', name: 'Languages' },
+              { id: 'sciences', name: 'Sciences' },
+              { id: 'arts', name: 'Arts & Humanities' }
+            ].map(dept => (
+              <button
+                key={dept.id}
+                className={`${styles.filterButton} ${selectedDepartment === dept.id ? styles.active : ''}`}
+                onClick={() => setSelectedDepartment(dept.id)}
+              >
+                {dept.name}
+              </button>
+            ))}
           </div>
-          <div className={styles.facultyCta}>
-            <a href="#" className={styles.btnViewAll}>View All Faculty Members</a>
-          </div>
+
+          {loading ? (
+            <div className={styles.loadingContainer}>
+              <div className={styles.loader}></div>
+              <p>Loading faculty members...</p>
+            </div>
+          ) : error ? (
+            <div className={styles.errorContainer}>
+              <p className={styles.errorMessage}>{error}</p>
+              <button 
+                className={styles.retryButton}
+                onClick={() => window.location.reload()}
+              >
+                Retry
+              </button>
+            </div>
+          ) : (
+            <div className={styles.facultyMembersGrid}>
+              {filteredInstructors.map(instructor => (
+                <div key={instructor._id} className={styles.facultyCard}>
+                  <div className={styles.facultyImageContainer}>
+                    <img 
+                      src={instructor.avatar ? ` ${instructor.avatar}` : imageDefault} 
+                      alt={`${instructor.firstName} ${instructor.lastName}`} 
+                      className={styles.facultyImage} 
+                      onError={(e) => {
+                        e.target.src = imageDefault;
+                      }}
+                    />
+                  </div>
+                  <div className={styles.facultyDetails}>
+                    <h3 className={styles.facultyName}>
+                      {instructor.firstName} {instructor.lastName}
+                    </h3>
+                    <p className={styles.facultyPosition}>
+                      {instructor.specialization?.length > 0 
+                        ? instructor.specialization[0]
+                        : 'Instructor'}
+                    </p>
+
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
       {/* Join Our Faculty Section */}
       <section className={styles.joinFacultySection}>
-        <div className={container}>
+        <div className="container">
           <div className={styles.joinFacultyContent}>
             <div className={styles.joinFacultyText}>
               <h2 className={styles.joinTitle}>Join Our Faculty</h2>
@@ -156,7 +220,7 @@ const FacultyPage = () => {
 
       {/* Faculty Resources Section */}
       <section className={styles.facultyResourcesSection}>
-        <div className={container}>
+        <div className="container">
           <div className="section-header">
             <h2 className="section-title">Faculty Resources</h2>
           </div>

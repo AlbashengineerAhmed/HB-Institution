@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
-import { Provider } from 'react-redux';
+import { Provider, useDispatch, useSelector } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
 import { store } from './store/store';
+import { initializeSocketConnection, requestNotificationPermission } from './store/slices/notificationSlice';
 import styles from './App.module.css';
 import './styles/global.css';
 import 'react-toastify/dist/ReactToastify.css';
@@ -15,6 +16,9 @@ import AboutPage from './pages/AboutPage/AboutPage';
 import WhoWeArePage from './pages/WhoWeArePage/WhoWeArePage';
 import CommunityPage from './pages/CommunityPage/CommunityPage';
 import WhyHBIPage from './pages/WhyHBIPage/WhyHBIPage';
+import AboutUsPage from './pages/AboutUsPage/AboutUsPage';
+import BlogPage from './pages/BlogPage/BlogPage';
+import FacultyPage from './pages/FacultyPage/FacultyPage';
 import WhatsAppFloat from './components/WhatsAppFloat/WhatsAppFloat';
 import ScrollToTop from './components/ScrollToTop/ScrollToTop';
 import ScrollToTopOnRouteChange from './components/ScrollToTopOnRouteChange/ScrollToTopOnRouteChange';
@@ -56,6 +60,8 @@ import NotFoundPage from './pages/NotFoundPage/NotFoundPage';
 const AppContent = () => {
   const [isInitialLoad, setIsInitialLoad] = useState(true);
   const location = useLocation();
+  const dispatch = useDispatch();
+  const { isAuthenticated } = useSelector(state => state.auth);
   
   /**
    * Effect to handle initial loading state
@@ -68,6 +74,16 @@ const AppContent = () => {
     
     return () => clearTimeout(timer);
   }, []);
+
+  /**
+   * Initialize socket connection when user is authenticated
+   */
+  useEffect(() => {
+    if (isAuthenticated) {
+      dispatch(initializeSocketConnection());
+      dispatch(requestNotificationPermission());
+    }
+  }, [isAuthenticated, dispatch]);
 
   /**
    * Array of routes where footer should be hidden
@@ -98,6 +114,9 @@ const AppContent = () => {
           <Route path="/about" element={<AboutPage />} />
           <Route path="/about/*" element={<AboutPage />} />
           <Route path="/who-we-are" element={<WhoWeArePage />} />
+          <Route path="/about-us" element={<AboutUsPage />} />
+          <Route path="/blog" element={<BlogPage />} />
+          <Route path="/faculty" element={<FacultyPage />} />
           <Route path="/community" element={<CommunityPage />} />
           <Route path="/community/*" element={<CommunityPage />} />
           <Route path="/why-hbi" element={<WhyHBIPage />} />

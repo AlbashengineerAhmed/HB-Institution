@@ -10,6 +10,7 @@ import newsReducer from './slices/newsSlice';
 import instructorDashboardReducer from './slices/instructorDashboardSlice';
 import studentDashboardReducer from './slices/studentDashboardSlice';
 import instructorManagementReducer from './slices/instructorManagementSlice';
+import notificationReducer from './slices/notificationSlice';
 
 export const store = configureStore({
   reducer: {
@@ -24,6 +25,7 @@ export const store = configureStore({
     instructorDashboard: instructorDashboardReducer,
     studentDashboard: studentDashboardReducer,
     instructorManagement: instructorManagementReducer,
+    notifications: notificationReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

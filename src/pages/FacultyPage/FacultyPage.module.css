@@ -1,72 +1,173 @@
-/* Using global color variables from global.css */
+/* Faculty Page Styles - Dark Theme */
 
+/* Main Page Container */
 .facultyPage {
-  padding-top: 2rem;
+  background-color: var(--gradient-start);
+  color: var(--text-color);
+  min-height: 100vh;
+  overflow-x: hidden;
 }
 
-/* Common section styles */
-section {
-  padding: 5rem 0;
-}
-
-/* Using global styles */
-
-.sectionTitle::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 80px;
-  height: 3px;
-  background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
-  border-radius: 2px;
-}
-
-/* Faculty Banner Section */
+/* ===== BANNER SECTION ===== */
 .facultyBanner {
-  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/images/teacher-5.png');
+  position: relative;
+  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('../../../public/images/teacher-5.jpg');
   background-size: cover;
   background-position: center;
+  background-attachment: fixed;
   color: var(--light-text);
   text-align: center;
-  padding: 8rem 0;
+  padding: 0;
+  overflow: hidden;
+  height: 60vh;
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 1s ease-in;
+}
+
+.facultyBanner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(var(--gradient-start-rgb), 0.85) 0%, rgba(var(--gradient-end-rgb), 0.85) 100%);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.bannerContent {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  padding: 0 2rem;
+  pointer-events: auto;
+}
+
+.bannerText {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem;
+  border-radius: var(--border-radius);
+  background-color: rgba(var(--gradient-start-rgb), 0.5);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--box-shadow);
+  border: 1px solid rgba(var(--primary-color-rgb), 0.1);
 }
 
 .bannerTitle {
   font-size: 3.5rem;
   font-weight: 800;
   margin-bottom: 1.5rem;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  color: var(--light-text);
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  position: relative;
+  display: inline-block;
+}
+
+.bannerTitle::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary-color), var(--hover-color));
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.bannerTitle:hover::after {
+  width: 120px;
 }
 
 .bannerDescription {
-  font-size: 1.3rem;
+  font-size: 1.2rem;
+  line-height: 1.8;
+  color: var(--light-text);
+  opacity: 0.9;
   max-width: 800px;
   margin: 0 auto;
-  line-height: 1.8;
 }
 
-/* Faculty Overview Section */
+/* ===== FACULTY OVERVIEW SECTION ===== */
 .facultyOverviewSection {
-  background-color: var(--secondary-color);
+  background-color: var(--gradient-start);
+  position: relative;
+  overflow: hidden;
+  padding: 6rem 0;
+}
+
+.facultyOverviewSection::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, rgba(var(--gradient-start-rgb), 0.97) 0%, rgba(var(--gradient-end-rgb), 0.97) 100%);
+  z-index: 0;
+  pointer-events: none;
 }
 
 .overviewContent {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
-  gap: 3rem;
+  gap: 4rem;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 2rem;
+  pointer-events: auto;
 }
 
 .overviewImage {
   flex: 1;
-  text-align: center;
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  transition: var(--transition);
+  border: 1px solid rgba(var(--primary-color-rgb), 0.1);
+}
+
+.overviewImage::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(var(--primary-color-rgb), 0.2) 0%, rgba(var(--secondary-color-rgb), 0.2) 100%);
+  z-index: 1;
+  opacity: 0;
+  transition: var(--transition);
+}
+
+.overviewImage:hover::before {
+  opacity: 1;
 }
 
 .overviewImage img {
-  max-width: 100%;
-  border-radius: 8px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.overviewImage:hover img {
+  transform: scale(1.05);
 }
 
 .overviewText {
@@ -76,77 +177,240 @@ section {
   color: var(--text-color);
 }
 
-/* Departments Section */
+.overviewText p {
+  margin-bottom: 1.5rem;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.overviewText p:last-child {
+  margin-bottom: 0;
+}
+
+/* ===== DEPARTMENTS SECTION ===== */
 .departmentsSection {
-  background-color: #ffffff;
+  background-color: var(--gradient-start);
+  position: relative;
+  overflow: hidden;
+  padding: 6rem 0;
+}
+
+.departmentsSection::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(225deg, rgba(var(--gradient-start-rgb), 0.97) 0%, rgba(var(--gradient-end-rgb), 0.97) 100%);
+  z-index: 0;
+  pointer-events: none;
 }
 
 .departmentsGrid {
+  position: relative;
+  z-index: 1;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 2rem;
+  padding: 2rem;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  pointer-events: auto;
 }
 
 .departmentCard {
-  background-color: var(--secondary-color);
-  border-radius: 8px;
-  padding: 2rem;
+  background-color: rgba(var(--secondary-color-rgb), 0.3);
+  border-radius: var(--border-radius);
+  padding: 2.5rem 2rem;
   text-align: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  transition: var(--transition);
+  box-shadow: var(--box-shadow);
+  border: 1px solid rgba(var(--primary-color-rgb), 0.1);
+  color: var(--text-color);
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.departmentCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: linear-gradient(90deg, var(--primary-color), var(--hover-color));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s ease;
 }
 
 .departmentCard:hover {
   transform: translateY(-10px);
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--box-shadow-hover);
+  border-color: rgba(var(--primary-color-rgb), 0.3);
+  background-color: rgba(var(--secondary-color-rgb), 0.5);
+}
+
+.departmentCard:hover::before {
+  transform: scaleX(1);
 }
 
 .departmentIcon {
-  font-size: 3rem;
+  font-size: 3.5rem;
   margin-bottom: 1.5rem;
+  color: var(--primary-color);
+  transition: var(--transition);
+}
+
+.departmentCard:hover .departmentIcon {
+  transform: scale(1.1);
 }
 
 .departmentTitle {
-  font-size: 1.3rem;
+  font-size: 1.4rem;
   font-weight: 700;
-  color: var(--text-color);
+  color: var(--light-text);
   margin-bottom: 1rem;
+  position: relative;
+  padding-bottom: 0.75rem;
+}
+
+.departmentTitle::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 2px;
+  background: var(--primary-color);
+  transition: width 0.3s ease;
+}
+
+.departmentCard:hover .departmentTitle::after {
+  width: 60px;
 }
 
 .departmentDescription {
   font-size: 1rem;
   line-height: 1.6;
-  color: #666;
+  color: var(--text-muted);
 }
 
-/* Faculty Members Section */
+/* ===== FACULTY MEMBERS SECTION ===== */
 .facultyMembersSection {
-  background: linear-gradient(135deg, #f5f7fa 0%, #e8edf5 100%);
+  background: var(--gradient-start);
+  position: relative;
+  overflow: hidden;
+  padding: 6rem 0;
+}
+
+.facultyMembersSection::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(315deg, rgba(var(--gradient-start-rgb), 0.97) 0%, rgba(var(--gradient-end-rgb), 0.97) 100%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.departmentFilter {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 3rem;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.filterButton {
+  padding: 0.75rem 1.5rem;
+  border: 2px solid var(--primary-color);
+  border-radius: var(--border-radius-lg);
+  background: transparent;
+  color: var(--primary-color);
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+
+.filterButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(var(--primary-color-rgb), 0.2), transparent);
+  transition: left 0.7s ease;
+}
+
+.filterButton:hover {
+  background: rgba(var(--primary-color-rgb), 0.1);
+  color: var(--primary-color);
+  transform: translateY(-3px);
+  box-shadow: var(--box-shadow);
+}
+
+.filterButton:hover::before {
+  left: 100%;
+}
+
+.filterButton.active {
+  background: var(--primary-color);
+  color: var(--gradient-start);
+  font-weight: 700;
 }
 
 .facultyMembersGrid {
+  position: relative;
+  z-index: 1;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 2.5rem;
-  margin-bottom: 3rem;
+  margin-top: 3rem;
+  width: 100%;
+  max-width: var(--max-width);
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 1rem;
+  pointer-events: auto;
 }
 
 .facultyCard {
-  display: flex;
-  background-color: #ffffff;
-  border-radius: 8px;
+  background-color: rgba(var(--secondary-color-rgb), 0.3);
+  border-radius: var(--border-radius);
   overflow: hidden;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: var(--transition);
+  box-shadow: var(--box-shadow);
+  border: 1px solid rgba(var(--primary-color-rgb), 0.1);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .facultyCard:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+  transform: translateY(-10px);
+  box-shadow: var(--box-shadow-hover);
+  border-color: rgba(var(--primary-color-rgb), 0.3);
 }
 
 .facultyImageContainer {
-  flex: 0 0 150px;
+  position: relative;
+  width: 100%;
+  height: 280px;
   overflow: hidden;
 }
 
@@ -154,35 +418,71 @@ section {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.3s ease;
+  transition: transform 0.5s ease;
 }
 
 .facultyCard:hover .facultyImage {
-  transform: scale(1.05);
+  transform: scale(1.08);
+}
+
+.facultyImageContainer::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  background: linear-gradient(to top, rgba(var(--gradient-start-rgb), 0.9), transparent);
+  opacity: 0;
+  transition: var(--transition);
+}
+
+.facultyCard:hover .facultyImageContainer::after {
+  opacity: 1;
 }
 
 .facultyDetails {
-  flex: 1;
   padding: 1.5rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .facultyName {
   font-size: 1.3rem;
   font-weight: 700;
-  color: var(--text-color);
+  color: var(--light-text);
   margin-bottom: 0.5rem;
+  position: relative;
+  padding-bottom: 0.75rem;
+}
+
+.facultyName::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 40px;
+  height: 2px;
+  background: var(--primary-color);
+  transition: width 0.3s ease;
+}
+
+.facultyCard:hover .facultyName::after {
+  width: 60px;
 }
 
 .facultyPosition {
   font-size: 1rem;
   color: var(--primary-color);
   font-weight: 600;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
 }
 
 .facultyCredentials {
   font-size: 0.9rem;
-  color: #666;
+  color: var(--text-muted);
   margin-bottom: 1rem;
   font-style: italic;
 }
@@ -190,170 +490,339 @@ section {
 .facultyDescription {
   font-size: 0.95rem;
   line-height: 1.6;
-  color: #555;
+  color: var(--text-color);
 }
 
-.facultyCta {
+/* ===== LOADING & ERROR STATES ===== */
+.loadingContainer {
   text-align: center;
+  padding: 4rem 2rem;
+  background-color: rgba(var(--secondary-color-rgb), 0.2);
+  border-radius: var(--border-radius);
+  margin: 2rem auto;
+  max-width: 500px;
+  border: 1px solid rgba(var(--primary-color-rgb), 0.1);
+  box-shadow: var(--box-shadow);
 }
 
-.btnViewAll {
-  display: inline-block;
-  background-color: var(--primary-color);
-  color: var(--light-text);
-  padding: 0.8rem 2rem;
-  border-radius: 4px;
-  text-decoration: none;
+.loader {
+  border: 4px solid rgba(var(--primary-color-rgb), 0.1);
+  border-top: 4px solid var(--primary-color);
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 1.5rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.errorContainer {
+  text-align: center;
+  padding: 3rem 2rem;
+  background-color: rgba(var(--error-color-rgb), 0.1);
+  border-radius: var(--border-radius);
+  margin: 2rem auto;
+  max-width: 600px;
+  border: 1px solid rgba(var(--error-color-rgb), 0.3);
+  box-shadow: var(--box-shadow);
+}
+
+.errorMessage {
+  color: var(--error-color);
+  margin-bottom: 1.5rem;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.retryButton {
+  padding: 0.75rem 2rem;
+  background: var(--primary-color);
+  color: var(--gradient-start);
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: var(--transition);
   font-weight: 600;
-  transition: background-color 0.3s ease;
+  display: inline-block;
 }
 
-.btnViewAll:hover {
-  background-color: var(--hover-color);
+.retryButton:hover {
+  background: var(--hover-color);
+  transform: translateY(-3px);
+  box-shadow: var(--box-shadow-hover);
 }
 
-/* Join Our Faculty Section */
+/* ===== JOIN FACULTY SECTION ===== */
 .joinFacultySection {
-  background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('../../../public/images/teacher-5.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
   color: var(--light-text);
-  padding: 4rem 0;
+  padding: 6rem 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.joinFacultySection::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(var(--gradient-start-rgb), 0.85) 0%, rgba(var(--gradient-end-rgb), 0.85) 100%);
+  z-index: 1;
+  pointer-events: none;
 }
 
 .joinFacultyContent {
   text-align: center;
   max-width: 800px;
   margin: 0 auto;
+  position: relative;
+  z-index: 2;
+  padding: 3rem;
+  border-radius: var(--border-radius);
+  background-color: rgba(var(--secondary-color-rgb), 0.3);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--box-shadow);
+  border: 1px solid rgba(var(--primary-color-rgb), 0.1);
 }
 
 .joinTitle {
   font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 1.5rem;
+  color: var(--light-text);
+  position: relative;
+  display: inline-block;
+  padding-bottom: 0.75rem;
+}
+
+.joinTitle::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background: var(--primary-color);
+  transition: width 0.3s ease;
+}
+
+.joinFacultyContent:hover .joinTitle::after {
+  width: 100px;
 }
 
 .joinDescription {
   font-size: 1.1rem;
   line-height: 1.8;
   margin-bottom: 2rem;
+  color: var(--light-text);
+  opacity: 0.9;
+}
+
+.joinCta {
+  margin-top: 2rem;
 }
 
 .btnJoinFaculty {
   display: inline-block;
-  background-color: var(--light-text);
-  color: var(--primary-color);
-  padding: 0.8rem 2rem;
-  border-radius: 4px;
+  background-color: var(--primary-color);
+  color: var(--gradient-start);
+  padding: 1rem 2.5rem;
+  border-radius: var(--border-radius);
   text-decoration: none;
   font-weight: 600;
-  transition: all 0.3s ease;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.btnJoinFaculty::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.7s ease;
+  z-index: -1;
 }
 
 .btnJoinFaculty:hover {
-  background-color: rgba(255, 255, 255, 0.9);
-  transform: translateY(-3px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  background-color: var(--hover-color);
+  transform: translateY(-5px);
+  box-shadow: var(--box-shadow-hover);
 }
 
-/* Faculty Resources Section */
+.btnJoinFaculty:hover::before {
+  left: 100%;
+}
+
+/* ===== FACULTY RESOURCES SECTION ===== */
 .facultyResourcesSection {
-  background-color: #ffffff;
+  background-color: var(--gradient-start);
+  padding: 6rem 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.facultyResourcesSection::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, rgba(var(--gradient-start-rgb), 0.97) 0%, rgba(var(--gradient-end-rgb), 0.97) 100%);
+  z-index: 0;
 }
 
 .resourcesGrid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 2.5rem;
+  position: relative;
+  z-index: 1;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 1rem;
 }
 
 .resourceCard {
-  background-color: var(--secondary-color);
-  border-radius: 8px;
-  padding: 2rem;
+  background-color: rgba(var(--secondary-color-rgb), 0.3);
+  border-radius: var(--border-radius);
+  padding: 2.5rem 2rem;
   text-align: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  transition: var(--transition);
+  box-shadow: var(--box-shadow);
+  border: 1px solid rgba(var(--primary-color-rgb), 0.1);
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.resourceCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 5px;
+  height: 100%;
+  background: linear-gradient(to bottom, var(--primary-color), var(--hover-color));
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.5s ease;
 }
 
 .resourceCard:hover {
   transform: translateY(-10px);
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--box-shadow-hover);
+  border-color: rgba(var(--primary-color-rgb), 0.3);
+  background-color: rgba(var(--secondary-color-rgb), 0.5);
+}
+
+.resourceCard:hover::before {
+  transform: scaleY(1);
 }
 
 .resourceIcon {
   font-size: 2.5rem;
   color: var(--primary-color);
   margin-bottom: 1.5rem;
+  transition: var(--transition);
+}
+
+.resourceCard:hover .resourceIcon {
+  transform: scale(1.1);
 }
 
 .resourceTitle {
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   font-weight: 700;
-  color: var(--text-color);
+  color: var(--light-text);
   margin-bottom: 1rem;
+  position: relative;
+  padding-bottom: 0.75rem;
+}
+
+.resourceTitle::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 2px;
+  background: var(--primary-color);
+  transition: width 0.3s ease;
+}
+
+.resourceCard:hover .resourceTitle::after {
+  width: 60px;
 }
 
 .resourceDescription {
   font-size: 0.95rem;
   line-height: 1.6;
-  color: #666;
+  color: var(--text-muted);
 }
 
-/* Responsive Styles */
-@media (max-width: 992px) {
-  .overviewContent {
-    flex-direction: column;
-    gap: 2rem;
-  }
-  
-  .departmentsGrid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  
-  .facultyMembersGrid {
-    grid-template-columns: 1fr;
-  }
-  
-  .resourcesGrid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  
+/* ===== RESPONSIVE STYLES ===== */
+@media (max-width: 1200px) {
   .bannerTitle {
-    font-size: 2.8rem;
+    font-size: 3rem;
+  }
+  
+  .departmentsGrid,
+  .facultyMembersGrid,
+  .resourcesGrid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+}
+
+@media (max-width: 992px) {
+  .bannerTitle {
+    font-size: 2.5rem;
   }
   
   .bannerDescription {
     font-size: 1.1rem;
   }
+  
+  .overviewContent {
+    flex-direction: column;
+    gap: 3rem;
+  }
+  
+  .departmentsGrid,
+  .resourcesGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .facultyMembersGrid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  }
+  
+  .joinTitle {
+    font-size: 2.2rem;
+  }
 }
 
 @media (max-width: 768px) {
-  section {
-    padding: 3rem 0;
-  }
-  
-  /* Using global .section-title styles */
-  
-  .overviewText {
-    font-size: 1rem;
-  }
-  
-  .departmentsGrid {
-    grid-template-columns: 1fr;
-  }
-  
-  .facultyCard {
-    flex-direction: column;
-  }
-  
-  .facultyImageContainer {
-    flex: 0 0 auto;
-    height: 200px;
-  }
-  
-  .resourcesGrid {
-    grid-template-columns: 1fr;
-  }
-  
   .bannerTitle {
     font-size: 2.2rem;
   }
@@ -362,11 +831,95 @@ section {
     font-size: 1rem;
   }
   
+  .facultyBanner {
+    height: 50vh;
+  }
+  
+  .departmentFilter {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .filterButton {
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  .departmentsGrid,
+  .resourcesGrid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .facultyMembersGrid {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .facultyImageContainer {
+    height: 220px;
+  }
+  
+  .joinFacultyContent {
+    padding: 2rem 1.5rem;
+  }
+  
   .joinTitle {
     font-size: 2rem;
   }
   
   .joinDescription {
     font-size: 1rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .bannerTitle {
+    font-size: 1.8rem;
+  }
+  
+  .bannerDescription {
+    font-size: 0.9rem;
+  }
+  
+  .facultyBanner {
+    height: 40vh;
+  }
+  
+  .bannerText {
+    padding: 1.5rem;
+  }
+  
+  .facultyMembersGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .facultyImageContainer {
+    height: 200px;
+  }
+  
+  .departmentTitle,
+  .facultyName,
+  .resourceTitle {
+    font-size: 1.2rem;
+  }
+  
+  .departmentDescription,
+  .facultyDescription,
+  .resourceDescription {
+    font-size: 0.9rem;
+  }
+  
+  .joinTitle {
+    font-size: 1.8rem;
+  }
+  
+  .joinDescription {
+    font-size: 0.9rem;
+  }
+  
+  .btnJoinFaculty {
+    padding: 0.8rem 1.8rem;
+    font-size: 0.9rem;
   }
 }

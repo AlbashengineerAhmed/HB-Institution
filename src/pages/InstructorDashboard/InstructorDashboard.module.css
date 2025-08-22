@@ -749,6 +749,7 @@
 .lessonControls {
   display: flex;
   gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
 .completeButton {
@@ -762,6 +763,7 @@
   background-color: rgba(76, 175, 80, 0.2);
   color: #4caf50;
   margin-left: 0.5rem;
+  white-space: nowrap;
 }
 
 .completeButton:hover {
@@ -786,6 +788,7 @@
   background-color: rgba(33, 150, 243, 0.2);
   color: #2196f3;
   margin-left: 0.5rem;
+  white-space: nowrap;
 }
 
 .attendanceButton:hover {
@@ -998,7 +1001,23 @@
   .unitHeader {
     flex-direction: column;
     align-items: stretch;
-    gap: 1rem;
+  }
+  
+  .lessonItem {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .lessonControls {
+    margin-top: 0.75rem;
+    width: 100%;
+    justify-content: flex-start;
+  }
+  
+  .completeButton,
+  .attendanceButton {
+    margin-left: 0;
+    margin-right: 0.5rem;
   }
 
   .unitControls {
@@ -1025,7 +1044,6 @@
     margin-left: 0;
   }
 }
-
 @media (max-width: 768px) {
   .closeBtn {
     display: flex !important;
@@ -1098,10 +1116,6 @@
   .sidebarHeader {
     position: relative !important;
     padding: 3rem 1rem 1.5rem 1rem !important;
-  }
-  
-  .closeBtn {
-    display: none !important;
   }
   
   .pageTitle {
@@ -1565,6 +1579,30 @@
     width: 95vw;
     max-height: 85vh;
   }
+  
+  .modalBody {
+    padding: 1rem;
+  }
+  
+  .formRow {
+    margin-bottom: 0.5rem;
+  }
+  
+  .formRow label {
+    font-size: 0.8rem;
+  }
+  
+  .formRow input {
+    padding: 0.6rem;
+    font-size: 0.85rem;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .detailsButton {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+  }
 }
 
 
@@ -1574,6 +1612,7 @@
   flex-direction: column;
   gap: 0.25rem;
   margin-bottom: 0.75rem;
+  width: 100%;
 }
 
 .formRow label {
@@ -1591,6 +1630,8 @@
   font-size: 0.9rem;
   transition: var(--transition);
   width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .formRow input:focus {

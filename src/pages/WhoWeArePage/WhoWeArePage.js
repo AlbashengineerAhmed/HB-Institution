@@ -19,39 +19,20 @@ const WhoWeArePage = () => {
                 <h1 className={styles.messageTitle}>Message from the Chairman</h1>
                 <div className={styles.messageText}>
                   <p className={styles.welcomeMessage}>
-                    Welcome to HB Institution, a beacon of knowledge and spirituality dedicated to nurturing minds and souls. At HB Institution, we believe that education is a powerful tool to transform lives, and our mission is to make quality education accessible to everyone, regardless of their location or financial status. Where Knowledge Meets Faith.
+                    Dear Students, Educators, and Supporters,
+                    Welcome to HB Institution, a vision born from a deep commitment to knowledge, faith, and the transformative power of education. Our mission is both simple and profound: to make quality education, including academic, professional, and Islamic studies, accessible to all, regardless of background or circumstance.
+                    As Chairman of HB Institution, I take immense pride in our dedication to empowering individuals to reach their highest potential. By harmonizing traditional values with modern disciplines, we strive to equip our students with the knowledge, skills, and character needed to succeed in this life and the Hereafter.
+                    HB Institution is a self-funded initiative rooted in the belief that giving back to society is a sacred responsibility. Every course, program, and interaction is thoughtfully designed to reflect our unwavering commitment to quality, accessibility, and meaningful impact.
+                    Thank you for choosing HB Institution as your partner in education and growth. Together, let us embark on a journey of learning, purpose, and transformation.      
                   </p>
                   
                   <div className={styles.topicSection}>
-                    <h3 className={styles.topicTitle}>Our Vision</h3>
+                    <h3 className={styles.topicTitle}>Warm regards,</h3>
                     <p className={styles.topicContent}>
-                      To illuminate the path of knowledge and faith for individuals across the globe, empowering them to connect deeply with their education and personal growth.
+                      Hamed Minhaj
                     </p>
-                  </div>
-
-                  <div className={styles.topicSection}>
-                    <h3 className={styles.topicTitle}>Our Mission</h3>
-                    <p className={styles.topicContent}>
-                      Our mission is to provide free, high-quality education to students worldwide. Through a combination of innovative technology, dedicated educators, and a commitment to excellence, we aim to:
-                    </p>
-                    <ul className={styles.missionList}>
-                      <li>Teach the Quran with proper Tajweed</li>
-                      <li>Instill the values of Islam through the study of Tafsir, Hadith, and Fiqh</li>
-                      <li>Make Quran memorization (Hifz) achievable for all who aspire to it</li>
-                      <li>Offer a comprehensive academic curriculum to empower students with knowledge in various fields</li>
-                      <li>Foster a global community of learners united by faith, knowledge, and personal development</li>
-                    </ul>
-                  </div>
-
-                  <div className={styles.topicSection}>
-                    <h3 className={styles.topicTitle}>What We Offer</h3>
-                    <ul className={styles.offerList}>
-                      <li><strong>Comprehensive Quranic Education:</strong> From beginner-level recitation to advanced memorization and interpretation</li>
-                      <li><strong>Academic Excellence:</strong> Courses in mathematics, science, language, and other key subjects to support holistic education</li>
-                      <li><strong>Accessible Learning:</strong> Live online classes, recorded sessions, and personalized feedback to ensure every student progresses at their own pace</li>
-                      <li><strong>Skilled Educators:</strong> Our teachers are highly qualified, experienced, and passionate about guiding students on their educational journey</li>
-                      <li><strong>Global Reach:</strong> Our platform is designed to reach students in the most remote corners of the world, making quality education truly universal</li>
-                    </ul>
+                    <p className={styles.topicContent}>Chairman, HB Institution</p>
+                    <p className={styles.topicContent}>Where Knowledge Meets Faith</p>
                   </div>
                 </div>
               </div>

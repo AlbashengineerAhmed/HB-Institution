@@ -50,7 +50,7 @@ const News = () => {
       <div className="container">
         <div className="section-header">
           <h2 className="section-title">Updated News & Publications</h2>
-          <Link to="/news" className="view-all-link">View All News</Link>
+          <Link to="/blog" className="view-all-link">View All News</Link>
         </div>
         
         <div className={styles.newsGrid}>
@@ -62,13 +62,13 @@ const News = () => {
               </div>
               <div className={styles.newsContent}>
                 <h3 className={styles.newsTitle}>
-                  <Link to={`/news/${item.id}`}>{item.title}</Link>
+                  <a href={item.link} target="_blank" rel="noopener noreferrer">{item.title}</a>
                 </h3>
                 <div className={styles.newsMeta}>
                   <span className={styles.newsDate}>{item.date}</span>
                 </div>
                 <p className={styles.newsExcerpt}>{item.excerpt}</p>
-                <Link to={`/news/${item.id}`} className={styles.readMoreLink}>Read More</Link>
+
               </div>
             </div>
           ))}

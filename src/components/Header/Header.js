@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout, fetchUserProfile } from '../../store/slices/authSlice';
 import { getDashboardLink, getRoleDisplayName } from '../../utils/roleUtils';
+import NotificationBell from '../Shared/NotificationBell/NotificationBell';
 import styles from './Header.module.css';
 
 /**
@@ -174,6 +175,7 @@ const Header = () => {
               </div>
               <ul className={`${styles.dropdownMenu} ${activeDropdown === 'about' ? styles.show : ''}`}>
                 <li><Link to="/who-we-are" className={styles.dropdownItem} onClick={handleLinkClick}>Message from the Chairman</Link></li>
+                <li><Link to="/about-us" className={styles.dropdownItem} onClick={handleLinkClick}>About Us</Link></li>
                 <li><Link to="/about/history" className={styles.dropdownItem} onClick={handleLinkClick}>History</Link></li>
                 <li><Link to="/about/mission" className={styles.dropdownItem} onClick={handleLinkClick}>Mission</Link></li>
                 <li><Link to="/about/founder" className={styles.dropdownItem} onClick={handleLinkClick}>Founder</Link></li>
@@ -185,7 +187,6 @@ const Header = () => {
                 <li><Link to="/about/disclaimer" className={styles.dropdownItem} onClick={handleLinkClick}>Disclaimer</Link></li>
               </ul>
             </li>
-            <li className={styles.navItem}><Link to="/team" className={styles.navLink}>Team</Link></li>
             <li 
               className={`${styles.navItem} ${styles.dropdown} ${activeDropdown === 'faculty' ? styles.active : ''}`}
               onMouseLeave={handleDropdownMouseLeave}
@@ -306,6 +307,8 @@ const Header = () => {
               onMouseLeave={handleUserDropdownMouseLeave}
               onMouseEnter={handleUserDropdownMouseEnter}
             >
+              {/* Notification Bell Component */}
+              <NotificationBell />
               <div className={styles.userProfile} onClick={toggleUserDropdown}>
                 <div className={styles.userAvatar}>
                   {(user?.avatar || user?.profilePicture || user?.image) ? (
