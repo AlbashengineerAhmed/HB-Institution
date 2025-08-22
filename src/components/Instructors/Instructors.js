@@ -125,7 +125,14 @@ const Instructors = () => {
               <div className={styles.instructorSlide} key={instructor.id}>
                 <div className={styles.instructorCard}>
                   <div className={styles.instructorImageContainer}>
-                    <img src={instructor.image? instructor.image: imageDefault} alt={instructor.name} className={styles.instructorImage} />
+                    <img 
+                      src={instructor.avatar ? ` ${instructor.avatar}` : imageDefault} 
+                      alt={`${instructor.firstName} ${instructor.lastName}`} 
+                      className={styles.facultyImage} 
+                      onError={(e) => {
+                        e.target.src = imageDefault;
+                      }}
+                      />
                     <div className={styles.instructorSocial}>
                       {Object.entries(instructor.socialLinks).map(([platform, link]) => (
                         <a href={link} key={platform} className={`social-icon ${platform}`} target="_blank" rel="noopener noreferrer">
@@ -152,7 +159,7 @@ const Instructors = () => {
                         <span key={skill} className={styles.expertiseTag}>{skill}</span>
                       ))}
                     </div>
-                    <AuthGuard
+                    {/* <AuthGuard
                       fallback={
                         <button 
                           className={`${styles.viewProfileButton} ${styles.loginRequired}`}
@@ -165,7 +172,7 @@ const Instructors = () => {
                       <Link to={`/faculty/${instructor.id}`} className={styles.viewProfileButton}>
                         View Profile
                       </Link>
-                    </AuthGuard>
+                    </AuthGuard> */}
                   </div>
                 </div>
               </div>

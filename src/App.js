@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import { Provider, useDispatch, useSelector } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
 import { store } from './store/store';
-import { initializeSocketConnection, requestNotificationPermission } from './store/slices/notificationSlice';
+// import { initializeSocketConnection, requestNotificationPermission } from './store/slices/notificationSlice';
 import styles from './App.module.css';
 import './styles/global.css';
 import 'react-toastify/dist/ReactToastify.css';
@@ -78,12 +78,12 @@ const AppContent = () => {
   /**
    * Initialize socket connection when user is authenticated
    */
-  useEffect(() => {
-    if (isAuthenticated) {
-      dispatch(initializeSocketConnection());
-      dispatch(requestNotificationPermission());
-    }
-  }, [isAuthenticated, dispatch]);
+  // useEffect(() => {
+  //   if (isAuthenticated) {
+  //     dispatch(initializeSocketConnection());
+  //     dispatch(requestNotificationPermission());
+  //   }
+  // }, [isAuthenticated, dispatch]);
 
   /**
    * Array of routes where footer should be hidden

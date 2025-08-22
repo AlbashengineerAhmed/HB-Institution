@@ -161,12 +161,12 @@ const BlogPage = () => {
                             <i className="fab fa-facebook"></i>
                           </button>
                         </div>
-                        <button 
+                        {/* <button 
                           onClick={() => window.open(article.link || '#', '_blank')}
                           className={styles.readMoreLink}
                         >
                           Visit Article
-                        </button>
+                        </button> */}
                       </div>
                     </div>
                   </div>

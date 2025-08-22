@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect, useCallback, useContext } from 'react';
-import { initializeSocket, disconnectSocket, requestNotificationPermission } from '../services/notificationService';
+import { requestNotificationPermission } from '../services/notificationService';
+// import { initializeSocket, disconnectSocket } from '../services/notificationService';
 import { toast } from 'react-toastify';
 
 // Create context
@@ -13,7 +14,7 @@ export const NotificationProvider = ({ children }) => {
   const [notifications, setNotifications] = useState([]);
   const [meetingReminders, setMeetingReminders] = useState([]);
   const [notificationPermission, setNotificationPermission] = useState('default');
-  const [socket, setSocket] = useState(null);
+  // const [socket, setSocket] = useState(null);
 
   // Handle meeting reminder notifications
   const handleMeetingReminder = useCallback((reminder) => {
@@ -63,13 +64,13 @@ export const NotificationProvider = ({ children }) => {
   }, []);
 
   // Initialize socket connection
-  const initializeSocketConnection = useCallback(() => {
-    const token = localStorage.getItem('authToken');
-    if (!token) return;
+  // const initializeSocketConnection = useCallback(() => {
+  //   const token = localStorage.getItem('authToken');
+  //   if (!token) return;
 
-    const socketInstance = initializeSocket(token, handleMeetingReminder);
-    setSocket(socketInstance);
-  }, [handleMeetingReminder]);
+  //   const socketInstance = initializeSocket(token, handleMeetingReminder);
+  //   setSocket(socketInstance);
+  // }, [handleMeetingReminder]);
 
   // Request notification permission
   const askNotificationPermission = useCallback(async () => {
@@ -103,23 +104,23 @@ export const NotificationProvider = ({ children }) => {
 
   // Initialize socket when auth token changes
   useEffect(() => {
-    initializeSocketConnection();
+    // initializeSocketConnection();
     
     // Request notification permission
     askNotificationPermission();
 
     // Cleanup on unmount
-    return () => {
-      disconnectSocket();
-    };
-  }, [initializeSocketConnection, askNotificationPermission]);
+    // return () => {
+    //   disconnectSocket();
+    // };
+  }, [askNotificationPermission]);
 
   // Context value
   const value = {
     notifications,
     meetingReminders,
     notificationPermission,
-    socket,
+    // socket,
     markNotificationAsRead,
     markAllNotificationsAsRead,
     clearAllNotifications,

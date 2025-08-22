@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
-import { initializeSocket, disconnectSocket, showBrowserNotification } from '../../services/notificationService';
+import { showBrowserNotification } from '../../services/notificationService';
+// import { initializeSocket, disconnectSocket } from '../../services/notificationService';
 
 /**
  * Initial state for the notification slice
@@ -9,7 +10,7 @@ const initialState = {
   notifications: [],
   unreadCount: 0,
   permissionGranted: false,
-  socket: null,
+  // socket: null,
 };
 
 /**
@@ -19,20 +20,20 @@ const notificationSlice = createSlice({
   name: 'notifications',
   initialState,
   reducers: {
-    /**
-     * Initialize socket connection
-     */
-    initSocket: (state, action) => {
-      // The actual socket connection is handled in the thunk
-      state.socket = {}; // Placeholder to indicate socket is connected
-    },
+    // /**
+    //  * Initialize socket connection
+    //  */
+    // initSocket: (state, action) => {
+    //   // The actual socket connection is handled in the thunk
+    //   state.socket = {}; // Placeholder to indicate socket is connected
+    // },
     
-    /**
-     * Disconnect socket
-     */
-    disconnectSocket: (state) => {
-      state.socket = null;
-    },
+    // /**
+    //  * Disconnect socket
+    //  */
+    // disconnectSocket: (state) => {
+    //   state.socket = null;
+    // },
     
     /**
      * Set notification permission status
@@ -96,8 +97,8 @@ const notificationSlice = createSlice({
 
 // Export actions
 export const { 
-  initSocket,
-  disconnectSocket: disconnectSocketAction,
+  // initSocket,
+  // disconnectSocket: disconnectSocketAction,
   setPermissionStatus,
   addNotification,
   markAsRead,
@@ -106,75 +107,75 @@ export const {
   clearAllNotifications
 } = notificationSlice.actions;
 
-/**
- * Thunk to initialize socket connection
- */
-export const initializeSocketConnection = () => (dispatch) => {
-  const token = localStorage.getItem('authToken');
-  if (!token) return;
+// /**
+//  * Thunk to initialize socket connection
+//  */
+// export const initializeSocketConnection = () => (dispatch) => {
+//   const token = localStorage.getItem('authToken');
+//   if (!token) return;
   
-  const socket = initializeSocket(token);
+//   const socket = initializeSocket(token);
   
-  // Set up meeting reminder listener
-  socket.on('meeting_reminder', (meetingData) => {
-    // Create notification object
-    const notification = {
-      id: Date.now().toString(),
-      type: 'meeting_reminder',
-      title: meetingData.title || 'Meeting Reminder',
-      message: meetingData.message || 'You have an upcoming meeting',
-      timestamp: new Date(),
-      read: false,
-      data: meetingData
-    };
+//   // Set up meeting reminder listener
+//   socket.on('meeting_reminder', (meetingData) => {
+//     // Create notification object
+//     const notification = {
+//       id: Date.now().toString(),
+//       type: 'meeting_reminder',
+//       title: meetingData.title || 'Meeting Reminder',
+//       message: meetingData.message || 'You have an upcoming meeting',
+//       timestamp: new Date(),
+//       read: false,
+//       data: meetingData
+//     };
     
-    // Add to Redux store
-    dispatch(addNotification(notification));
+//     // Add to Redux store
+//     dispatch(addNotification(notification));
     
-    // Show toast notification
-    toast.info(
-      <div>
-        <strong>{notification.title}</strong>
-        <p>{notification.message}</p>
-        {meetingData.joinUrl && (
-          <button 
-            onClick={() => window.open(meetingData.joinUrl, '_blank')}
-            style={{
-              background: 'var(--primary-color)',
-              color: 'white',
-              border: 'none',
-              padding: '5px 10px',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              marginTop: '8px'
-            }}
-          >
-            Join Meeting
-          </button>
-        )}
-      </div>,
-      {
-        autoClose: 8000,
-        closeButton: true
-      }
-    );
+//     // Show toast notification
+//     toast.info(
+//       <div>
+//         <strong>{notification.title}</strong>
+//         <p>{notification.message}</p>
+//         {meetingData.joinUrl && (
+//           <button 
+//             onClick={() => window.open(meetingData.joinUrl, '_blank')}
+//             style={{
+//               background: 'var(--primary-color)',
+//               color: 'white',
+//               border: 'none',
+//               padding: '5px 10px',
+//               borderRadius: '4px',
+//               cursor: 'pointer',
+//               marginTop: '8px'
+//             }}
+//           >
+//             Join Meeting
+//           </button>
+//         )}
+//       </div>,
+//       {
+//         autoClose: 8000,
+//         closeButton: true
+//       }
+//     );
     
-    // Show browser notification
-    showBrowserNotification(meetingData);
-  });
+//     // Show browser notification
+//     showBrowserNotification(meetingData);
+//   });
   
-  dispatch(initSocket());
+//   dispatch(initSocket());
   
-  return socket;
-};
+//   return socket;
+// };
 
-/**
- * Thunk to disconnect socket
- */
-export const disconnectSocketThunk = () => (dispatch) => {
-  disconnectSocket();
-  dispatch(disconnectSocketAction());
-};
+// /**
+//  * Thunk to disconnect socket
+//  */
+// export const disconnectSocketThunk = () => (dispatch) => {
+//   disconnectSocket();
+//   dispatch(disconnectSocketAction());
+// };
 
 /**
  * Thunk to request notification permission
